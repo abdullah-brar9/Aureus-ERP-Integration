@@ -24,6 +24,14 @@ class ReportLineAccount extends Model
         'sign' => 'integer',
     ];
 
+    /**
+     * Touch the owning line (which in turn touches its template) so cached
+     * report results are invalidated when an account binding changes.
+     *
+     * @var array<int, string>
+     */
+    protected $touches = ['line'];
+
     public function line(): BelongsTo
     {
         return $this->belongsTo(ReportLine::class, 'report_line_id');

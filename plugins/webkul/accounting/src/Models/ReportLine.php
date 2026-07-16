@@ -53,6 +53,14 @@ class ReportLine extends Model implements Sortable
         'sort_when_creating' => true,
     ];
 
+    /**
+     * Touch the parent template on write so cached report results (keyed by the
+     * template's updated_at) are invalidated whenever a line changes.
+     *
+     * @var array<int, string>
+     */
+    protected $touches = ['template'];
+
     public function template(): BelongsTo
     {
         return $this->belongsTo(ReportTemplate::class, 'report_template_id');
