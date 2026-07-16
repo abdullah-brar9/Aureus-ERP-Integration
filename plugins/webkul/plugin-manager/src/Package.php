@@ -196,13 +196,13 @@ class Package extends BasePackage
         return static::$plugins[$name] ??= Plugin::where('name', $name)->first();
     }
 
-   
+
     public static function refreshPluginCaches(): void
     {
         try {
             Artisan::call('optimize:clear');
 
-           if (app()->isProduction()) {
+            if (app()->isProduction()) {
                 static::rebuildCachesInBackground();
             }
         } catch (Throwable $e) {
@@ -225,24 +225,38 @@ class Package extends BasePackage
         exec($command);
     }
 
-  
     public static function phpBinaryPath(): string
     {
-        $php = trim((string) @shell_exec('which php 2>/dev/null'));
-
-        if ($php !== '' && is_file($php)) {
-            return $php;
+        // PHP_BINARY only reliably points at the interpreter itself under the
+        // CLI SAPI (e.g. `php artisan serve`). Under apache2handler (Laragon's
+        // default Apache+mod_php setup), PHP_BINARY resolves to httpd.exe —
+        // never trust it outside CLI.
+        if (PHP_SAPI === 'cli' && is_file(PHP_BINARY)) {
+            return PHP_BINARY;
         }
 
-        if (! str_contains(PHP_BINARY, 'fpm') && is_file(PHP_BINARY)) {
-            return PHP_BINARY;
+        // PHP_BINDIR is correct under every SAPI (cli, apache2handler, fpm-fcgi).
+        $binaryName = PHP_OS_FAMILY === 'Windows' ? 'php.exe' : 'php';
+        $bindirCandidate = rtrim(PHP_BINDIR, '\\/') . DIRECTORY_SEPARATOR . $binaryName;
+
+        if (is_file($bindirCandidate)) {
+            return $bindirCandidate;
+        }
+
+        // Windows has no `which` — must use `where`.
+        $locatorCommand = PHP_OS_FAMILY === 'Windows' ? 'where php' : 'which php';
+        $found = trim((string) @shell_exec($locatorCommand . ' 2>&1'));
+        $found = strtok($found, "\r\n") ?: '';
+
+        if ($found !== '' && is_file($found) && ! str_contains(strtolower($found), 'httpd') && ! str_contains(strtolower($found), 'apache')) {
+            return $found;
         }
 
         $candidates = [
             '/usr/local/bin/php',
             '/usr/bin/php',
             '/opt/homebrew/bin/php',
-            '/Users/'.get_current_user().'/Library/Application Support/Herd/bin/php',
+            '/Users/' . get_current_user() . '/Library/Application Support/Herd/bin/php',
         ];
 
         foreach ($candidates as $path) {
@@ -251,12 +265,12 @@ class Package extends BasePackage
             }
         }
 
-        return 'php';
+        return $binaryName;
     }
 
     public static function isPluginInstalled(string $name): bool
     {
-        static $isLoaded = false; 
+        static $isLoaded = false;
 
         try {
             if (! $isLoaded) {

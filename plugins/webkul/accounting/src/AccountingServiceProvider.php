@@ -27,9 +27,17 @@ class AccountingServiceProvider extends PackageServiceProvider
             ->hasDependencies([
                 'accounts',
             ])
+            ->hasMigrations([
+                '2025_07_16_000001_create_accounting_report_templates_table',
+                '2025_07_16_000002_create_accounting_report_lines_table',
+                '2025_07_16_000003_create_accounting_report_line_accounts_table',
+                '2025_07_16_000004_create_accounting_report_line_formulas_table',
+            ])
+            ->runsMigrations()
             ->icon('accounting')
             ->hasInstallCommand(function (InstallCommand $command) {
                 $command->installDependencies();
+                $command->runsMigrations();
             })
             ->hasUninstallCommand(function (UninstallCommand $command) {});
     }
