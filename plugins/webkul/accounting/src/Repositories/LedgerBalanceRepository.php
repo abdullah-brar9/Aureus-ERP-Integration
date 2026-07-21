@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 use Webkul\Account\Enums\MoveState;
 use Webkul\Accounting\Data\ReportContext;
 use Webkul\Accounting\Data\ReportPeriod;
+use Webkul\Accounting\Enums\ValueBasis;
 
 /**
  * Single source of truth for reading posted ledger balances.
@@ -28,7 +29,7 @@ class LedgerBalanceRepository
      * scoped by the report context.
      *
      * @param  array<int, int>  $accountIds
-     * @return Collection<int, float>  keyed by account_id => summed balance
+     * @return Collection<int, float> keyed by account_id => summed balance
      */
     public function balancesForAccounts(array $accountIds, ReportPeriod $period, ReportContext $context): Collection
     {
@@ -58,10 +59,11 @@ class LedgerBalanceRepository
 
     /**
      * Bulk variant: sum of `balance` per account for many accounts across many
-     * periods in a single query, returned as [account_id][period_key] => balance.
+     * periods, returned as [account_id][period_key] => balance.
      *
-     * This is what the monthly-matrix engine uses so that a twelve-column report
-     * costs one query instead of twelve.
+     * Rows are aggregated per (account, day) in SQL and bucketed into every
+     * period whose range contains the day, so overlapping periods (e.g. twelve
+     * months plus a full-year total) are each summed correctly.
      *
      * @param  array<int, int>  $accountIds
      * @param  array<int, ReportPeriod>  $periods
@@ -69,12 +71,31 @@ class LedgerBalanceRepository
      */
     public function balancesMatrixForAccounts(array $accountIds, array $periods, ReportContext $context): array
     {
+        return $this->basisBalances($accountIds, $periods, $context, ValueBasis::MOVEMENT);
+    }
+
+    /**
+     * Balances per account per period under a given basis, in at most two
+     * queries regardless of how many periods are requested:
+     *
+     *   - movement:        sum of balance with move date inside the period
+     *   - closing_balance: cumulative balance up to and including the period end
+     *   - opening_balance: cumulative balance up to but excluding the period start
+     *
+     * @param  array<int, int>  $accountIds
+     * @param  array<int, ReportPeriod>  $periods
+     * @return array<int, array<string, float>> [account_id][period_key] => balance
+     */
+    public function basisBalances(array $accountIds, array $periods, ReportContext $context, ValueBasis $basis): array
+    {
+        $accountIds = array_values(array_unique(array_map('intval', $accountIds)));
+
         $result = [];
 
         foreach ($accountIds as $accountId) {
-            $result[(int) $accountId] = [];
+            $result[$accountId] = [];
             foreach ($periods as $period) {
-                $result[(int) $accountId][$period->key] = 0.0;
+                $result[$accountId][$period->key] = 0.0;
             }
         }
 
@@ -83,19 +104,44 @@ class LedgerBalanceRepository
         }
 
         $rangeStart = collect($periods)->min(fn (ReportPeriod $p) => $p->startDate->toDateString());
-        $rangeEnd   = collect($periods)->max(fn (ReportPeriod $p) => $p->endDate->toDateString());
+        $rangeEnd = collect($periods)->max(fn (ReportPeriod $p) => $p->endDate->toDateString());
 
-        $rows = $this->rawLinesInRange($accountIds, $rangeStart, $rangeEnd, $context);
+        $carriedForward = $basis === ValueBasis::MOVEMENT
+            ? []
+            : $this->balancesBefore($accountIds, $rangeStart, $context);
 
-        foreach ($rows as $row) {
-            $accountId = (int) $row->account_id;
-            $date      = $row->date;
+        $dailyByAccount = [];
+
+        foreach ($this->dailyBalances($accountIds, $rangeStart, $rangeEnd, $context) as $row) {
+            $dailyByAccount[(int) $row->account_id][substr((string) $row->date, 0, 10)] = (float) $row->balance;
+        }
+
+        foreach ($accountIds as $accountId) {
+            $daily = $dailyByAccount[$accountId] ?? [];
 
             foreach ($periods as $period) {
-                if ($date >= $period->startDate->toDateString() && $date <= $period->endDate->toDateString()) {
-                    $result[$accountId][$period->key] += (float) $row->balance;
-                    break;
+                $start = $period->startDate->toDateString();
+                $end = $period->endDate->toDateString();
+
+                $sum = 0.0;
+
+                foreach ($daily as $date => $balance) {
+                    $inWindow = match ($basis) {
+                        ValueBasis::MOVEMENT        => $date >= $start && $date <= $end,
+                        ValueBasis::CLOSING_BALANCE => $date <= $end,
+                        ValueBasis::OPENING_BALANCE => $date < $start,
+                    };
+
+                    if ($inWindow) {
+                        $sum += $balance;
+                    }
                 }
+
+                if ($basis !== ValueBasis::MOVEMENT) {
+                    $sum += (float) ($carriedForward[$accountId] ?? 0.0);
+                }
+
+                $result[$accountId][$period->key] = $sum;
             }
         }
 
@@ -134,28 +180,55 @@ class LedgerBalanceRepository
     }
 
     /**
-     * Raw per-line rows (account_id, date, balance) within a date range,
-     * scoped by context. Kept protected so the ledger query shape lives in one
-     * place; the matrix method buckets these rows into periods in PHP.
+     * Per-day sums (account_id, date, balance) within a date range, scoped by
+     * context and aggregated in SQL so PHP only buckets one row per account per
+     * active day.
      *
      * @param  array<int, int>  $accountIds
      * @return Collection<int, object>
      */
-    protected function rawLinesInRange(array $accountIds, string $rangeStart, string $rangeEnd, ReportContext $context): Collection
+    protected function dailyBalances(array $accountIds, string $rangeStart, string $rangeEnd, ReportContext $context): Collection
     {
         $query = DB::table($this->lineTable)
             ->join($this->moveTable, "{$this->lineTable}.move_id", '=', "{$this->moveTable}.id")
             ->select([
                 "{$this->lineTable}.account_id",
                 "{$this->moveTable}.date as date",
-                "{$this->lineTable}.balance as balance",
+                DB::raw("SUM({$this->lineTable}.balance) as balance"),
             ])
             ->whereIn("{$this->lineTable}.account_id", $accountIds)
-            ->whereBetween("{$this->moveTable}.date", [$rangeStart, $rangeEnd]);
+            ->whereBetween("{$this->moveTable}.date", [$rangeStart, $rangeEnd])
+            ->groupBy(["{$this->lineTable}.account_id", "{$this->moveTable}.date"]);
 
         $this->applyContext($query, $context);
 
         return $query->get();
+    }
+
+    /**
+     * Cumulative balance per account strictly before a date (the carried-forward
+     * amount for opening/closing bases).
+     *
+     * @param  array<int, int>  $accountIds
+     * @return array<int, float> account_id => balance
+     */
+    protected function balancesBefore(array $accountIds, string $dateExclusive, ReportContext $context): array
+    {
+        $query = DB::table($this->lineTable)
+            ->join($this->moveTable, "{$this->lineTable}.move_id", '=', "{$this->moveTable}.id")
+            ->select([
+                "{$this->lineTable}.account_id",
+                DB::raw("SUM({$this->lineTable}.balance) as balance"),
+            ])
+            ->whereIn("{$this->lineTable}.account_id", $accountIds)
+            ->where("{$this->moveTable}.date", '<', $dateExclusive)
+            ->groupBy("{$this->lineTable}.account_id");
+
+        $this->applyContext($query, $context);
+
+        return $query->get()->mapWithKeys(fn ($row) => [
+            (int) $row->account_id => (float) $row->balance,
+        ])->all();
     }
 
     /**

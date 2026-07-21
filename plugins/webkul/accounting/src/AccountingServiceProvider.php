@@ -8,6 +8,7 @@ use Filament\Support\Facades\FilamentAsset;
 use Livewire\Livewire;
 use Webkul\Accounting\Filament\Widgets\JournalChartWidget;
 use Webkul\Accounting\Livewire\InvoiceSummary;
+use Webkul\Accounting\Services\ReportValueProviderRegistry;
 use Webkul\PluginManager\Console\Commands\InstallCommand;
 use Webkul\PluginManager\Console\Commands\UninstallCommand;
 use Webkul\PluginManager\Package;
@@ -32,6 +33,11 @@ class AccountingServiceProvider extends PackageServiceProvider
                 '2025_07_16_000002_create_accounting_report_lines_table',
                 '2025_07_16_000003_create_accounting_report_line_accounts_table',
                 '2025_07_16_000004_create_accounting_report_line_formulas_table',
+                '2026_07_16_000001_create_accounting_report_columns_table',
+                '2026_07_16_000002_create_accounting_report_line_inputs_table',
+                '2026_07_16_000003_add_engine_columns_to_accounting_report_lines_table',
+                '2026_07_16_000004_add_purpose_to_accounting_report_line_formulas_table',
+                '2026_07_17_000001_add_published_at_to_accounting_report_templates_table',
             ])
             ->runsMigrations()
             ->icon('accounting')
@@ -51,6 +57,8 @@ class AccountingServiceProvider extends PackageServiceProvider
 
     public function packageRegistered(): void
     {
+        $this->app->singleton(ReportValueProviderRegistry::class);
+
         Panel::configureUsing(function (Panel $panel): void {
             $panel->plugin(AccountingPlugin::make());
         });

@@ -39,7 +39,7 @@ class PluginResource extends Resource
 {
     protected static ?string $model = Plugin::class;
 
-    public static function getNavigationGroup(): string | \UnitEnum
+    public static function getNavigationGroup(): string|\UnitEnum
     {
         return NavigationGroup::Plugin;
     }
@@ -152,7 +152,11 @@ class PluginResource extends Resource
 
                                 $commandName = escapeshellarg("{$record->name}:install");
 
-                                $cmd = self::buildTimeoutCommand(300, "$php $artisan $commandName 2>&1");
+                                // The child runs with no terminal attached: force
+                                // non-interactive mode and feed STDIN from the null
+                                // device so any residual prompt fails fast instead of
+                                // blocking until the request times out.
+                                $cmd = self::buildTimeoutCommand(300, "$php $artisan $commandName --no-interaction 2>&1".self::nullStdinRedirect());
 
                                 $output = [];
 
@@ -428,6 +432,11 @@ class PluginResource extends Resource
     protected static function getPhpExecutablePath(): string
     {
         return Package::phpBinaryPath();
+    }
+
+    protected static function nullStdinRedirect(): string
+    {
+        return PHP_OS_FAMILY === 'Windows' ? ' < NUL' : ' < /dev/null';
     }
 
     protected static function buildTimeoutCommand(int $seconds, string $command): string

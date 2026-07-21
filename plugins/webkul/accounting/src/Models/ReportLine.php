@@ -2,6 +2,7 @@
 
 namespace Webkul\Accounting\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -14,11 +15,15 @@ use Spatie\EloquentSortable\SortableTrait;
 use Webkul\Account\Models\Account;
 use Webkul\Accounting\Database\Factories\ReportLineFactory;
 use Webkul\Accounting\Enums\LineType;
+use Webkul\Accounting\Enums\ValueBasis;
+use Webkul\Accounting\Enums\ValueSource;
+use Webkul\Accounting\Models\Concerns\InteractsWithReportTemplate;
 use Webkul\Security\Models\User;
+use Webkul\Support\Models\Company;
 
 class ReportLine extends Model implements Sortable
 {
-    use HasFactory, SortableTrait;
+    use HasFactory, InteractsWithReportTemplate, SortableTrait;
 
     protected $table = 'accounting_report_lines';
 
@@ -26,13 +31,18 @@ class ReportLine extends Model implements Sortable
         'report_template_id',
         'parent_id',
         'creator_id',
+        'company_id',
         'sort',
         'line_type',
         'caption',
         'code',
         'sign',
+        'value_source',
+        'value_basis',
+        'external_provider',
         'is_visible',
         'is_bold',
+        'is_check',
         'indent_level',
         'dimension_type',
         'dimension_id',
@@ -40,9 +50,12 @@ class ReportLine extends Model implements Sortable
 
     protected $casts = [
         'line_type'    => LineType::class,
+        'value_source' => ValueSource::class,
+        'value_basis'  => ValueBasis::class,
         'sign'         => 'integer',
         'is_visible'   => 'boolean',
         'is_bold'      => 'boolean',
+        'is_check'     => 'boolean',
         'indent_level' => 'integer',
         'sort'         => 'integer',
         'dimension_id' => 'integer',
@@ -129,6 +142,95 @@ class ReportLine extends Model implements Sortable
     public function dimension(): MorphTo
     {
         return $this->morphTo(__FUNCTION__, 'dimension_type', 'dimension_id');
+    }
+
+    public function company(): BelongsTo
+    {
+        return $this->belongsTo(Company::class);
+    }
+
+    public function inputs(): HasMany
+    {
+        return $this->hasMany(ReportLineInput::class, 'report_line_id');
+    }
+
+    /**
+     * How this line's values are produced. A null column derives the source
+     * from the line type, which keeps every pre-existing row behaving exactly
+     * as before: detail lines read the ledger, subtotal lines evaluate their
+     * formulas, headers and spacers carry no values.
+     */
+    public function effectiveValueSource(): ?ValueSource
+    {
+        if ($this->value_source !== null) {
+            return $this->value_source instanceof ValueSource
+                ? $this->value_source
+                : ValueSource::from((string) $this->value_source);
+        }
+
+        $lineType = $this->line_type instanceof LineType
+            ? $this->line_type
+            : LineType::from((string) $this->line_type);
+
+        return match ($lineType) {
+            LineType::DETAIL   => ValueSource::LEDGER,
+            LineType::SUBTOTAL => ValueSource::FORMULA,
+            default            => null,
+        };
+    }
+
+    /**
+     * How ledger balances are read for this line, falling back to the given
+     * report-level default when the line does not specify a basis.
+     */
+    public function effectiveValueBasis(ValueBasis $default): ValueBasis
+    {
+        if ($this->value_basis === null) {
+            return $default;
+        }
+
+        return $this->value_basis instanceof ValueBasis
+            ? $this->value_basis
+            : ValueBasis::from((string) $this->value_basis);
+    }
+
+    /**
+     * Keep sort sequences independent per template.
+     */
+    public function buildSortQuery(): Builder
+    {
+        return static::query()->where('report_template_id', $this->report_template_id);
+    }
+
+    public function owningTemplate(): ?ReportTemplate
+    {
+        return $this->template;
+    }
+
+    public function getModelTitle(): string
+    {
+        return $this->caption ?? "Report line #{$this->id}";
+    }
+
+    /**
+     * @return array<int|string, string>
+     */
+    public function getLogAttributeLabels(): array
+    {
+        return [
+            'caption'           => 'Caption',
+            'line_type'         => 'Line Type',
+            'code'              => 'Code',
+            'sign'              => 'Sign',
+            'value_source'      => 'Value Source',
+            'value_basis'       => 'Value Basis',
+            'external_provider' => 'External Provider',
+            'is_visible'        => 'Visible',
+            'is_bold'           => 'Bold',
+            'is_check'          => 'Check Row',
+            'indent_level'      => 'Indent',
+            'company.name'      => 'Company Override',
+        ];
     }
 
     protected static function boot()

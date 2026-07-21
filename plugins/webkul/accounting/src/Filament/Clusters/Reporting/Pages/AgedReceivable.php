@@ -33,7 +33,7 @@ class AgedReceivable extends Page implements HasForms
 
     protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-currency-dollar';
 
-    protected static ?int $navigationSort = 6;
+    protected static ?int $navigationSort = 96;
 
     public ?array $data = [];
 

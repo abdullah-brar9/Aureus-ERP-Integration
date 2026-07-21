@@ -54,6 +54,23 @@ class InstallCommand extends Command
 
     public function handle()
     {
+        if ($this->shouldRunNonInteractively()) {
+            // No terminal can answer a prompt here (web-triggered installs run
+            // via exec() with no TTY): promote every "ask" into its direct
+            // action so the install proceeds instead of blocking forever on
+            // input that cannot arrive.
+            $this->installDependencies = $this->installDependencies || $this->askToInstallDependencies;
+            $this->askToInstallDependencies = false;
+
+            $this->runsMigrations = $this->runsMigrations || $this->askToRunMigrations;
+            $this->askToRunMigrations = false;
+
+            $this->runsSeeders = $this->runsSeeders || $this->askToRunSeeders;
+            $this->askToRunSeeders = false;
+
+            $this->starRepo = null;
+        }
+
         if ($this->startWith) {
             ($this->startWith)($this);
         }
@@ -178,6 +195,21 @@ class InstallCommand extends Command
         Package::refreshPluginCaches();
 
         $this->info("🎉 Package <comment>{$this->package->shortName()}</comment> has been installed!");
+    }
+
+    /**
+     * Whether prompts must be skipped because nothing can answer them. Covers
+     * `--no-interaction`, and processes whose STDIN is not a terminal (the
+     * plugin manager's web-triggered exec() child, and nested dependency
+     * installs running inside it).
+     */
+    protected function shouldRunNonInteractively(): bool
+    {
+        if (! $this->input->isInteractive()) {
+            return true;
+        }
+
+        return ! (defined('STDIN') && is_resource(STDIN) && @stream_isatty(STDIN));
     }
 
     public function publish(string ...$tag): self

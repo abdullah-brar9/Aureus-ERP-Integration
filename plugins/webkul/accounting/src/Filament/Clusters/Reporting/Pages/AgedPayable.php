@@ -33,7 +33,7 @@ class AgedPayable extends Page implements HasForms
 
     protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-banknotes';
 
-    protected static ?int $navigationSort = 7;
+    protected static ?int $navigationSort = 97;
 
     public ?array $data = [];
 

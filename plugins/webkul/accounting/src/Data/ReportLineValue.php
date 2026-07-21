@@ -28,6 +28,7 @@ final class ReportLineValue
         public readonly int $indentLevel,
         public readonly int $sort,
         public readonly array $values,
+        public readonly bool $isCheck = false,
     ) {}
 
     public static function fromLine(ReportLine $line, array $values): self
@@ -37,16 +38,17 @@ final class ReportLineValue
             : LineType::from((string) $line->line_type);
 
         return new self(
-            lineId:      (int) $line->id,
-            parentId:    $line->parent_id !== null ? (int) $line->parent_id : null,
-            lineType:    $lineType,
-            caption:     $line->caption,
-            code:        $line->code,
-            isVisible:   (bool) $line->is_visible,
-            isBold:      (bool) $line->is_bold,
+            lineId: (int) $line->id,
+            parentId: $line->parent_id !== null ? (int) $line->parent_id : null,
+            lineType: $lineType,
+            caption: $line->caption,
+            code: $line->code,
+            isVisible: (bool) $line->is_visible,
+            isBold: (bool) $line->is_bold,
             indentLevel: (int) $line->indent_level,
-            sort:        (int) $line->sort,
-            values:      $values,
+            sort: (int) $line->sort,
+            values: $values,
+            isCheck: (bool) $line->is_check,
         );
     }
 
@@ -70,6 +72,7 @@ final class ReportLineValue
             'code'         => $this->code,
             'is_visible'   => $this->isVisible,
             'is_bold'      => $this->isBold,
+            'is_check'     => $this->isCheck,
             'indent_level' => $this->indentLevel,
             'sort'         => $this->sort,
             'values'       => $this->values,

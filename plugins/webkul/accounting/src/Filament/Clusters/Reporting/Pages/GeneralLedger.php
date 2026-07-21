@@ -35,7 +35,7 @@ class GeneralLedger extends Page implements HasForms
 
     protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-book-open';
 
-    protected static ?int $navigationSort = 3;
+    protected static ?int $navigationSort = 93;
 
     public ?array $data = [];
 

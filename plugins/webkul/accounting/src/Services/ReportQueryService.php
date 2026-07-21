@@ -4,18 +4,22 @@ namespace Webkul\Accounting\Services;
 
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
+use Webkul\Accounting\Data\ReportColumnSpec;
 use Webkul\Accounting\Data\ReportContext;
 use Webkul\Accounting\Data\ReportLineValue;
 use Webkul\Accounting\Data\ReportPeriod;
 use Webkul\Accounting\Enums\LayoutType;
+use Webkul\Accounting\Enums\LineType;
+use Webkul\Accounting\Enums\ValueBasis;
 use Webkul\Accounting\Models\ReportTemplate;
 
 /**
  * Public entry point for producing a rendered report.
  *
  * Responsibilities:
- *   - derive the period set from the template's layout_type
- *   - choose movement vs cumulative balances
+ *   - resolve the template's column set (explicit definitions, or the
+ *     layout_type defaults for templates without any)
+ *   - derive the default value basis from the layout (per-line overrides win)
  *   - run the calculation engine
  *   - cache the (pure) result and invalidate it when the template changes
  *
@@ -32,6 +36,7 @@ class ReportQueryService
 
     public function __construct(
         protected ReportCalculationEngine $engine,
+        protected ReportColumnResolver $columns,
     ) {}
 
     /**
@@ -41,19 +46,19 @@ class ReportQueryService
      */
     public function getReport(ReportTemplate $template, int $year, ReportContext $context, bool $useCache = true): Collection
     {
-        $periods    = $this->periodsFor($template, $year);
-        $cumulative = $this->usesCumulativeBalances($template);
+        $columns = $this->columnsFor($template, $year, $context);
+        $defaultBasis = $this->defaultBasisFor($template);
 
         if (! $useCache) {
-            return $this->engine->calculate($template, $periods, $context, $cumulative);
+            return $this->engine->calculateForColumns($template, $columns, $context, $defaultBasis);
         }
 
-        $key = ReportCacheKey::for($template, $periods, $context, $cumulative);
+        $key = ReportCacheKey::forColumns($template, $columns, $context, $defaultBasis);
 
         /** @var array<int, array<string, mixed>> $cached */
-        $cached = Cache::remember($key, $this->cacheTtlSeconds, function () use ($template, $periods, $context, $cumulative) {
+        $cached = Cache::remember($key, $this->cacheTtlSeconds, function () use ($template, $columns, $context, $defaultBasis) {
             return $this->engine
-                ->calculate($template, $periods, $context, $cumulative)
+                ->calculateForColumns($template, $columns, $context, $defaultBasis)
                 ->map(fn (ReportLineValue $v) => $v->toArray())
                 ->all();
         });
@@ -72,20 +77,36 @@ class ReportQueryService
     }
 
     /**
-     * Forget any cached result for this template across common scopes is not
-     * required because the cache key includes the template's updated_at; a saved
-     * change yields a new key automatically. This method remains for callers who
-     * want to proactively drop a specific run's cache.
+     * The resolved column specs for a run — what a page or export iterates to
+     * render the horizontal axis (including spacer columns).
      *
-     * @param  array<int, ReportPeriod>  $periods
+     * @return array<int, ReportColumnSpec>
      */
-    public function forget(ReportTemplate $template, array $periods, ReportContext $context, bool $cumulative): void
+    public function columnsFor(ReportTemplate $template, int $year, ReportContext $context): array
     {
-        Cache::forget(ReportCacheKey::for($template, $periods, $context, $cumulative));
+        return $this->columns->resolve($template, $year, $context);
+    }
+
+    /**
+     * Proactively dropping a cached run is normally unnecessary — the cache key
+     * includes the template's updated_at, so any saved change yields a new key
+     * automatically. This remains for callers who want to force a drop.
+     */
+    public function forget(ReportTemplate $template, int $year, ReportContext $context): void
+    {
+        Cache::forget(ReportCacheKey::forColumns(
+            $template,
+            $this->columnsFor($template, $year, $context),
+            $context,
+            $this->defaultBasisFor($template),
+        ));
     }
 
     /**
      * Derive the period columns from the template layout.
+     *
+     * Retained for callers that reason in raw periods; the engine itself now
+     * consumes resolved columns (see columnsFor()).
      *
      * @return array<int, ReportPeriod>
      */
@@ -107,22 +128,21 @@ class ReportQueryService
     }
 
     /**
-     * Balance-sheet style reports report point-in-time balances (cumulative);
-     * profit-and-loss / cashflow style reports report period movements.
-     *
-     * The distinction is data-driven via currency/entity/layout signals rather
-     * than a hardcoded per-report rule: a period_total layout is treated as a
-     * balance-sheet snapshot (cumulative), a monthly_matrix as movements. Stage
-     * 4 can extend the template with an explicit flag if a report needs to
-     * override this; until then the layout drives it.
+     * The report-level default basis, derived from the layout: a period_total
+     * layout reads point-in-time closing balances (balance-sheet style), a
+     * monthly_matrix reads period movements (P&L style). Any line can override
+     * this via its own value_basis, which is how a cashflow statement mixes
+     * opening-balance, movement and closing-balance rows in one report.
      */
-    protected function usesCumulativeBalances(ReportTemplate $template): bool
+    public function defaultBasisFor(ReportTemplate $template): ValueBasis
     {
         $layout = $template->layout_type instanceof LayoutType
             ? $template->layout_type
             : LayoutType::from((string) $template->layout_type);
 
-        return $layout === LayoutType::PERIOD_TOTAL;
+        return $layout === LayoutType::PERIOD_TOTAL
+            ? ValueBasis::CLOSING_BALANCE
+            : ValueBasis::MOVEMENT;
     }
 
     /**
@@ -135,16 +155,17 @@ class ReportQueryService
     {
         return collect($rows)->map(function (array $row) {
             return new ReportLineValue(
-                lineId:      (int) $row['line_id'],
-                parentId:    $row['parent_id'] !== null ? (int) $row['parent_id'] : null,
-                lineType:    \Webkul\Accounting\Enums\LineType::from((string) $row['line_type']),
-                caption:     $row['caption'] !== null ? (string) $row['caption'] : null,
-                code:        $row['code'] !== null ? (string) $row['code'] : null,
-                isVisible:   (bool) $row['is_visible'],
-                isBold:      (bool) $row['is_bold'],
+                lineId: (int) $row['line_id'],
+                parentId: $row['parent_id'] !== null ? (int) $row['parent_id'] : null,
+                lineType: LineType::from((string) $row['line_type']),
+                caption: $row['caption'] !== null ? (string) $row['caption'] : null,
+                code: $row['code'] !== null ? (string) $row['code'] : null,
+                isVisible: (bool) $row['is_visible'],
+                isBold: (bool) $row['is_bold'],
                 indentLevel: (int) $row['indent_level'],
-                sort:        (int) $row['sort'],
-                values:      array_map('floatval', $row['values'] ?? []),
+                sort: (int) $row['sort'],
+                values: array_map('floatval', $row['values'] ?? []),
+                isCheck: (bool) ($row['is_check'] ?? false),
             );
         })->values();
     }

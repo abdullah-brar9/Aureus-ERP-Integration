@@ -35,7 +35,7 @@ class ProfitLoss extends Page implements HasForms
 
     protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-chart-bar';
 
-    protected static ?int $navigationSort = 2;
+    protected static ?int $navigationSort = 92;
 
     public ?array $data = [];
 

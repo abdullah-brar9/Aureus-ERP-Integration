@@ -8,15 +8,18 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Webkul\Accounting\Database\Factories\ReportLineFormulaFactory;
 use Webkul\Accounting\Enums\FormulaOperandType;
 use Webkul\Accounting\Enums\FormulaOperator;
+use Webkul\Accounting\Enums\FormulaPurpose;
+use Webkul\Accounting\Models\Concerns\InteractsWithReportTemplate;
 
 class ReportLineFormula extends Model
 {
-    use HasFactory;
+    use HasFactory, InteractsWithReportTemplate;
 
     protected $table = 'accounting_report_line_formulas';
 
     protected $fillable = [
         'report_line_id',
+        'purpose',
         'operator',
         'operand_type',
         'operand_line_id',
@@ -26,6 +29,7 @@ class ReportLineFormula extends Model
     ];
 
     protected $casts = [
+        'purpose'          => FormulaPurpose::class,
         'operator'         => FormulaOperator::class,
         'operand_type'     => FormulaOperandType::class,
         'operand_constant' => 'decimal:6',
@@ -49,6 +53,31 @@ class ReportLineFormula extends Model
     public function operandLine(): BelongsTo
     {
         return $this->belongsTo(ReportLine::class, 'operand_line_id');
+    }
+
+    public function owningTemplate(): ?ReportTemplate
+    {
+        return $this->line?->template;
+    }
+
+    public function getModelTitle(): string
+    {
+        return 'Formula operand on "'.($this->line?->caption ?? "line #{$this->report_line_id}").'"';
+    }
+
+    /**
+     * @return array<int|string, string>
+     */
+    public function getLogAttributeLabels(): array
+    {
+        return [
+            'purpose'             => 'Purpose',
+            'operator'            => 'Operator',
+            'operand_type'        => 'Operand Type',
+            'operandLine.caption' => 'Operand Line',
+            'operand_constant'    => 'Constant',
+            'sign'                => 'Sign',
+        ];
     }
 
     protected static function newFactory()

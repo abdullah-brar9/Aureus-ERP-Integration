@@ -5,6 +5,7 @@ namespace Webkul\Accounting\Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Webkul\Accounting\Enums\FormulaOperandType;
 use Webkul\Accounting\Enums\FormulaOperator;
+use Webkul\Accounting\Enums\FormulaPurpose;
 use Webkul\Accounting\Models\ReportLine;
 use Webkul\Accounting\Models\ReportLineFormula;
 
@@ -19,6 +20,7 @@ class ReportLineFormulaFactory extends Factory
     {
         return [
             'report_line_id'   => ReportLine::factory(),
+            'purpose'          => FormulaPurpose::VALUE,
             'operator'         => FormulaOperator::ADD,
             'operand_type'     => FormulaOperandType::LINE,
             'operand_line_id'  => ReportLine::factory(),
@@ -41,6 +43,13 @@ class ReportLineFormulaFactory extends Factory
     {
         return $this->state(fn (array $attributes) => [
             'operator' => $operator,
+        ]);
+    }
+
+    public function consolidation(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'purpose' => FormulaPurpose::CONSOLIDATION,
         ]);
     }
 }

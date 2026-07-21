@@ -7,10 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Webkul\Account\Models\Account;
 use Webkul\Accounting\Database\Factories\ReportLineAccountFactory;
+use Webkul\Accounting\Models\Concerns\InteractsWithReportTemplate;
 
 class ReportLineAccount extends Model
 {
-    use HasFactory;
+    use HasFactory, InteractsWithReportTemplate;
 
     protected $table = 'accounting_report_line_accounts';
 
@@ -40,6 +41,27 @@ class ReportLineAccount extends Model
     public function account(): BelongsTo
     {
         return $this->belongsTo(Account::class, 'account_id');
+    }
+
+    public function owningTemplate(): ?ReportTemplate
+    {
+        return $this->line?->template;
+    }
+
+    public function getModelTitle(): string
+    {
+        return 'Account mapping on "'.($this->line?->caption ?? "line #{$this->report_line_id}").'"';
+    }
+
+    /**
+     * @return array<int|string, string>
+     */
+    public function getLogAttributeLabels(): array
+    {
+        return [
+            'account.name' => 'Account',
+            'sign'         => 'Sign',
+        ];
     }
 
     protected static function newFactory()

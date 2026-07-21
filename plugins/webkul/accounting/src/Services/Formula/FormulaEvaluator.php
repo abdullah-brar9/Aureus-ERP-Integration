@@ -4,6 +4,7 @@ namespace Webkul\Accounting\Services\Formula;
 
 use Webkul\Accounting\Enums\FormulaOperandType;
 use Webkul\Accounting\Enums\FormulaOperator;
+use Webkul\Accounting\Enums\FormulaPurpose;
 use Webkul\Accounting\Models\ReportLine;
 
 /**
@@ -22,13 +23,19 @@ class FormulaEvaluator
     /**
      * Evaluate one computed line for one period.
      *
+     * Only the operands matching the requested purpose participate: `value`
+     * formulas everywhere, `consolidation` formulas when the engine evaluates a
+     * consolidated column for a line that defines them. Operands without a
+     * purpose (in-memory fixtures, pre-existing rows) count as `value`.
+     *
      * @param  array<int, float>  $lineValues  line_id => already computed value (this period)
      */
-    public function evaluate(ReportLine $line, array $lineValues): float
+    public function evaluate(ReportLine $line, array $lineValues, FormulaPurpose $purpose = FormulaPurpose::VALUE): float
     {
         $line->loadMissing('formulas');
 
         $operands = $line->formulas
+            ->filter(fn ($formula) => $this->purposeOf($formula) === $purpose)
             ->sortBy('sort')
             ->values();
 
@@ -66,6 +73,19 @@ class FormulaEvaluator
         }
 
         return $result;
+    }
+
+    protected function purposeOf($formula): FormulaPurpose
+    {
+        $purpose = $formula->purpose ?? null;
+
+        if ($purpose === null) {
+            return FormulaPurpose::VALUE;
+        }
+
+        return $purpose instanceof FormulaPurpose
+            ? $purpose
+            : FormulaPurpose::from((string) $purpose);
     }
 
     /**

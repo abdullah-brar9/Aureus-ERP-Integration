@@ -33,7 +33,7 @@ class TrialBalance extends Page implements HasForms
 
     protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-scale';
 
-    protected static ?int $navigationSort = 4;
+    protected static ?int $navigationSort = 94;
 
     public ?array $data = [];
 

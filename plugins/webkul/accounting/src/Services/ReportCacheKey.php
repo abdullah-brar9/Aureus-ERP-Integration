@@ -2,8 +2,10 @@
 
 namespace Webkul\Accounting\Services;
 
+use Webkul\Accounting\Data\ReportColumnSpec;
 use Webkul\Accounting\Data\ReportContext;
 use Webkul\Accounting\Data\ReportPeriod;
+use Webkul\Accounting\Enums\ValueBasis;
 use Webkul\Accounting\Models\ReportTemplate;
 
 /**
@@ -39,6 +41,49 @@ class ReportCacheKey
             'posted='.($context->postedOnly ? '1' : '0'),
             'companies='.$companyPart,
             'periods='.$periodPart,
+        ]);
+
+        return 'accounting:report:'.md5($raw);
+    }
+
+    /**
+     * Column-based variant used by the Stage 3.5 engine: the key covers every
+     * resolved column (period, scope, consolidation) plus the default basis, so
+     * two runs differing in any column input cache independently. Template
+     * edits (lines, formulas, bindings, columns, manual inputs) all touch the
+     * template's updated_at and therefore rotate the key automatically.
+     *
+     * @param  array<int, ReportColumnSpec>  $columns
+     */
+    public static function forColumns(ReportTemplate $template, array $columns, ReportContext $context, ValueBasis $defaultBasis): string
+    {
+        $columnPart = implode('|', array_map(
+            function (ReportColumnSpec $column) {
+                $period = $column->period;
+
+                return implode(':', [
+                    $column->key,
+                    $period?->startDate->toDateString() ?? '-',
+                    $period?->endDate->toDateString() ?? '-',
+                    $column->companyIds !== null ? implode('.', $column->companyIds) : '-',
+                    $column->isConsolidated ? '1' : '0',
+                ]);
+            },
+            $columns,
+        ));
+
+        $companyPart = implode(',', $context->companyIds);
+
+        $stamp = optional($template->updated_at)->getTimestamp() ?? 0;
+
+        $raw = implode(';', [
+            'tpl='.$template->id,
+            'ver='.$template->version,
+            'upd='.$stamp,
+            'basis='.$defaultBasis->value,
+            'posted='.($context->postedOnly ? '1' : '0'),
+            'companies='.$companyPart,
+            'columns='.$columnPart,
         ]);
 
         return 'accounting:report:'.md5($raw);

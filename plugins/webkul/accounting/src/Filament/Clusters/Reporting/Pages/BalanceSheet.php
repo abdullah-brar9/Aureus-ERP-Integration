@@ -35,7 +35,7 @@ class BalanceSheet extends Page implements HasForms
 
     protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-document-chart-bar';
 
-    protected static ?int $navigationSort = 1;
+    protected static ?int $navigationSort = 91;
 
     public ?array $data = [];
 
