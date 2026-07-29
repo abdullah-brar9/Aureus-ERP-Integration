@@ -3,10 +3,12 @@
 namespace Webkul\Accounting\Services;
 
 use Illuminate\Support\Collection;
+use Webkul\Accounting\Data\MeasureReference;
 use Webkul\Accounting\Data\ReportColumnSpec;
 use Webkul\Accounting\Data\ReportContext;
 use Webkul\Accounting\Data\ReportLineValue;
 use Webkul\Accounting\Data\ReportPeriod;
+use Webkul\Accounting\Data\ResolutionContext;
 use Webkul\Accounting\Enums\FormulaPurpose;
 use Webkul\Accounting\Enums\ValueBasis;
 use Webkul\Accounting\Enums\ValueSource;
@@ -16,6 +18,7 @@ use Webkul\Accounting\Models\ReportTemplate;
 use Webkul\Accounting\Repositories\LedgerBalanceRepository;
 use Webkul\Accounting\Services\Formula\CycleDetector;
 use Webkul\Accounting\Services\Formula\FormulaEvaluator;
+use Webkul\Accounting\Services\Resolvers\LedgerMeasureResolver;
 
 /**
  * Computes every line's value, for every column, for one report template.
@@ -41,12 +44,29 @@ use Webkul\Accounting\Services\Formula\FormulaEvaluator;
  */
 class ReportCalculationEngine
 {
+    protected MeasureResolverRegistry $measureResolvers;
+
     public function __construct(
         protected LedgerBalanceRepository $ledger,
         protected AccountBindingService $bindings,
         protected FormulaEvaluator $evaluator,
         protected ?ReportValueProviderRegistry $providers = null,
-    ) {}
+        ?MeasureResolverRegistry $measureResolvers = null,
+    ) {
+        // Route ledger reads through the resolver seam. When the engine is
+        // constructed directly (e.g. in tests) with no registry, fall back to a
+        // local registry holding just the ledger resolver, so behaviour is
+        // identical whether or not the container-bound singleton is injected.
+        $this->measureResolvers = $measureResolvers ?? $this->defaultMeasureResolvers();
+    }
+
+    protected function defaultMeasureResolvers(): MeasureResolverRegistry
+    {
+        $registry = new MeasureResolverRegistry;
+        $registry->register(new LedgerMeasureResolver($this->ledger));
+
+        return $registry;
+    }
 
     /**
      * Backward-compatible entry point: one plain column per period, all under
@@ -220,15 +240,21 @@ class ReportCalculationEngine
             }
         }
 
+        $resolver = $this->measureResolvers->for(MeasureReference::SOURCE_LEDGER);
+
         $balances = [];
 
         foreach ($groups as $groupKey => $group) {
-            $balances[$groupKey] = $this->ledger->basisBalances(
+            $references = array_map(
+                fn ($accountId) => MeasureReference::ledgerAccount((int) $accountId),
                 array_keys($group['accounts']),
-                array_values($group['periods']),
-                $group['context'],
-                $group['basis'],
             );
+
+            $balances[$groupKey] = $resolver->resolve(
+                $references,
+                array_values($group['periods']),
+                new ResolutionContext($group['context'], $group['basis']),
+            )->all();
         }
 
         return $balances;

@@ -1,128 +1,77 @@
 <x-filament-panels::page>
     <div class="space-y-6">
-        {{-- Filters --}}
         {{ $this->form }}
 
-        {{-- Report Header --}}
-        <x-filament::section>
-            @php
-                $data = $this->trialBalanceData;
-            @endphp
-            
-            {{-- Trial Balance Table --}}
-            <div class="overflow-x-auto rounded-lg border border-gray-200 dark:border-white/5!">
-                <table class="min-w-full divide-y divide-gray-200 dark:divide-white/5!">
-                    <colgroup>
-                        <col style="width: auto;">
-                        <col style="width: 120px;">
-                        <col style="width: 120px;">
-                        <col style="width: 120px;">
-                        <col style="width: 120px;">
-                        <col style="width: 120px;">
-                        <col style="width: 120px;">
-                    </colgroup>
-                    
-                    <thead class="bg-gray-50/50 dark:bg-white/5">
-                        <tr>
-                            <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-400"></th>
-                            <th colspan="2" scope="col" class="border-b border-gray-200 px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider dark:border-white/5! dark:text-gray-400">
-                                Initial Balance
-                            </th>
-                            <th colspan="2" scope="col" class="border-b border-gray-200 px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider dark:border-white/5! dark:text-gray-400">
-                                {{ \Carbon\Carbon::parse($data['date_from'])->format('d M Y').' - '.\Carbon\Carbon::parse($data['date_to'])->format('d M Y') }}
-                            </th>
-                            <th colspan="2" scope="col" class="border-b border-gray-200 px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider dark:border-white/5! dark:text-gray-400">
-                                End Balance
-                            </th>
-                        </tr>
+        @php
+            $data = $this->trialBalanceData;
+            $completeness = $data['company'] ? $this->completeness : null;
+            $fmt = fn ($v) => (abs((float) $v) < 0.005) ? '-' : number_format((float) $v, 2);
+            $cols = ['opening_debit','opening_credit','movement_debit','movement_credit','adjustment_debit','adjustment_credit','closing_debit','closing_credit'];
+        @endphp
 
-                        <tr class="border-b border-gray-200 dark:border-white/5!">
-                            <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-400">
-                                Account
-                            </th>
-                            <th scope="col" class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-400">
-                                Debit
-                            </th>
-                            <th scope="col" class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-400">
-                                Credit
-                            </th>
-                            <th scope="col" class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-400">
-                                Debit
-                            </th>
-                            <th scope="col" class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-400">
-                                Credit
-                            </th>
-                            <th scope="col" class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-400">
-                                Debit
-                            </th>
-                            <th scope="col" class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-400">
-                                Credit
-                            </th>
-                        </tr>
-                    </thead>
+        @if (! $data['company'])
+            <x-filament::section>Select a company to generate the Trial Balance.</x-filament::section>
+        @else
+            <x-filament::section compact>
+                <span class="font-semibold">Report completeness:</span>
+                {{ $completeness['status']->value }} · {{ $completeness['provisional_label'] }}
+            </x-filament::section>
+            <x-filament::section>
+                <x-slot name="heading">
+                    Trial Balance — {{ $data['company']->name }}
+                </x-slot>
+                <x-slot name="description">
+                    {{ \Carbon\Carbon::parse($data['from'])->format('M d, Y') }}
+                    to {{ \Carbon\Carbon::parse($data['to'])->format('M d, Y') }} · posted ledger lines
+                </x-slot>
 
-                    <tbody class="divide-y divide-gray-200 dark:divide-white/5!">
-                        @if($data['accounts']->isNotEmpty())
-                            @foreach($data['accounts'] as $account)
-                                <tr class="hover:bg-gray-50 dark:hover:bg-white/5!">
-                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100!">
-                                        {{ $account->code ? $account->code . ' ' : '' }}{{ $account->name }}
-                                    </td>
-                                    <td class="px-4 py-3 text-right whitespace-nowrap text-sm text-gray-900 dark:text-gray-100!">
-                                        {{ $account->initial_debit > 0 ? number_format($account->initial_debit, 2) : '0.00' }}
-                                    </td>
-                                    <td class="px-4 py-3 text-right whitespace-nowrap text-sm text-gray-900 dark:text-gray-100!">
-                                        {{ $account->initial_credit > 0 ? number_format($account->initial_credit, 2) : '0.00' }}
-                                    </td>
-                                    <td class="px-4 py-3 text-right whitespace-nowrap text-sm text-gray-900 dark:text-gray-100!">
-                                        {{ $account->period_debit > 0 ? number_format($account->period_debit, 2) : '0.00' }}
-                                    </td>
-                                    <td class="px-4 py-3 text-right whitespace-nowrap text-sm text-gray-900 dark:text-gray-100!">
-                                        {{ $account->period_credit > 0 ? number_format($account->period_credit, 2) : '0.00' }}
-                                    </td>
-                                    <td class="px-4 py-3 text-right whitespace-nowrap text-sm text-gray-900 dark:text-gray-100!">
-                                        {{ $account->end_debit > 0 ? number_format($account->end_debit, 2) : '0.00' }}
-                                    </td>
-                                    <td class="px-4 py-3 text-right whitespace-nowrap text-sm text-gray-900 dark:text-gray-100!">
-                                        {{ $account->end_credit > 0 ? number_format($account->end_credit, 2) : '0.00' }}
-                                    </td>
-                                </tr>
-                            @endforeach
-                            
-                            {{-- Total Row --}}
-                            <tr class="bg-gray-100/80 dark:bg-white/5 font-semibold border-t-2 border-gray-300 dark:border-white/5!">
-                                <td class="px-4 py-3 text-gray-900 dark:text-white">
-                                    Total
-                                </td>
-                                <td class="px-4 py-3 text-right whitespace-nowrap text-gray-900 dark:text-white">
-                                    {{ number_format($data['totals']['initial_debit'], 2) }}
-                                </td>
-                                <td class="px-4 py-3 text-right whitespace-nowrap text-gray-900 dark:text-white">
-                                    {{ number_format($data['totals']['initial_credit'], 2) }}
-                                </td>
-                                <td class="px-4 py-3 text-right whitespace-nowrap text-gray-900 dark:text-white">
-                                    {{ number_format($data['totals']['period_debit'], 2) }}
-                                </td>
-                                <td class="px-4 py-3 text-right whitespace-nowrap text-gray-900 dark:text-white">
-                                    {{ number_format($data['totals']['period_credit'], 2) }}
-                                </td>
-                                <td class="px-4 py-3 text-right whitespace-nowrap text-gray-900 dark:text-white">
-                                    {{ number_format($data['totals']['end_debit'], 2) }}
-                                </td>
-                                <td class="px-4 py-3 text-right whitespace-nowrap text-gray-900 dark:text-white">
-                                    {{ number_format($data['totals']['end_credit'], 2) }}
-                                </td>
-                            </tr>
-                        @else
+                <div class="overflow-x-auto rounded-lg border border-gray-200 dark:border-white/5">
+                    <table class="min-w-full text-sm">
+                        <thead class="bg-gray-50/60 dark:bg-white/5 text-xs uppercase text-gray-500">
                             <tr>
-                                <td colspan="7" class="px-4 py-8 text-center text-gray-500 dark:text-gray-400">
-                                    No accounts with transactions in this period
-                                </td>
+                                <th class="px-3 py-2 text-left" rowspan="2">Code</th>
+                                <th class="px-3 py-2 text-left" rowspan="2">Account</th>
+                                <th class="px-3 py-2 text-center" colspan="2">Opening</th>
+                                <th class="px-3 py-2 text-center" colspan="2">Movement</th>
+                                <th class="px-3 py-2 text-center" colspan="2">Adjustment</th>
+                                <th class="px-3 py-2 text-center" colspan="2">Closing</th>
                             </tr>
+                            <tr>
+                                @foreach (['Debit','Credit','Debit','Credit','Debit','Credit','Debit','Credit'] as $h)
+                                    <th class="px-3 py-1 text-right">{{ $h }}</th>
+                                @endforeach
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100 dark:divide-white/5">
+                            @forelse ($data['rows'] as $row)
+                                <tr @class(['bg-gray-50/40 dark:bg-white/5 font-semibold' => $row['is_group']])>
+                                    <td class="px-3 py-1.5 whitespace-nowrap">{{ $row['code'] }}</td>
+                                    <td class="px-3 py-1.5 whitespace-nowrap">{{ $row['name'] }}</td>
+                                    @foreach ($cols as $c)
+                                        <td class="px-3 py-1.5 text-right tabular-nums">{{ $fmt($row[$c]) }}</td>
+                                    @endforeach
+                                </tr>
+                            @empty
+                                <tr><td colspan="10" class="px-3 py-4 text-center text-gray-500">No ledger activity for this selection.</td></tr>
+                            @endforelse
+                        </tbody>
+                        @if (! empty($data['totals']))
+                            <tfoot class="border-t-2 border-gray-300 dark:border-white/10 font-bold">
+                                <tr>
+                                    <td class="px-3 py-2" colspan="2">Total</td>
+                                    @foreach ($cols as $c)
+                                        <td class="px-3 py-2 text-right tabular-nums">{{ $fmt($data['totals'][$c] ?? 0) }}</td>
+                                    @endforeach
+                                </tr>
+                                <tr @class(['text-danger-600' => abs((float) ($data['totals']['difference'] ?? 0)) > 0.005, 'text-success-600' => abs((float) ($data['totals']['difference'] ?? 0)) <= 0.005])>
+                                    <td class="px-3 py-1" colspan="8">Difference (Closing Debit − Closing Credit)</td>
+                                    <td class="px-3 py-1 text-right tabular-nums" colspan="2">{{ $fmt($data['totals']['difference'] ?? 0) }}</td>
+                                </tr>
+                            </tfoot>
                         @endif
-                    </tbody>
-                </table>
-            </div>
-        </x-filament::section>
+                    </table>
+                </div>
+            </x-filament::section>
+        @endif
     </div>
 </x-filament-panels::page>

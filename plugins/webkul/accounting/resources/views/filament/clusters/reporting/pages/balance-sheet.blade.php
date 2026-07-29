@@ -3,6 +3,12 @@
         {{-- Filters --}}
         {{ $this->form }}
 
+        @php $completeness = $this->completeness; @endphp
+        <x-filament::section compact>
+            <span class="font-semibold">Report completeness:</span>
+            {{ $completeness['status']->value }} · {{ $completeness['provisional_label'] }}
+        </x-filament::section>
+
         {{-- Report Header --}}
         <x-filament::section>
             @php

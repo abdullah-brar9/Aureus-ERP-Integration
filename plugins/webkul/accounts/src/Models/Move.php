@@ -109,6 +109,13 @@ class Move extends Model implements Sortable
         'is_move_sent',
         'source_id',
         'medium_id',
+        'accounting_source_type',
+        'accounting_source_id',
+        'bank_statement_id',
+        'bank_mapping_id',
+        'cash_flow_category',
+        'tax_treatment',
+        'review_status',
     ];
 
     protected function getLogAttributeLabels(): array

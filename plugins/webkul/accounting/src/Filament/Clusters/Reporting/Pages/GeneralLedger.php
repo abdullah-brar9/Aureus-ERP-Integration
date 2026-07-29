@@ -7,6 +7,7 @@ use BezhanSalleh\FilamentShield\Traits\HasPageShield;
 use Carbon\Carbon;
 use Filament\Actions\Action;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Toggle;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Pages\Dashboard\Concerns\HasFiltersForm;
@@ -67,7 +68,14 @@ class GeneralLedger extends Page implements HasForms
 
     public function mount(): void
     {
-        $this->form->fill([]);
+        $requestedAccountId = (int) request()->query('account_id', 0);
+
+        $this->form->fill([
+            'accounts'             => $requestedAccountId > 0 ? [$requestedAccountId] : [],
+            'show_zero_activity'   => true,
+            'show_zero_balance'    => true,
+            'show_classification'  => false,
+        ]);
     }
 
     protected function getHeaderActions(): array
@@ -142,10 +150,58 @@ class GeneralLedger extends Page implements HasForms
                     Select::make('journals')
                         ->label(__('accounting::filament/clusters/reporting.pages.general-ledger.filters.journals'))
                         ->multiple()
-                        ->options(Journal::pluck('name', 'id'))
+                        ->options(fn () => Journal::query()
+                            ->where('company_id', Auth::user()?->default_company_id)
+                            ->pluck('name', 'id'))
                         ->searchable()
                         ->live()
                         ->afterStateUpdated(fn () => $this->resetExpandedState()),
+
+                    Select::make('accounts')
+                        ->label('Postable accounts')
+                        ->multiple()
+                        ->options(fn () => Account::query()
+                            ->postable()
+                            ->where('deprecated', false)
+                            ->whereHas('companies', fn ($query) => $query->where('companies.id', Auth::user()?->default_company_id))
+                            ->orderBy('code')
+                            ->get()
+                            ->mapWithKeys(fn (Account $account) => [$account->id => trim("{$account->code} {$account->name}")]))
+                        ->searchable()
+                        ->preload()
+                        ->live()
+                        ->afterStateUpdated(fn () => $this->resetExpandedState()),
+
+                    Select::make('groups')
+                        ->label('Account groups')
+                        ->multiple()
+                        ->options(fn () => Account::query()
+                            ->where('is_group', true)
+                            ->whereHas('companies', fn ($query) => $query->where('companies.id', Auth::user()?->default_company_id))
+                            ->orderBy('name')
+                            ->pluck('name', 'id'))
+                        ->helperText('Groups filter the tree; journal postings remain limited to postable accounts.')
+                        ->searchable()
+                        ->preload()
+                        ->live()
+                        ->afterStateUpdated(fn () => $this->resetExpandedState()),
+
+                    Toggle::make('show_zero_activity')
+                        ->label('Show zero-activity accounts')
+                        ->default(true)
+                        ->live()
+                        ->afterStateUpdated(fn () => $this->resetExpandedState()),
+
+                    Toggle::make('show_zero_balance')
+                        ->label('Show zero-balance accounts')
+                        ->default(true)
+                        ->live()
+                        ->afterStateUpdated(fn () => $this->resetExpandedState()),
+
+                    Toggle::make('show_classification')
+                        ->label('Show account classification')
+                        ->default(false)
+                        ->live(),
                 ])
                 ->columnSpanFull(),
         ];
@@ -163,7 +219,10 @@ class GeneralLedger extends Page implements HasForms
         $dateFrom = $dateRange ? Carbon::parse($dateRange[0]) : now()->startOfYear();
         $dateTo = $dateRange ? Carbon::parse($dateRange[1]) : now();
 
-        $journalIds = $this->form->getState()['journals'] ?? [];
+        $state = $this->form->getState();
+        $journalIds = $state['journals'] ?? [];
+        $accountIds = $state['accounts'] ?? [];
+        $groupIds = $state['groups'] ?? [];
         $companyId = Auth::user()->default_company_id;
 
         $accountsQuery = Account::select(
@@ -171,30 +230,65 @@ class GeneralLedger extends Page implements HasForms
             'accounts_accounts.code',
             'accounts_accounts.name',
             'accounts_accounts.account_type',
+            'accounts_accounts.source_classification_path',
             DB::raw('COALESCE(SUM(CASE WHEN accounts_account_moves.date < ? THEN accounts_account_move_lines.balance ELSE 0 END), 0) as opening_balance'),
             DB::raw('COALESCE(SUM(CASE WHEN accounts_account_moves.date BETWEEN ? AND ? THEN accounts_account_move_lines.debit ELSE 0 END), 0) as period_debit'),
             DB::raw('COALESCE(SUM(CASE WHEN accounts_account_moves.date BETWEEN ? AND ? THEN accounts_account_move_lines.credit ELSE 0 END), 0) as period_credit'),
             DB::raw('COALESCE(SUM(CASE WHEN accounts_account_moves.date <= ? THEN accounts_account_move_lines.balance ELSE 0 END), 0) as ending_balance')
         )
             ->leftJoin('accounts_account_move_lines', 'accounts_accounts.id', '=', 'accounts_account_move_lines.account_id')
-            ->leftJoin('accounts_account_moves', function ($join) use ($companyId) {
+            ->leftJoin('accounts_account_moves', function ($join) use ($companyId, $journalIds) {
                 $join->on('accounts_account_move_lines.move_id', '=', 'accounts_account_moves.id')
                     ->where('accounts_account_moves.state', MoveState::POSTED)
                     ->where('accounts_account_moves.company_id', $companyId);
+
+                if ($journalIds !== []) {
+                    $join->whereIn('accounts_account_moves.journal_id', $journalIds);
+                }
             })
             ->addBinding([$dateFrom, $dateFrom, $dateTo, $dateFrom, $dateTo, $dateTo], 'select')
-            ->groupBy('accounts_accounts.id', 'accounts_accounts.code', 'accounts_accounts.name', 'accounts_accounts.account_type')
-            ->havingRaw('COALESCE(SUM(CASE WHEN accounts_account_moves.date <= ? THEN accounts_account_move_lines.balance ELSE 0 END), 0) != 0', [$dateTo])
+            ->where('accounts_accounts.deprecated', false)
+            ->where('accounts_accounts.is_group', false)
+            ->whereHas('companies', fn ($query) => $query->where('companies.id', $companyId))
+            ->groupBy(
+                'accounts_accounts.id',
+                'accounts_accounts.code',
+                'accounts_accounts.name',
+                'accounts_accounts.account_type',
+                'accounts_accounts.source_classification_path',
+            )
             ->orderBy('accounts_accounts.code');
 
-        if (! empty($journalIds)) {
-            $accountsQuery->whereIn('accounts_account_moves.journal_id', $journalIds);
+        if ($accountIds !== []) {
+            $accountsQuery->whereIn('accounts_accounts.id', $accountIds);
+        }
+
+        if ($groupIds !== []) {
+            $descendantIds = Account::query()
+                ->whereIn('id', $groupIds)
+                ->with('descendants')
+                ->get()
+                ->flatMap(fn (Account $group) => $group->getDescendantIds())
+                ->unique()
+                ->values()
+                ->all();
+
+            $accountsQuery->whereIn('accounts_accounts.id', $descendantIds);
+        }
+
+        if (! ($state['show_zero_activity'] ?? true)) {
+            $accountsQuery->havingRaw('(period_debit != 0 OR period_credit != 0)');
+        }
+
+        if (! ($state['show_zero_balance'] ?? true)) {
+            $accountsQuery->havingRaw('ending_balance != 0');
         }
 
         return [
-            'accounts'  => $accountsQuery->get(),
-            'date_from' => $dateFrom,
-            'date_to'   => $dateTo,
+            'accounts'            => $accountsQuery->get(),
+            'date_from'           => $dateFrom,
+            'date_to'             => $dateTo,
+            'show_classification' => (bool) ($state['show_classification'] ?? false),
         ];
     }
 

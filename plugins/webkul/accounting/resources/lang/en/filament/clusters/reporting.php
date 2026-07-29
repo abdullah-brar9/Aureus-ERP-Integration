@@ -30,7 +30,7 @@ return [
         'balance-sheet' => [
             'navigation' => [
                 'title' => 'Balance Sheet',
-                'group' => 'Legacy Reports',
+                'group' => 'Reports',
             ],
             'actions' => [
                 'export-excel' => 'Export to Excel',
@@ -97,7 +97,7 @@ return [
         'profit-loss' => [
             'navigation' => [
                 'title' => 'Profit & Loss',
-                'group' => 'Legacy Reports',
+                'group' => 'Reports',
             ],
             'actions' => [
                 'export-excel' => 'Export to Excel',
@@ -125,7 +125,7 @@ return [
         'general-ledger' => [
             'navigation' => [
                 'title' => 'General Ledger',
-                'group' => 'Legacy Reports',
+                'group' => 'Reports',
             ],
             'actions' => [
                 'export-excel' => 'Export to Excel',

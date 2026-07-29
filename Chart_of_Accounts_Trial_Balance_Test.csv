@@ -1,0 +1,67 @@
+﻿TRUCK IT IN PVT LTD,,,,,,,,,,,,,,,,
+Chart of Accounts,,,,,,,,,,,,,,,,
+FY25,,,,,,,,,,,,,,,,
+,,,,,,,,,Opening,,Movement,,Adjustment,,Closing,
+Nature,Classification 1,Classification 2,Classification 3,Classification 4,Classification 5,Classification 7,Code,Title,Debit,Credit,Debit,Credit,Debit,Credit,Debit,Credit
+B/S,Assets,Non Current Assets,Property and equipment,Cost,Cost,Furniture and fixture,1011,Furniture and fixture,100000,0,0,0,0,0,100000,0
+B/S,Assets,Non Current Assets,Property and equipment,Cost,Cost,Leasehold building,1012,Leasehold building,0,0,0,0,0,0,0,0
+B/S,Assets,Non Current Assets,Property and equipment,Cost,Cost,Computers,1013,Computers,0,0,0,0,0,0,0,0
+B/S,Assets,Non Current Assets,Property and equipment,Cost,Cost,Office Equipments,1014,Office Equipments,0,0,0,0,0,0,0,0
+B/S,Assets,Non Current Assets,Property and equipment,Cost,Cost,Vehicles,1015,Vehicles,0,0,0,0,0,0,0,0
+B/S,Assets,Non Current Assets,Intanbgible assets,Cost,Cost,Intangible Assets,1016,Intangible Assets,0,0,0,0,0,0,0,0
+B/S,Assets,Non Current Assets,Property and equipment,Accumulated Depreciation,Accumulated Depreciation,Accumulated depreciation,1017,Accumulated depreciation,0,20000,0,10000,0,0,0,30000
+B/S,Assets,Current Assets,Trade debts,unsecured,Considered good,Trade Debtors,1018,Trade Debtors,200000,0,300000,200000,0,0,300000,0
+B/S,Assets,Current Assets,"Advances, deposits and prepayments",Advances,Carriers,Advance to carriers,1019,Advance to carriers,0,0,0,0,0,0,0,0
+B/S,Assets,Non Current Assets,Long term advances and deposits,Advances,To employees,Advance to BYOD,1020,Advance to BYOD,0,0,0,0,0,0,0,0
+B/S,Assets,Non Current Assets,Long term advances and deposits,Deposits,Security deposit office,Security deposit-Office,1021,Security deposit-Office,0,0,0,0,0,0,0,0
+B/S,Assets,Current Assets,"Advances, deposits and prepayments",Deposits,Customers,Security Deposits - Customer,1022,Security Deposits - Customer,0,0,0,0,0,0,0,0
+B/S,Assets,Current Assets,"Advances, deposits and prepayments",Deposits,Carriers,Security deposit - carriers,1023,Security deposit - carriers,0,0,0,0,0,0,0,0
+B/S,Assets,Non Current Assets,Long term advances and deposits,Deposits,Margin against guarantee,Bank Guarrantee,1024,Bank Guarrantee,0,0,0,0,0,0,0,0
+B/S,Assets,Current Assets,"Advances, deposits and prepayments",Advances,Advance to Employees,Advance to Employees,1025,Advance to Employees,0,0,0,0,0,0,0,0
+B/S,Assets,Current Assets,"Advances, deposits and prepayments",Prepayments,Prepayments,Prepayments,1026,Prepayments,0,0,0,0,0,0,0,0
+B/S,Libailities,Current Liabilities,Accrued and other liabilities,Sales tax payable,Sales tax payable,Input sales tax,1027,Input sales tax,0,0,0,0,0,0,0,0
+B/S,Assets,Current Assets,Cash & Bank Balances,Cash at bank,Current accounts,PK49DUIB0000000627075001,1028,PK49DUIB0000000627075001,500000,0,215000,135000,0,0,580000,0
+B/S,Assets,Current Assets,Cash & Bank Balances,Cash at bank,Current accounts,PK55HABB0022827200508103,1029,PK55HABB0022827200508103,0,0,0,0,0,0,0,0
+B/S,Assets,Current Assets,Cash & Bank Balances,Cash at bank,Savings account,PK24MEZN0001110107095251,1030,PK24MEZN0001110107095251,0,0,0,0,0,0,0,0
+B/S,Assets,Current Assets,Cash & Bank Balances,Cash at bank,Current accounts,PK75MPBL0124067140164610,1031,PK75MPBL0124067140164610,0,0,0,0,0,0,0,0
+B/S,Libailities,Current Liabilities,Accrued and other liabilities,Sales tax payable,Sales tax payable,Sales Tax Payable,1032,Sales Tax Payable,0,0,0,0,0,0,0,0
+B/S,Libailities,Current Liabilities,Accrued and other liabilities,Other liabilities,Other liabilities,Contract liability,1033,Contract liability,0,0,0,0,0,0,0,0
+B/S,Libailities,Current Liabilities,Accrued and other liabilities,Accrued expenses,Accrued expenses,Accrued payroll,1034,Accrued payroll,0,0,0,0,0,0,0,0
+B/S,Libailities,Current Liabilities,Accrued and other liabilities,Accrued expenses,Accrued expenses,Accrued expenses,1035,Accrued expenses,0,80000,0,0,0,8000,0,88000
+B/S,Libailities,Current Liabilities,Accrued and other liabilities,Withholding income tax payable,Withholding income tax payable,Withholding tax payable:Withholding tax - Vendors,1036,Withholding tax payable:Withholding tax - Vendors,0,0,0,0,0,0,0,0
+B/S,Equity,Advance against issuance of shares,Advance against issuance of shares,Advance against issuance of shares,Advance against issuance of shares,Advance against issue of shares,1037,Advance against issue of shares,0,0,0,0,0,0,0,0
+B/S,Equity,Share capital and reserves,Reserves,Accumulated losses,Accumulated losses,Retained Earnings,1038,Retained Earnings,0,0,0,0,0,0,0,0
+B/S,Equity,Share capital and reserves,Reserves,Share premium,Share premium,Share premium,1039,Share premium,0,0,0,0,0,0,0,0
+B/S,Equity,Share capital and reserves,Share capital,"Issued, Subscribed and Paid-up Capital","Issued, Subscribed and Paid-up Capital",Share capital,1040,Share capital,0,700000,0,0,0,0,0,700000
+B/S,Libailities,Current Liabilities,Accrued and other liabilities,Accrued expenses,Accrued expenses,ABHI,1041,ABHI,0,0,0,0,0,0,0,0
+B/S,Libailities,Current Liabilities,Accrued and other liabilities,Accrued expenses,Accrued expenses,Audit Fee Payable,1042,Audit Fee Payable,0,0,0,25000,0,0,0,25000
+B/S,Assets,Current Assets,"Advances, deposits and prepayments",Prepayments,Prepayments,Prepaid Leasehold,1043,Prepaid Leasehold,0,0,0,0,0,0,0,0
+B/S,Assets,Current Assets,Taxation - net,Advance tax,Opening,Advance tax,1044,Advance tax,0,0,0,0,0,0,0,0
+B/S,Assets,Current Assets,Taxation - net,Advance tax,Deducted,WHT on Bank Profit,1045,WHT on Bank Profit,0,0,0,0,0,0,0,0
+B/S,Assets,Current Assets,Taxation - net,Advance tax,Paid,Withholding tax :Withholding tax - Utilities,1046,Withholding tax :Withholding tax - Utilities,0,0,0,0,0,0,0,0
+B/S,Assets,Current Assets,Taxation - net,Provision For Taxation,Provision For Taxation,Provision for Taxation,1047,Provision for Taxation,0,0,0,0,0,12000,0,12000
+P&L,Expenses,Taxation,Current,Current,Current,Taxation ( Current Year),1048,Taxation ( Current Year),0,0,0,0,12000,0,12000,0
+P&L,Expenses,Direct expenses,Fleet subsidy,Fleet subsidy,Fleet subsidy,Fleet Subsidy,1049,Fleet Subsidy,0,0,0,0,0,0,0,0
+P&L,Revenue,Revenue - net,Services to shippers - net,Services to shippers - net,Services to shippers - net,Sales revenue,1050,Sales revenue,0,0,0,300000,0,0,0,300000
+P&L,Expenses,Administrative expenses,Allowance for doubtful debts,Allowance for doubtful debts,Allowance for doubtful debts,Allowance for doubtful debts,1051,Allowance for doubtful debts,0,0,0,0,0,0,0,0
+P&L,Expenses,Administrative expenses,Allowance for doubtful debts,Allowance for doubtful debts,Allowance for doubtful debts,Allowance for doubtful debts,1052,Allowance for doubtful debts,0,0,0,0,0,0,0,0
+P&L,Expenses,Administrative expenses,Allowance for advance for laptops,Allowance for advance for laptops,Allowance for advance for laptops,Allowance for advance for laptops,1053,Allowance for advance for laptops,0,0,0,0,0,0,0,0
+P&L,Revenue,Revenue - net,Carrier cost,Trucker's Commission,Trucker's Commission,Trucker's Commission,1054,Trucker's Commission,0,0,0,0,0,0,0,0
+P&L,Revenue,Revenue - net,Carrier cost,Trucker's Cost - Fuel,Trucker's Cost - Fuel,Trucker's Cost - Fuel,1055,Trucker's Cost - Fuel,0,0,0,0,0,0,0,0
+P&L,Expenses,Administrative expenses,Salaries and other benefits,Salaries and other benefits,Salaries and other benefits,SALARIES & WAGES,1056,SALARIES & WAGES,0,0,90000,0,0,0,90000,0
+P&L,Expenses,Finance Cost,Bank charges,Bank charges,Bank charges,Bank Charges,1057,Bank Charges,0,0,5000,0,0,0,5000,0
+P&L,Expenses,Administrative expenses,Rent and utilities,Rent and utilities,Rent and utilities,Rent and utilities,1058,Rent and utilities,0,0,40000,0,8000,0,48000,0
+P&L,Expenses,Administrative expenses,Travelling and entertainment,Travelling and entertainment,Travelling and entertainment,Travel and entertainment,1059,Travel and entertainment,0,0,0,0,0,0,0,0
+P&L,Expenses,Administrative expenses,Legal and professional,Legal and professional,Legal and professional,Legal and professional,1060,LEGAL & PROFESSIONAL FEE,0,0,0,0,0,0,0,0
+P&L,Expenses,Administrative expenses,Offline marketing and channel,Offline marketing and channel,Offline marketing and channel,Offline marketing and channel,1061,Offline marketing and channel,0,0,0,0,0,0,0,0
+P&L,Expenses,Administrative expenses,Call center,Call center,Call center,Call center,1062,Call center,0,0,0,0,0,0,0,0
+P&L,Expenses,Administrative expenses,Auditors' remuneration,Auditors' remuneration,Auditors' remuneration,Auditors remuneration,1063,Auditors remuneration,0,0,25000,0,0,0,25000,0
+P&L,Expenses,Administrative expenses,Depreciation,Depreciation,Depreciation,Depreciation,1064,Depreciation,0,0,10000,0,0,0,10000,0
+P&L,Income,Other Income,Income from non - financial assets,Miscellaneous,Miscellaneous,Other Income,1065,Other Income,0,0,0,15000,0,0,0,15000
+P&L,Income,Other Income,Income from financial assets,Interest on savings accounts,Interest on savings accounts,Profit on PLS,1066,Profit on PLS,0,0,0,0,0,0,0,0
+P&L,Expenses,Administrative expenses,Amortization,Amortization,Amortization,Amortization,1067,Amortization,0,0,0,0,0,0,0,0
+P&L,Expenses,Administrative expenses,Other expenses,Other expenses,Other expenses,Other Expenses,1068,Other Expenses,0,0,0,0,0,0,0,0
+P&L,Expenses,Finance Cost,Bank charges,Bank charges,Bank charges,Bank Charges,1069,Bank Charges,0,0,0,0,0,0,0,0
+P&L,Expenses,Other expenses,Loss on disposal,Loss on disposal,Loss on disposal,Loss on disposal,new code 2,Loss on disposal,0,0,0,0,0,0,0,0
+P&L,Assets,Current Assets,A Rec written off,A Rec written off,A Rec written off,A Rec written off,New code 1,A Rec written off,0,0,0,0,0,0,0,0
+P&L,Expenses,Taxation,Final tax levy,Final tax levy,Final tax levy,Final tax levy,New code 3,Final tax levy,0,0,0,0,0,0,0,0

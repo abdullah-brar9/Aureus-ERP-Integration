@@ -32,14 +32,26 @@ class Account extends Model
         'deprecated',
         'reconcile',
         'non_trade',
+        'is_group',
+        'source_classification_path',
+        'import_batch_id',
     ];
 
     protected $casts = [
         'deprecated'   => 'boolean',
         'reconcile'    => 'boolean',
         'non_trade'    => 'boolean',
+        'is_group'     => 'boolean',
         'account_type' => AccountType::class,
     ];
+
+    /**
+     * Postable (leaf) accounts only — journal lines may not use group nodes.
+     */
+    public function scopePostable($query)
+    {
+        return $query->where('is_group', false);
+    }
 
     public function currency(): BelongsTo
     {

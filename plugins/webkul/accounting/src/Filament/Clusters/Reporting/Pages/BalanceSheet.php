@@ -24,6 +24,7 @@ use Webkul\Account\Models\MoveLine;
 use Webkul\Accounting\Filament\Clusters\Reporting;
 use Webkul\Accounting\Filament\Clusters\Reporting\Pages\Concerns\NormalizeDateFilter;
 use Webkul\Accounting\Filament\Clusters\Reporting\Pages\Exports\BalanceSheetExport;
+use Webkul\Accounting\Services\ReportCompletenessService;
 
 class BalanceSheet extends Page implements HasForms
 {
@@ -261,6 +262,19 @@ class BalanceSheet extends Page implements HasForms
             'grand_total'       => $liabilities['total'] + $equity['total'],
             'date'              => $date,
         ];
+    }
+
+    #[Computed]
+    public function completeness(): array
+    {
+        $dateRange = $this->parseDateRange();
+        $date = $dateRange ? Carbon::parse($dateRange[1]) : now();
+
+        return app(ReportCompletenessService::class)->assess(
+            Auth::user()->default_company_id,
+            $date->copy()->startOfYear()->toDateString(),
+            $date->toDateString(),
+        );
     }
 
     protected function buildAssetSection($accounts, $balances): array

@@ -24,6 +24,7 @@ use Webkul\Account\Models\MoveLine;
 use Webkul\Accounting\Filament\Clusters\Reporting;
 use Webkul\Accounting\Filament\Clusters\Reporting\Pages\Concerns\NormalizeDateFilter;
 use Webkul\Accounting\Filament\Clusters\Reporting\Pages\Exports\ProfitAndLossExport;
+use Webkul\Accounting\Services\ReportCompletenessService;
 
 class ProfitLoss extends Page implements HasForms
 {
@@ -203,6 +204,20 @@ class ProfitLoss extends Page implements HasForms
             'date_from'  => $dateFrom,
             'date_to'    => $dateTo,
         ];
+    }
+
+    #[Computed]
+    public function completeness(): array
+    {
+        $dateRange = $this->parseDateRange();
+        $dateFrom = $dateRange ? Carbon::parse($dateRange[0]) : now()->startOfMonth();
+        $dateTo = $dateRange ? Carbon::parse($dateRange[1]) : now()->endOfMonth();
+
+        return app(ReportCompletenessService::class)->assess(
+            Auth::user()->default_company_id,
+            $dateFrom->toDateString(),
+            $dateTo->toDateString(),
+        );
     }
 
     protected function buildRevenueSection($accounts, $balances): array

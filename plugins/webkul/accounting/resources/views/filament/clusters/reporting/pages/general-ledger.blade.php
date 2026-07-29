@@ -95,6 +95,14 @@
                                             <span class="font-medium text-gray-900 dark:text-white">
                                                 {{ $account->code }} {{ $account->name }}
                                             </span>
+                                            <div class="text-xs text-gray-500 dark:text-gray-400">
+                                                Opening {{ number_format($account->opening_balance, 2) }}
+                                                · Net movement {{ number_format($account->period_debit - $account->period_credit, 2) }}
+                                                · Closing {{ number_format($account->ending_balance, 2) }}
+                                            </div>
+                                            @if ($data['show_classification'] && $account->source_classification_path)
+                                                <div class="text-xs text-primary-600">{{ $account->source_classification_path }}</div>
+                                            @endif
                                         </td>
                                         <td class="px-4 py-3"></td>
                                         <td class="px-4 py-3"></td>
@@ -222,7 +230,7 @@
                             <tbody>
                                 <tr>
                                     <td colspan="9" class="px-4 py-8 text-center text-gray-500 dark:text-gray-400">
-                                        No accounts with transactions in this period
+                                        No accounts match the selected visibility filters
                                     </td>
                                 </tr>
                             </tbody>
