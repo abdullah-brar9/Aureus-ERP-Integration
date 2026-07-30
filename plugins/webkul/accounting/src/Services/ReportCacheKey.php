@@ -40,6 +40,7 @@ class ReportCacheKey
             'cum='.($cumulative ? '1' : '0'),
             'posted='.($context->postedOnly ? '1' : '0'),
             'companies='.$companyPart,
+            'original_currency='.($context->originalCurrencyId ?? '-'),
             'periods='.$periodPart,
         ]);
 
@@ -83,6 +84,7 @@ class ReportCacheKey
             'basis='.$defaultBasis->value,
             'posted='.($context->postedOnly ? '1' : '0'),
             'companies='.$companyPart,
+            'original_currency='.($context->originalCurrencyId ?? '-'),
             'columns='.$columnPart,
         ]);
 

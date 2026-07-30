@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Webkul\Account\Models\BankStatement;
 use Webkul\Accounting\Filament\Clusters\Accounting;
 use Webkul\Accounting\Filament\Clusters\Accounting\Resources\BankStatementResource\Pages\ListBankStatements;
+use Webkul\Accounting\Support\AccountingPermissions;
 
 class BankStatementResource extends Resource
 {
@@ -45,6 +46,10 @@ class BankStatementResource extends Resource
             TextColumn::make('total_debits')->alignRight(),
             TextColumn::make('total_credits')->alignRight(),
             TextColumn::make('closing_balance')->alignRight(),
+            TextColumn::make('currency.code')->label('Original currency'),
+            TextColumn::make('company_closing_balance')->label('Company closing')->numeric(4)->alignRight()->placeholder('Missing rate'),
+            TextColumn::make('companyCurrency.code')->label('Company currency'),
+            TextColumn::make('conversion_status')->badge(),
             TextColumn::make('lines_count')->label('Transactions')->alignRight(),
             TextColumn::make('import_status')->badge(),
             IconColumn::make('is_completed')->label('Posted/closed')->boolean(),
@@ -56,6 +61,11 @@ class BankStatementResource extends Resource
     public static function canCreate(): bool
     {
         return false;
+    }
+
+    public static function canViewAny(): bool
+    {
+        return Auth::user()?->can(AccountingPermissions::BankStatements) ?? false;
     }
 
     public static function getPages(): array

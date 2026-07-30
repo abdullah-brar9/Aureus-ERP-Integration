@@ -2,6 +2,7 @@
 
 namespace Webkul\Accounting\Services\Bank;
 
+use Brick\Math\BigDecimal;
 use Illuminate\Support\Facades\DB;
 use RuntimeException;
 use Webkul\Account\Enums\JournalType;
@@ -12,7 +13,11 @@ use Webkul\Account\Models\Journal;
 use Webkul\Accounting\Enums\BankImportStatus;
 use Webkul\Accounting\Enums\BankPostingStatus;
 use Webkul\Accounting\Enums\BankReviewStatus;
+use Webkul\Accounting\Enums\ConversionStatus;
+use Webkul\Accounting\Exceptions\MissingExchangeRateException;
 use Webkul\Accounting\Models\BankTransactionMapping;
+use Webkul\Accounting\Services\Currency\CompanyCurrencyService;
+use Webkul\Accounting\Services\Currency\ExchangeRateService;
 use Webkul\Support\Models\Company;
 use Webkul\Support\Models\Currency;
 
@@ -21,6 +26,8 @@ class BankStatementImportService
     public function __construct(
         protected BankStatementParserRegistry $parsers,
         protected BankStatementValidationService $validator,
+        protected CompanyCurrencyService $companyCurrencies,
+        protected ExchangeRateService $exchangeRates,
     ) {}
 
     public function import(
@@ -32,6 +39,7 @@ class BankStatementImportService
         ?string $parserKey = null,
         ?string $sheetName = null,
         ?string $originalFilename = null,
+        ?bool $currencyWasOverridden = null,
     ): BankStatement {
         $this->assertTarget($company, $journal, $bankGlAccount, $currency);
 
@@ -45,25 +53,25 @@ class BankStatementImportService
 
         if (BankStatement::query()
             ->where('company_id', $company->id)
+            ->where('bank_account_number', $normalized->bankAccountNumber)
+            ->where('currency_id', $currency->id)
+            ->whereDate('statement_start_date', $normalized->statementStartDate)
+            ->whereDate('statement_end_date', $normalized->statementEndDate)
             ->where('file_hash', $fileHash)
             ->where('parser', $normalized->parser)
             ->exists()) {
-            throw new RuntimeException('This bank statement source has already been imported for the company.');
+            throw new RuntimeException('This bank statement source, account, currency and period have already been imported for the company.');
         }
 
         $errors = $this->validator->validate($normalized);
-
-        if (mb_strtoupper($normalized->currency) !== mb_strtoupper($currency->name)) {
-            $errors[] = [
-                'code'       => 'currency_mismatch',
-                'message'    => "Statement currency {$normalized->currency} does not match {$currency->name}.",
-                'source_row' => null,
-            ];
-        }
+        $selectedCurrencyCode = mb_strtoupper((string) ($currency->code ?: $currency->name));
+        $detectedCurrencyCode = mb_strtoupper(trim($normalized->currency));
+        $currencyWasOverridden ??= $detectedCurrencyCode !== '' && $detectedCurrencyCode !== $selectedCurrencyCode;
 
         $overlap = BankStatement::query()
             ->where('company_id', $company->id)
             ->where('bank_account_number', $normalized->bankAccountNumber)
+            ->where('currency_id', $currency->id)
             ->whereDate('statement_start_date', '<=', $normalized->statementEndDate)
             ->whereDate('statement_end_date', '>=', $normalized->statementStartDate)
             ->exists();
@@ -76,6 +84,8 @@ class BankStatementImportService
             ];
         }
 
+        $conversions = $this->prepareConversions($normalized, $company, $currency);
+
         return DB::transaction(function () use (
             $normalized,
             $errors,
@@ -86,43 +96,56 @@ class BankStatementImportService
             $fileHash,
             $originalFilename,
             $path,
+            $currencyWasOverridden,
+            $detectedCurrencyCode,
+            $conversions,
         ): BankStatement {
             $status = $errors === []
                 ? BankImportStatus::Validated
                 : BankImportStatus::ReconciliationFailed;
 
             $statement = BankStatement::query()->create([
-                'company_id'           => $company->id,
-                'journal_id'           => $journal->id,
-                'currency_id'          => $currency->id,
-                'bank_gl_account_id'   => $bankGlAccount->id,
-                'name'                 => "{$normalized->bank} {$normalized->statementStartDate} to {$normalized->statementEndDate}",
-                'reference'            => $normalized->bankAccountNumber,
-                'bank_name'            => $normalized->bank,
-                'bank_account_number'  => $normalized->bankAccountNumber,
-                'account_title'        => $normalized->accountTitle,
-                'date'                 => $normalized->statementEndDate,
-                'statement_start_date' => $normalized->statementStartDate,
-                'statement_end_date'   => $normalized->statementEndDate,
-                'opening_balance'      => $normalized->openingBalance,
-                'total_debits'         => $normalized->totalDebits,
-                'total_credits'        => $normalized->totalCredits,
-                'closing_balance'      => $normalized->closingBalance,
-                'balance_start'        => $normalized->openingBalance,
-                'balance_end'          => $normalized->closingBalance,
-                'balance_end_real'     => $normalized->closingBalance,
-                'original_filename'    => $originalFilename ?? basename($path),
-                'file_hash'            => $fileHash,
-                'source_sheet'         => $normalized->sourceSheet,
-                'parser'               => $normalized->parser,
-                'import_status'        => $status->value,
-                'validation_errors'    => $errors,
-                'raw_header'           => $normalized->rawHeader,
-                'is_completed'         => false,
+                'company_id'              => $company->id,
+                'journal_id'              => $journal->id,
+                'currency_id'             => $currency->id,
+                'company_currency_id'     => $company->currency_id,
+                'bank_gl_account_id'      => $bankGlAccount->id,
+                'name'                    => "{$normalized->bank} {$normalized->statementStartDate} to {$normalized->statementEndDate}",
+                'reference'               => $normalized->bankAccountNumber,
+                'bank_name'               => $normalized->bank,
+                'bank_account_number'     => $normalized->bankAccountNumber,
+                'account_title'           => $normalized->accountTitle,
+                'date'                    => $normalized->statementEndDate,
+                'statement_start_date'    => $normalized->statementStartDate,
+                'statement_end_date'      => $normalized->statementEndDate,
+                'opening_balance'         => $normalized->openingBalance,
+                'total_debits'            => $normalized->totalDebits,
+                'total_credits'           => $normalized->totalCredits,
+                'closing_balance'         => $normalized->closingBalance,
+                'detected_currency_code'  => $detectedCurrencyCode ?: null,
+                'currency_was_overridden' => $currencyWasOverridden,
+                'company_opening_balance' => $conversions['company_opening_balance'],
+                'company_total_debits'    => $conversions['company_total_debits'],
+                'company_total_credits'   => $conversions['company_total_credits'],
+                'company_closing_balance' => $conversions['company_closing_balance'],
+                'conversion_status'       => $conversions['status'],
+                'balance_start'           => $normalized->openingBalance,
+                'balance_end'             => $normalized->closingBalance,
+                'balance_end_real'        => $normalized->closingBalance,
+                'original_filename'       => $originalFilename ?? basename($path),
+                'file_hash'               => $fileHash,
+                'source_sheet'            => $normalized->sourceSheet,
+                'parser'                  => $normalized->parser,
+                'import_status'           => $status->value,
+                'validation_errors'       => $errors,
+                'raw_header'              => $normalized->rawHeader,
+                'is_completed'            => false,
             ]);
 
             foreach ($normalized->transactions as $sort => $transaction) {
+                $conversion = $conversions['transactions'][$sort];
                 $fingerprint = $transaction->fingerprint($normalized->bankAccountNumber);
+                $originalSignedAmount = BigDecimal::of($transaction->credit)->minus($transaction->debit)->__toString();
                 $line = BankStatementLine::query()->create([
                     'sort'                    => $sort,
                     'journal_id'              => $journal->id,
@@ -130,7 +153,7 @@ class BankStatementImportService
                     'statement_id'            => $statement->id,
                     'currency_id'             => $currency->id,
                     'account_number'          => $normalized->bankAccountNumber,
-                    'transaction_type'        => $transaction->credit > 0 ? 'credit' : 'debit',
+                    'transaction_type'        => BigDecimal::of($transaction->credit)->isPositive() ? 'credit' : 'debit',
                     'payment_reference'       => $transaction->reference,
                     'internal_index'          => $fingerprint,
                     'transaction_date'        => $transaction->transactionDate ?: null,
@@ -139,24 +162,46 @@ class BankStatementImportService
                     'reference'               => $transaction->reference,
                     'debit'                   => $transaction->debit,
                     'credit'                  => $transaction->credit,
+                    'original_currency_id'    => $currency->id,
+                    'company_currency_id'     => $company->currency_id,
+                    'original_debit'          => $transaction->debit,
+                    'original_credit'         => $transaction->credit,
+                    'original_signed_amount'  => $originalSignedAmount,
+                    'company_debit'           => $conversion['company_debit'],
+                    'company_credit'          => $conversion['company_credit'],
+                    'company_signed_amount'   => $conversion['company_signed_amount'],
+                    'exchange_rate_id'        => $conversion['exchange_rate_id'],
+                    'exchange_rate'           => $conversion['exchange_rate'],
+                    'rate_date'               => $conversion['rate_date'],
+                    'rate_source'             => $conversion['rate_source'],
+                    'rate_type'               => $conversion['rate_type'],
+                    'conversion_status'       => $conversion['conversion_status'],
                     'running_balance'         => $transaction->runningBalance,
                     'source_row'              => $transaction->sourceRow,
                     'raw_row'                 => $transaction->rawRow,
                     'transaction_fingerprint' => $fingerprint,
                     'import_status'           => $status->value,
                     'transaction_details'     => $transaction->rawRow,
-                    'amount'                  => $transaction->credit - $transaction->debit,
-                    'amount_currency'         => $transaction->credit - $transaction->debit,
-                    'amount_residual'         => $transaction->credit - $transaction->debit,
+                    'amount'                  => $conversion['company_signed_amount'] ?? '0',
+                    'amount_currency'         => $originalSignedAmount,
+                    'amount_residual'         => $conversion['company_signed_amount'] ?? '0',
                     'is_reconciled'           => false,
                 ]);
 
                 BankTransactionMapping::query()->create([
-                    'company_id'         => $company->id,
-                    'statement_line_id'  => $line->id,
-                    'bank_gl_account_id' => $bankGlAccount->id,
-                    'review_status'      => BankReviewStatus::Unmapped,
-                    'posting_status'     => BankPostingStatus::NotPosted,
+                    'company_id'           => $company->id,
+                    'statement_line_id'    => $line->id,
+                    'bank_gl_account_id'   => $bankGlAccount->id,
+                    'original_currency_id' => $currency->id,
+                    'company_currency_id'  => $company->currency_id,
+                    'exchange_rate_id'     => $conversion['exchange_rate_id'],
+                    'exchange_rate'        => $conversion['exchange_rate'],
+                    'rate_date'            => $conversion['rate_date'],
+                    'rate_source'          => $conversion['rate_source'],
+                    'rate_type'            => $conversion['rate_type'],
+                    'conversion_status'    => $conversion['conversion_status'],
+                    'review_status'        => BankReviewStatus::Unmapped,
+                    'posting_status'       => BankPostingStatus::NotPosted,
                 ]);
             }
 
@@ -166,6 +211,9 @@ class BankStatementImportService
 
     protected function assertTarget(Company $company, Journal $journal, Account $bankGlAccount, Currency $currency): void
     {
+        if (! $this->companyCurrencies->isTransactionCurrencyEnabled($company, (int) $currency->id)) {
+            throw new RuntimeException('The selected currency is not enabled for this company.');
+        }
         if ($journal->company_id !== $company->id) {
             throw new RuntimeException('The selected journal belongs to another company.');
         }
@@ -186,8 +234,79 @@ class BankStatementImportService
             throw new RuntimeException('The bank GL account belongs to another company.');
         }
 
+        if ($bankGlAccount->currency_id === null && (int) $currency->id !== (int) $company->currency_id) {
+            throw new RuntimeException('A foreign-currency bank GL must have its currency set explicitly.');
+        }
+
         if ($bankGlAccount->currency_id && (int) $bankGlAccount->currency_id !== (int) $currency->id) {
             throw new RuntimeException('The bank GL currency does not match the selected statement currency.');
+        }
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function prepareConversions($statement, Company $company, Currency $currency): array
+    {
+        $transactions = [];
+        $companyDebits = BigDecimal::zero();
+        $companyCredits = BigDecimal::zero();
+        $complete = true;
+
+        foreach ($statement->transactions as $transaction) {
+            $date = $transaction->transactionDate ?: ($transaction->valueDate ?: $statement->statementEndDate);
+
+            try {
+                $rate = $this->exchangeRates->resolveForBankTransaction($company, $currency, $company->currency, $date);
+                $companyDebit = $this->exchangeRates->convert($transaction->debit, $rate);
+                $companyCredit = $this->exchangeRates->convert($transaction->credit, $rate);
+                $companySigned = BigDecimal::of($companyCredit)->minus($companyDebit)->__toString();
+                $companyDebits = $companyDebits->plus($companyDebit);
+                $companyCredits = $companyCredits->plus($companyCredit);
+                $transactions[] = [
+                    'company_debit'        => $companyDebit,
+                    'company_credit'       => $companyCredit,
+                    'company_signed_amount'=> $companySigned,
+                    'exchange_rate_id'     => $rate->recordId,
+                    'exchange_rate'        => $rate->rate,
+                    'rate_date'            => $rate->effectiveDate,
+                    'rate_source'          => $rate->source,
+                    'rate_type'            => $rate->type,
+                    'conversion_status'    => ConversionStatus::Complete->value,
+                ];
+            } catch (MissingExchangeRateException) {
+                $complete = false;
+                $transactions[] = [
+                    'company_debit'     => null, 'company_credit' => null, 'company_signed_amount' => null,
+                    'exchange_rate_id'  => null, 'exchange_rate' => null, 'rate_date' => $date,
+                    'rate_source'       => null, 'rate_type' => 'transaction',
+                    'conversion_status' => ConversionStatus::MissingRate->value,
+                ];
+            }
+        }
+
+        $opening = $this->convertBoundary($statement->openingBalance, $statement->statementStartDate, $company, $currency);
+        $closing = $this->convertBoundary($statement->closingBalance, $statement->statementEndDate, $company, $currency);
+        $complete = $complete && $opening !== null && $closing !== null;
+
+        return [
+            'transactions'            => $transactions,
+            'company_opening_balance' => $opening,
+            'company_total_debits'    => $complete ? $companyDebits->__toString() : null,
+            'company_total_credits'   => $complete ? $companyCredits->__toString() : null,
+            'company_closing_balance' => $closing,
+            'status'                  => $complete ? ConversionStatus::Complete->value : ConversionStatus::MissingRate->value,
+        ];
+    }
+
+    private function convertBoundary(string $amount, string $date, Company $company, Currency $currency): ?string
+    {
+        try {
+            $rate = $this->exchangeRates->resolveForBankTransaction($company, $currency, $company->currency, $date);
+
+            return $this->exchangeRates->convert($amount, $rate);
+        } catch (MissingExchangeRateException) {
+            return null;
         }
     }
 }

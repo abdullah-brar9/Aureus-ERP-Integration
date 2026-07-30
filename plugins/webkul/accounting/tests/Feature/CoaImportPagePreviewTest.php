@@ -18,7 +18,7 @@ require_once __DIR__.'/../../../support/tests/Helpers/FilamentHelper.php';
  * End-to-end page test: drives the real ImportChartOfAccounts Livewire page the
  * way the browser does, but seeds the upload state with the EXACT shape that
  * broke Preview in production — an absolute OS temp path with a .tmp name, like
- * PHP's C:\Users\HP\AppData\Local\Temp\phpB063.tmp. The old resolveRows() fed
+ * PHP's C:\Users\Example\AppData\Local\Temp\phpB063.tmp. The old resolveRows() fed
  * that straight into Storage::disk('local')->path(), producing
  * storage/app/private/C:\Users\...\phpB063.tmp and a "File not found" crash.
  *

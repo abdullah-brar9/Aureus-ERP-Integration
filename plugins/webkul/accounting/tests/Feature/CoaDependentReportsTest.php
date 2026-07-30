@@ -3,7 +3,9 @@
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Permission;
 use Webkul\Account\Enums\AccountType;
+use Webkul\Account\Enums\JournalType;
 use Webkul\Account\Models\Account;
+use Webkul\Account\Models\Journal;
 use Webkul\Accounting\Filament\Clusters\Reporting\Pages\BalanceSheet;
 use Webkul\Accounting\Filament\Clusters\Reporting\Pages\Exports\TrialBalanceExport;
 use Webkul\Accounting\Filament\Clusters\Reporting\Pages\GeneralLedger;
@@ -31,6 +33,11 @@ function depImport(): Company
     $company = Company::factory()->create([
         'name'        => 'Dependent Reports Co',
         'currency_id' => Currency::query()->orderBy('id')->value('id'),
+    ]);
+    Journal::factory()->create([
+        'company_id'  => $company->id,
+        'currency_id' => $company->currency_id,
+        'type'        => JournalType::GENERAL,
     ]);
 
     app(CoaImportService::class)->import(
@@ -143,7 +150,7 @@ it('produces identical Trial Balance totals on screen data and Excel export', fu
     // The Total row is second from the bottom; closing debit/credit are the
     // last two columns.
     $totalRow = $grid[count($grid) - 2];
-    expect((float) $totalRow[8])->toBe($tb['totals']['closing_debit'])
-        ->and((float) $totalRow[9])->toBe($tb['totals']['closing_credit'])
+    expect((float) $totalRow[9])->toBe($tb['totals']['closing_debit'])
+        ->and((float) $totalRow[10])->toBe($tb['totals']['closing_credit'])
         ->and($tb['totals']['closing_debit'])->toBe(1170000.0);
 });

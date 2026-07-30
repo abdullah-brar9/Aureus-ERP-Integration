@@ -2,6 +2,7 @@
 
 namespace Webkul\Accounting\Services\Bank;
 
+use Brick\Math\BigDecimal;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Webkul\Account\Models\BankStatementLine;
@@ -22,7 +23,7 @@ class BankTransferMatchingService
             ->with(['statement', 'mapping'])
             ->where('company_id', $companyId)
             ->where('debit', '>', 0)
-            ->whereDoesntHave('mapping', fn ($query) => $query->whereNotNull('transfer_match_id'))
+            ->whereDoesntHave('mapping', fn ($query) => $query->whereNotNull('transfer_match_id')->orWhereNotNull('matched_reference'))
             ->orderBy('transaction_date')
             ->get();
 
@@ -30,7 +31,7 @@ class BankTransferMatchingService
             ->with(['statement', 'mapping'])
             ->where('company_id', $companyId)
             ->where('credit', '>', 0)
-            ->whereDoesntHave('mapping', fn ($query) => $query->whereNotNull('transfer_match_id'))
+            ->whereDoesntHave('mapping', fn ($query) => $query->whereNotNull('transfer_match_id')->orWhereNotNull('matched_reference'))
             ->orderBy('transaction_date')
             ->get();
 
@@ -45,7 +46,13 @@ class BankTransferMatchingService
 
                 return $credit->statement_id !== $debit->statement_id
                     && $credit->statement?->bank_account_number !== $debit->statement?->bank_account_number
-                    && abs((float) $credit->credit - (float) $debit->debit) <= 0.01
+                    && (int) $credit->original_currency_id === (int) $debit->original_currency_id
+                    && $credit->company_credit !== null
+                    && $debit->company_debit !== null
+                    && BigDecimal::of((string) ($credit->original_credit ?? $credit->credit))
+                        ->minus((string) ($debit->original_debit ?? $debit->debit))->abs()->isLessThanOrEqualTo('0.01')
+                    && BigDecimal::of((string) $credit->company_credit)
+                        ->minus((string) $debit->company_debit)->abs()->isLessThanOrEqualTo('0.01')
                     && Carbon::parse($credit->transaction_date)->diffInDays(Carbon::parse($debit->transaction_date)) <= $maximumDateDistance
                     && $this->looksLikeTransfer((string) $debit->description, (string) $credit->description);
             });
@@ -66,6 +73,11 @@ class BankTransferMatchingService
                     'incoming_statement_line_id'  => $candidate->id,
                     'match_reference'             => $reference,
                     'amount'                      => $debit->debit,
+                    'outgoing_currency_id'        => $debit->original_currency_id,
+                    'incoming_currency_id'        => $candidate->original_currency_id,
+                    'outgoing_amount'             => $debit->original_debit ?? $debit->debit,
+                    'incoming_amount'             => $candidate->original_credit ?? $candidate->credit,
+                    'company_amount'              => $debit->company_debit,
                     'confidence'                  => 1,
                     'status'                      => 'suggested',
                 ]);
@@ -101,6 +113,13 @@ class BankTransferMatchingService
 
     public function approve(BankTransferMatch $match, User $reviewer): BankTransferMatch
     {
+        if ((int) $match->outgoing_currency_id !== (int) $match->incoming_currency_id) {
+            throw new \RuntimeException('Cross-currency transfers require explicit conversion, FX difference and bank-charge handling.');
+        }
+        if ($match->company_amount === null) {
+            throw new \RuntimeException('A transfer cannot be approved until its company-currency conversion is complete.');
+        }
+
         $match->update([
             'status'      => 'approved',
             'reviewer_id' => $reviewer->id,

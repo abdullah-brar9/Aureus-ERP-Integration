@@ -76,6 +76,7 @@ class FollowerAction extends Action
                             ->preload()
                             ->live()
                             ->searchable()
+                            ->options(fn (): array => Partner::query()->orderBy('name')->limit(50)->pluck('name', 'id')->toArray())
                             ->getSearchResultsUsing(function (string $search) {
                                 return Partner::query()
                                     ->when($search, fn ($q) => $q->where('name', 'like', "%{$search}%")

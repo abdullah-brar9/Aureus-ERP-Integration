@@ -17,7 +17,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -116,7 +116,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":[{"id":1,"name":"SO\/1","state":"sale","invoice_status":"invoiced","client_order_ref":null,"origin":null,"reference":null,"date_order":"2026-01-07","validity_date":"2026-02-06","commitment_date":null,"currency_rate":0,"amount_untaxed":2440,"amount_tax":366,"amount_total":2806,"locked":true,"require_signature":false,"require_payment":false,"signed_by":null,"signed_on":null,"prepayment_percent":0,"note":"<p><\/p>","access_token":null,"partner_id":33,"partner_invoice_id":33,"partner_shipping_id":33,"user_id":1,"team_id":null,"company_id":1,"currency_id":1,"payment_term_id":2,"fiscal_position_id":null,"journal_id":null,"campaign_id":null,"utm_source_id":null,"medium_id":null,"warehouse_id":5,"created_at":"2026-01-07T11:12:56+00:00","updated_at":"2026-01-08T12:59:31+00:00","deleted_at":null,"partner":{"id":33,"account_type":"individual","sub_type":"customer","name":"Lyle Holman","email":"lyle@holman.com","phone":"12121221212","mobile":"1212121215294","avatar":null,"avatar_url":null,"job_title":"Itaque ratione dicta tenetur omnis reiciendis quidem consequatur","website":"https:\/\/www.zecikapuleze.mobi","tax_id":"Esse dolorum quo vel animi fugiat ipsum dicta et","company_registry":"TEST COMPANY","reference":"Ea aliquid debitis m","is_active":true,"color":null,"street1":"Street 69","street2":"Reprehenderit eos saepe deserunt ut eu ea aliquam magnam saepe reprehenderit cum alias dicta amet ducimus saepe excepturi facere qui","city":"California","zip":"90006","country_id":233,"state_id":13,"parent_id":18,"title_id":1,"company_id":null,"industry_id":null,"user_id":2,"creator_id":null,"created_at":"2025-04-10T10:45:51.000000Z","updated_at":"2025-12-09T11:12:13.000000Z","deleted_at":null,"country":{"id":233,"name":"United States","code":"US","phone_code":"1","state_required":true,"zip_required":true,"currency_id":1,"created_at":"2025-04-07T12:34:34.000000Z","updated_at":"2025-04-07T12:34:34.000000Z"},"state":{"id":13,"name":"California","code":"CA","country_id":233,"created_at":"2025-04-07T12:34:34.000000Z","updated_at":"2025-04-07T12:34:34.000000Z"}},"lines":[{"id":1,"sort":1,"name":"Big Vision 4K Action Camera - Fisheye Lens","display_type":null,"product_uom_qty":5,"product_qty":5,"qty_delivered":5,"qty_invoiced":5,"qty_to_invoice":0,"product_packaging_qty":0.5,"price_unit":210,"technical_price_unit":210,"discount":0,"price_subtotal":1050,"price_tax":157.5,"price_total":1207.5,"price_reduce_taxexcl":210,"price_reduce_taxinc":241.5,"purchase_price":100,"margin":0,"margin_percent":0,"untaxed_amount_invoiced":0,"untaxed_amount_to_invoice":1050,"state":"sale","invoice_status":"invoiced","qty_delivered_method":"stock_move","virtual_id":null,"linked_virtual_id":null,"is_downpayment":false,"is_expense":false,"customer_lead":0,"analytic_distribution":null,"order_id":1,"product_id":2,"linked_sale_order_sale_id":null,"product_uom_id":1,"product_packaging_id":1,"currency_id":1,"order_partner_id":33,"salesman_id":1,"warehouse_id":5,"route_id":null,"company_id":1,"created_at":"2026-01-07T11:12:56+00:00","updated_at":"2026-01-08T12:59:31+00:00"},{"id":2,"sort":2,"name":"Bass Blaze Waterproof Bluetooth Speaker - Blue","display_type":null,"product_uom_qty":4,"product_qty":4,"qty_delivered":4,"qty_invoiced":4,"qty_to_invoice":0,"product_packaging_qty":0.2,"price_unit":60,"technical_price_unit":60,"discount":0,"price_subtotal":240,"price_tax":36,"price_total":276,"price_reduce_taxexcl":60,"price_reduce_taxinc":69,"purchase_price":45,"margin":0,"margin_percent":0,"untaxed_amount_invoiced":0,"untaxed_amount_to_invoice":240,"state":"sale","invoice_status":"invoiced","qty_delivered_method":"stock_move","virtual_id":null,"linked_virtual_id":null,"is_downpayment":false,"is_expense":false,"customer_lead":0,"analytic_distribution":null,"order_id":1,"product_id":12,"linked_sale_order_sale_id":null,"product_uom_id":1,"product_packaging_id":2,"currency_id":1,"order_partner_id":33,"salesman_id":1,"warehouse_id":5,"route_id":null,"company_id":1,"created_at":"2026-01-07T11:12:56+00:00","updated_at":"2026-01-08T12:59:31+00:00"},{"id":3,"sort":3,"name":"Flim Rocket Mini Projector - Telecentric Lens","display_type":null,"product_uom_qty":5,"product_qty":5,"qty_delivered":5,"qty_invoiced":5,"qty_to_invoice":0,"product_packaging_qty":0.5,"price_unit":230,"technical_price_unit":230,"discount":0,"price_subtotal":1150,"price_tax":172.5,"price_total":1322.5,"price_reduce_taxexcl":230,"price_reduce_taxinc":264.5,"purchase_price":120,"margin":0,"margin_percent":0,"untaxed_amount_invoiced":0,"untaxed_amount_to_invoice":1150,"state":"sale","invoice_status":"invoiced","qty_delivered_method":"stock_move","virtual_id":null,"linked_virtual_id":null,"is_downpayment":false,"is_expense":false,"customer_lead":0,"analytic_distribution":null,"order_id":1,"product_id":8,"linked_sale_order_sale_id":null,"product_uom_id":1,"product_packaging_id":1,"currency_id":1,"order_partner_id":33,"salesman_id":1,"warehouse_id":5,"route_id":null,"company_id":1,"created_at":"2026-01-07T11:12:56+00:00","updated_at":"2026-01-08T12:59:31+00:00"}]},{"id":1,"name":"SO\/1","state":"sale","invoice_status":"invoiced","client_order_ref":null,"origin":null,"reference":null,"date_order":"2026-01-07","validity_date":"2026-02-06","commitment_date":null,"currency_rate":0,"amount_untaxed":2440,"amount_tax":366,"amount_total":2806,"locked":true,"require_signature":false,"require_payment":false,"signed_by":null,"signed_on":null,"prepayment_percent":0,"note":"<p><\/p>","access_token":null,"partner_id":33,"partner_invoice_id":33,"partner_shipping_id":33,"user_id":1,"team_id":null,"company_id":1,"currency_id":1,"payment_term_id":2,"fiscal_position_id":null,"journal_id":null,"campaign_id":null,"utm_source_id":null,"medium_id":null,"warehouse_id":5,"created_at":"2026-01-07T11:12:56+00:00","updated_at":"2026-01-08T12:59:31+00:00","deleted_at":null,"partner":{"id":33,"account_type":"individual","sub_type":"customer","name":"Lyle Holman","email":"lyle@holman.com","phone":"12121221212","mobile":"1212121215294","avatar":null,"avatar_url":null,"job_title":"Itaque ratione dicta tenetur omnis reiciendis quidem consequatur","website":"https:\/\/www.zecikapuleze.mobi","tax_id":"Esse dolorum quo vel animi fugiat ipsum dicta et","company_registry":"TEST COMPANY","reference":"Ea aliquid debitis m","is_active":true,"color":null,"street1":"Street 69","street2":"Reprehenderit eos saepe deserunt ut eu ea aliquam magnam saepe reprehenderit cum alias dicta amet ducimus saepe excepturi facere qui","city":"California","zip":"90006","country_id":233,"state_id":13,"parent_id":18,"title_id":1,"company_id":null,"industry_id":null,"user_id":2,"creator_id":null,"created_at":"2025-04-10T10:45:51.000000Z","updated_at":"2025-12-09T11:12:13.000000Z","deleted_at":null,"country":{"id":233,"name":"United States","code":"US","phone_code":"1","state_required":true,"zip_required":true,"currency_id":1,"created_at":"2025-04-07T12:34:34.000000Z","updated_at":"2025-04-07T12:34:34.000000Z"},"state":{"id":13,"name":"California","code":"CA","country_id":233,"created_at":"2025-04-07T12:34:34.000000Z","updated_at":"2025-04-07T12:34:34.000000Z"}},"lines":[{"id":1,"sort":1,"name":"Big Vision 4K Action Camera - Fisheye Lens","display_type":null,"product_uom_qty":5,"product_qty":5,"qty_delivered":5,"qty_invoiced":5,"qty_to_invoice":0,"product_packaging_qty":0.5,"price_unit":210,"technical_price_unit":210,"discount":0,"price_subtotal":1050,"price_tax":157.5,"price_total":1207.5,"price_reduce_taxexcl":210,"price_reduce_taxinc":241.5,"purchase_price":100,"margin":0,"margin_percent":0,"untaxed_amount_invoiced":0,"untaxed_amount_to_invoice":1050,"state":"sale","invoice_status":"invoiced","qty_delivered_method":"stock_move","virtual_id":null,"linked_virtual_id":null,"is_downpayment":false,"is_expense":false,"customer_lead":0,"analytic_distribution":null,"order_id":1,"product_id":2,"linked_sale_order_sale_id":null,"product_uom_id":1,"product_packaging_id":1,"currency_id":1,"order_partner_id":33,"salesman_id":1,"warehouse_id":5,"route_id":null,"company_id":1,"created_at":"2026-01-07T11:12:56+00:00","updated_at":"2026-01-08T12:59:31+00:00"},{"id":2,"sort":2,"name":"Bass Blaze Waterproof Bluetooth Speaker - Blue","display_type":null,"product_uom_qty":4,"product_qty":4,"qty_delivered":4,"qty_invoiced":4,"qty_to_invoice":0,"product_packaging_qty":0.2,"price_unit":60,"technical_price_unit":60,"discount":0,"price_subtotal":240,"price_tax":36,"price_total":276,"price_reduce_taxexcl":60,"price_reduce_taxinc":69,"purchase_price":45,"margin":0,"margin_percent":0,"untaxed_amount_invoiced":0,"untaxed_amount_to_invoice":240,"state":"sale","invoice_status":"invoiced","qty_delivered_method":"stock_move","virtual_id":null,"linked_virtual_id":null,"is_downpayment":false,"is_expense":false,"customer_lead":0,"analytic_distribution":null,"order_id":1,"product_id":12,"linked_sale_order_sale_id":null,"product_uom_id":1,"product_packaging_id":2,"currency_id":1,"order_partner_id":33,"salesman_id":1,"warehouse_id":5,"route_id":null,"company_id":1,"created_at":"2026-01-07T11:12:56+00:00","updated_at":"2026-01-08T12:59:31+00:00"},{"id":3,"sort":3,"name":"Flim Rocket Mini Projector - Telecentric Lens","display_type":null,"product_uom_qty":5,"product_qty":5,"qty_delivered":5,"qty_invoiced":5,"qty_to_invoice":0,"product_packaging_qty":0.5,"price_unit":230,"technical_price_unit":230,"discount":0,"price_subtotal":1150,"price_tax":172.5,"price_total":1322.5,"price_reduce_taxexcl":230,"price_reduce_taxinc":264.5,"purchase_price":120,"margin":0,"margin_percent":0,"untaxed_amount_invoiced":0,"untaxed_amount_to_invoice":1150,"state":"sale","invoice_status":"invoiced","qty_delivered_method":"stock_move","virtual_id":null,"linked_virtual_id":null,"is_downpayment":false,"is_expense":false,"customer_lead":0,"analytic_distribution":null,"order_id":1,"product_id":8,"linked_sale_order_sale_id":null,"product_uom_id":1,"product_packaging_id":1,"currency_id":1,"order_partner_id":33,"salesman_id":1,"warehouse_id":5,"route_id":null,"company_id":1,"created_at":"2026-01-07T11:12:56+00:00","updated_at":"2026-01-08T12:59:31+00:00"}]}],"links":{"first":"\/?page=1","last":"\/?page=1","prev":null,"next":null},"meta":{"current_page":1,"from":1,"last_page":1,"links":[{"url":null,"label":"&laquo; Previous","active":false},{"url":"\/?page=1","label":"1","active":true},{"url":null,"label":"Next &raquo;","active":false}],"path":"\/","per_page":10,"to":2,"total":2}}'
+        content: '{"data":[{"id":1,"name":"SO\/1","state":"draft","invoice_status":"to_invoice","client_order_ref":null,"origin":"SO-3746","reference":null,"date_order":"2026-06-25T00:00:00.000000Z","validity_date":null,"commitment_date":null,"currency_rate":1,"amount_untaxed":2895.5047,"amount_tax":434.3257,"amount_total":3329.8304,"locked":false,"require_signature":false,"require_payment":false,"signed_by":null,"signed_on":null,"prepayment_percent":0,"note":null,"access_token":"cedb0016-40b7-300f-9d80-b0f111c218c7","partner_id":1,"partner_invoice_id":1,"partner_shipping_id":1,"user_id":1,"team_id":null,"company_id":2016,"currency_id":1086,"payment_term_id":null,"fiscal_position_id":null,"journal_id":null,"campaign_id":null,"utm_source_id":null,"medium_id":null,"warehouse_id":null,"created_at":"2026-07-22T07:55:43+00:00","updated_at":"2026-07-22T07:55:43+00:00","deleted_at":null,"partner":{"id":1,"account_type":"individual","sub_type":"company","name":"Truck It In (TIN Pvt)","email":"dummy@dummycorp.local","phone":"1234567890","mobile":"1234567890","avatar":null,"avatar_url":null,"job_title":null,"website":"http:\/\/dummycorp.local","tax_id":"DUM123456","company_registry":"TIN001","reference":null,"is_active":null,"color":"#e80f0f","street1":null,"street2":null,"city":null,"zip":null,"country_id":null,"state_id":null,"parent_id":null,"title_id":null,"company_id":1,"industry_id":null,"user_id":null,"creator_id":1,"created_at":"2026-07-22T07:23:10.000000Z","updated_at":"2026-07-23T10:20:43.000000Z","deleted_at":null,"country":null,"state":null},"lines":[]},{"id":1,"name":"SO\/1","state":"draft","invoice_status":"to_invoice","client_order_ref":null,"origin":"SO-3746","reference":null,"date_order":"2026-06-25T00:00:00.000000Z","validity_date":null,"commitment_date":null,"currency_rate":1,"amount_untaxed":2895.5047,"amount_tax":434.3257,"amount_total":3329.8304,"locked":false,"require_signature":false,"require_payment":false,"signed_by":null,"signed_on":null,"prepayment_percent":0,"note":null,"access_token":"cedb0016-40b7-300f-9d80-b0f111c218c7","partner_id":1,"partner_invoice_id":1,"partner_shipping_id":1,"user_id":1,"team_id":null,"company_id":2016,"currency_id":1086,"payment_term_id":null,"fiscal_position_id":null,"journal_id":null,"campaign_id":null,"utm_source_id":null,"medium_id":null,"warehouse_id":null,"created_at":"2026-07-22T07:55:43+00:00","updated_at":"2026-07-22T07:55:43+00:00","deleted_at":null,"partner":{"id":1,"account_type":"individual","sub_type":"company","name":"Truck It In (TIN Pvt)","email":"dummy@dummycorp.local","phone":"1234567890","mobile":"1234567890","avatar":null,"avatar_url":null,"job_title":null,"website":"http:\/\/dummycorp.local","tax_id":"DUM123456","company_registry":"TIN001","reference":null,"is_active":null,"color":"#e80f0f","street1":null,"street2":null,"city":null,"zip":null,"country_id":null,"state_id":null,"parent_id":null,"title_id":null,"company_id":1,"industry_id":null,"user_id":null,"creator_id":1,"created_at":"2026-07-22T07:23:10.000000Z","updated_at":"2026-07-23T10:20:43.000000Z","deleted_at":null,"country":null,"state":null},"lines":[]}],"links":{"first":"\/?page=1","last":"\/?page=1","prev":null,"next":null},"meta":{"current_page":1,"from":1,"last_page":1,"links":[{"url":null,"label":"&laquo; Previous","page":null,"active":false},{"url":"\/?page=1","label":"1","page":1,"active":true},{"url":null,"label":"Next &raquo;","page":null,"active":false}],"path":"\/","per_page":10,"to":2,"total":2}}'
         headers: []
         description: ''
       -
@@ -129,7 +129,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -149,7 +149,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -206,7 +206,7 @@ endpoints:
         name: commitment_date
         description: 'Must be a valid date.'
         required: false
-        example: '2026-03-03T04:25:46'
+        example: '2026-07-29T11:41:56'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -473,7 +473,7 @@ endpoints:
       payment_term_id: 1
       date_order: '2026-02-18'
       validity_date: '2026-02-28'
-      commitment_date: '2026-03-03T04:25:46'
+      commitment_date: '2026-07-29T11:41:56'
       client_order_ref: b
       origin: 'n'
       note: 'Delivery within 7 business days.'
@@ -503,7 +503,7 @@ endpoints:
       -
         custom: []
         status: 201
-        content: '{"data":{"id":1,"name":"SO\/1","state":"sale","invoice_status":"invoiced","client_order_ref":null,"origin":null,"reference":null,"date_order":"2026-01-07","validity_date":"2026-02-06","commitment_date":null,"currency_rate":0,"amount_untaxed":2440,"amount_tax":366,"amount_total":2806,"locked":true,"require_signature":false,"require_payment":false,"signed_by":null,"signed_on":null,"prepayment_percent":0,"note":"<p><\/p>","access_token":null,"partner_id":33,"partner_invoice_id":33,"partner_shipping_id":33,"user_id":1,"team_id":null,"company_id":1,"currency_id":1,"payment_term_id":2,"fiscal_position_id":null,"journal_id":null,"campaign_id":null,"utm_source_id":null,"medium_id":null,"warehouse_id":5,"created_at":"2026-01-07T11:12:56+00:00","updated_at":"2026-01-08T12:59:31+00:00","deleted_at":null,"partner":{"id":33,"account_type":"individual","sub_type":"customer","name":"Lyle Holman","email":"lyle@holman.com","phone":"12121221212","mobile":"1212121215294","avatar":null,"avatar_url":null,"job_title":"Itaque ratione dicta tenetur omnis reiciendis quidem consequatur","website":"https:\/\/www.zecikapuleze.mobi","tax_id":"Esse dolorum quo vel animi fugiat ipsum dicta et","company_registry":"TEST COMPANY","reference":"Ea aliquid debitis m","is_active":true,"color":null,"street1":"Street 69","street2":"Reprehenderit eos saepe deserunt ut eu ea aliquam magnam saepe reprehenderit cum alias dicta amet ducimus saepe excepturi facere qui","city":"California","zip":"90006","country_id":233,"state_id":13,"parent_id":18,"title_id":1,"company_id":null,"industry_id":null,"user_id":2,"creator_id":null,"created_at":"2025-04-10T10:45:51.000000Z","updated_at":"2025-12-09T11:12:13.000000Z","deleted_at":null,"country":{"id":233,"name":"United States","code":"US","phone_code":"1","state_required":true,"zip_required":true,"currency_id":1,"created_at":"2025-04-07T12:34:34.000000Z","updated_at":"2025-04-07T12:34:34.000000Z"},"state":{"id":13,"name":"California","code":"CA","country_id":233,"created_at":"2025-04-07T12:34:34.000000Z","updated_at":"2025-04-07T12:34:34.000000Z"}},"lines":[{"id":1,"sort":1,"name":"Big Vision 4K Action Camera - Fisheye Lens","display_type":null,"product_uom_qty":5,"product_qty":5,"qty_delivered":5,"qty_invoiced":5,"qty_to_invoice":0,"product_packaging_qty":0.5,"price_unit":210,"technical_price_unit":210,"discount":0,"price_subtotal":1050,"price_tax":157.5,"price_total":1207.5,"price_reduce_taxexcl":210,"price_reduce_taxinc":241.5,"purchase_price":100,"margin":0,"margin_percent":0,"untaxed_amount_invoiced":0,"untaxed_amount_to_invoice":1050,"state":"sale","invoice_status":"invoiced","qty_delivered_method":"stock_move","virtual_id":null,"linked_virtual_id":null,"is_downpayment":false,"is_expense":false,"customer_lead":0,"analytic_distribution":null,"order_id":1,"product_id":2,"linked_sale_order_sale_id":null,"product_uom_id":1,"product_packaging_id":1,"currency_id":1,"order_partner_id":33,"salesman_id":1,"warehouse_id":5,"route_id":null,"company_id":1,"created_at":"2026-01-07T11:12:56+00:00","updated_at":"2026-01-08T12:59:31+00:00"},{"id":2,"sort":2,"name":"Bass Blaze Waterproof Bluetooth Speaker - Blue","display_type":null,"product_uom_qty":4,"product_qty":4,"qty_delivered":4,"qty_invoiced":4,"qty_to_invoice":0,"product_packaging_qty":0.2,"price_unit":60,"technical_price_unit":60,"discount":0,"price_subtotal":240,"price_tax":36,"price_total":276,"price_reduce_taxexcl":60,"price_reduce_taxinc":69,"purchase_price":45,"margin":0,"margin_percent":0,"untaxed_amount_invoiced":0,"untaxed_amount_to_invoice":240,"state":"sale","invoice_status":"invoiced","qty_delivered_method":"stock_move","virtual_id":null,"linked_virtual_id":null,"is_downpayment":false,"is_expense":false,"customer_lead":0,"analytic_distribution":null,"order_id":1,"product_id":12,"linked_sale_order_sale_id":null,"product_uom_id":1,"product_packaging_id":2,"currency_id":1,"order_partner_id":33,"salesman_id":1,"warehouse_id":5,"route_id":null,"company_id":1,"created_at":"2026-01-07T11:12:56+00:00","updated_at":"2026-01-08T12:59:31+00:00"},{"id":3,"sort":3,"name":"Flim Rocket Mini Projector - Telecentric Lens","display_type":null,"product_uom_qty":5,"product_qty":5,"qty_delivered":5,"qty_invoiced":5,"qty_to_invoice":0,"product_packaging_qty":0.5,"price_unit":230,"technical_price_unit":230,"discount":0,"price_subtotal":1150,"price_tax":172.5,"price_total":1322.5,"price_reduce_taxexcl":230,"price_reduce_taxinc":264.5,"purchase_price":120,"margin":0,"margin_percent":0,"untaxed_amount_invoiced":0,"untaxed_amount_to_invoice":1150,"state":"sale","invoice_status":"invoiced","qty_delivered_method":"stock_move","virtual_id":null,"linked_virtual_id":null,"is_downpayment":false,"is_expense":false,"customer_lead":0,"analytic_distribution":null,"order_id":1,"product_id":8,"linked_sale_order_sale_id":null,"product_uom_id":1,"product_packaging_id":1,"currency_id":1,"order_partner_id":33,"salesman_id":1,"warehouse_id":5,"route_id":null,"company_id":1,"created_at":"2026-01-07T11:12:56+00:00","updated_at":"2026-01-08T12:59:31+00:00"}]},"message":"Order created successfully."}'
+        content: '{"data":{"id":1,"name":"SO\/1","state":"draft","invoice_status":"to_invoice","client_order_ref":null,"origin":"SO-3746","reference":null,"date_order":"2026-06-25T00:00:00.000000Z","validity_date":null,"commitment_date":null,"currency_rate":1,"amount_untaxed":2895.5047,"amount_tax":434.3257,"amount_total":3329.8304,"locked":false,"require_signature":false,"require_payment":false,"signed_by":null,"signed_on":null,"prepayment_percent":0,"note":null,"access_token":"cedb0016-40b7-300f-9d80-b0f111c218c7","partner_id":1,"partner_invoice_id":1,"partner_shipping_id":1,"user_id":1,"team_id":null,"company_id":2016,"currency_id":1086,"payment_term_id":null,"fiscal_position_id":null,"journal_id":null,"campaign_id":null,"utm_source_id":null,"medium_id":null,"warehouse_id":null,"created_at":"2026-07-22T07:55:43+00:00","updated_at":"2026-07-22T07:55:43+00:00","deleted_at":null,"partner":{"id":1,"account_type":"individual","sub_type":"company","name":"Truck It In (TIN Pvt)","email":"dummy@dummycorp.local","phone":"1234567890","mobile":"1234567890","avatar":null,"avatar_url":null,"job_title":null,"website":"http:\/\/dummycorp.local","tax_id":"DUM123456","company_registry":"TIN001","reference":null,"is_active":null,"color":"#e80f0f","street1":null,"street2":null,"city":null,"zip":null,"country_id":null,"state_id":null,"parent_id":null,"title_id":null,"company_id":1,"industry_id":null,"user_id":null,"creator_id":1,"created_at":"2026-07-22T07:23:10.000000Z","updated_at":"2026-07-23T10:20:43.000000Z","deleted_at":null,"country":null,"state":null},"lines":[]},"message":"Order created successfully."}'
         headers: []
         description: ''
       -
@@ -522,7 +522,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -542,7 +542,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -580,7 +580,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":1,"name":"SO\/1","state":"sale","invoice_status":"invoiced","client_order_ref":null,"origin":null,"reference":null,"date_order":"2026-01-07","validity_date":"2026-02-06","commitment_date":null,"currency_rate":0,"amount_untaxed":2440,"amount_tax":366,"amount_total":2806,"locked":true,"require_signature":false,"require_payment":false,"signed_by":null,"signed_on":null,"prepayment_percent":0,"note":"<p><\/p>","access_token":null,"partner_id":33,"partner_invoice_id":33,"partner_shipping_id":33,"user_id":1,"team_id":null,"company_id":1,"currency_id":1,"payment_term_id":2,"fiscal_position_id":null,"journal_id":null,"campaign_id":null,"utm_source_id":null,"medium_id":null,"warehouse_id":5,"created_at":"2026-01-07T11:12:56+00:00","updated_at":"2026-01-08T12:59:31+00:00","deleted_at":null,"partner":{"id":33,"account_type":"individual","sub_type":"customer","name":"Lyle Holman","email":"lyle@holman.com","phone":"12121221212","mobile":"1212121215294","avatar":null,"avatar_url":null,"job_title":"Itaque ratione dicta tenetur omnis reiciendis quidem consequatur","website":"https:\/\/www.zecikapuleze.mobi","tax_id":"Esse dolorum quo vel animi fugiat ipsum dicta et","company_registry":"TEST COMPANY","reference":"Ea aliquid debitis m","is_active":true,"color":null,"street1":"Street 69","street2":"Reprehenderit eos saepe deserunt ut eu ea aliquam magnam saepe reprehenderit cum alias dicta amet ducimus saepe excepturi facere qui","city":"California","zip":"90006","country_id":233,"state_id":13,"parent_id":18,"title_id":1,"company_id":null,"industry_id":null,"user_id":2,"creator_id":null,"created_at":"2025-04-10T10:45:51.000000Z","updated_at":"2025-12-09T11:12:13.000000Z","deleted_at":null,"country":{"id":233,"name":"United States","code":"US","phone_code":"1","state_required":true,"zip_required":true,"currency_id":1,"created_at":"2025-04-07T12:34:34.000000Z","updated_at":"2025-04-07T12:34:34.000000Z"},"state":{"id":13,"name":"California","code":"CA","country_id":233,"created_at":"2025-04-07T12:34:34.000000Z","updated_at":"2025-04-07T12:34:34.000000Z"}},"lines":[{"id":1,"sort":1,"name":"Big Vision 4K Action Camera - Fisheye Lens","display_type":null,"product_uom_qty":5,"product_qty":5,"qty_delivered":5,"qty_invoiced":5,"qty_to_invoice":0,"product_packaging_qty":0.5,"price_unit":210,"technical_price_unit":210,"discount":0,"price_subtotal":1050,"price_tax":157.5,"price_total":1207.5,"price_reduce_taxexcl":210,"price_reduce_taxinc":241.5,"purchase_price":100,"margin":0,"margin_percent":0,"untaxed_amount_invoiced":0,"untaxed_amount_to_invoice":1050,"state":"sale","invoice_status":"invoiced","qty_delivered_method":"stock_move","virtual_id":null,"linked_virtual_id":null,"is_downpayment":false,"is_expense":false,"customer_lead":0,"analytic_distribution":null,"order_id":1,"product_id":2,"linked_sale_order_sale_id":null,"product_uom_id":1,"product_packaging_id":1,"currency_id":1,"order_partner_id":33,"salesman_id":1,"warehouse_id":5,"route_id":null,"company_id":1,"created_at":"2026-01-07T11:12:56+00:00","updated_at":"2026-01-08T12:59:31+00:00"},{"id":2,"sort":2,"name":"Bass Blaze Waterproof Bluetooth Speaker - Blue","display_type":null,"product_uom_qty":4,"product_qty":4,"qty_delivered":4,"qty_invoiced":4,"qty_to_invoice":0,"product_packaging_qty":0.2,"price_unit":60,"technical_price_unit":60,"discount":0,"price_subtotal":240,"price_tax":36,"price_total":276,"price_reduce_taxexcl":60,"price_reduce_taxinc":69,"purchase_price":45,"margin":0,"margin_percent":0,"untaxed_amount_invoiced":0,"untaxed_amount_to_invoice":240,"state":"sale","invoice_status":"invoiced","qty_delivered_method":"stock_move","virtual_id":null,"linked_virtual_id":null,"is_downpayment":false,"is_expense":false,"customer_lead":0,"analytic_distribution":null,"order_id":1,"product_id":12,"linked_sale_order_sale_id":null,"product_uom_id":1,"product_packaging_id":2,"currency_id":1,"order_partner_id":33,"salesman_id":1,"warehouse_id":5,"route_id":null,"company_id":1,"created_at":"2026-01-07T11:12:56+00:00","updated_at":"2026-01-08T12:59:31+00:00"},{"id":3,"sort":3,"name":"Flim Rocket Mini Projector - Telecentric Lens","display_type":null,"product_uom_qty":5,"product_qty":5,"qty_delivered":5,"qty_invoiced":5,"qty_to_invoice":0,"product_packaging_qty":0.5,"price_unit":230,"technical_price_unit":230,"discount":0,"price_subtotal":1150,"price_tax":172.5,"price_total":1322.5,"price_reduce_taxexcl":230,"price_reduce_taxinc":264.5,"purchase_price":120,"margin":0,"margin_percent":0,"untaxed_amount_invoiced":0,"untaxed_amount_to_invoice":1150,"state":"sale","invoice_status":"invoiced","qty_delivered_method":"stock_move","virtual_id":null,"linked_virtual_id":null,"is_downpayment":false,"is_expense":false,"customer_lead":0,"analytic_distribution":null,"order_id":1,"product_id":8,"linked_sale_order_sale_id":null,"product_uom_id":1,"product_packaging_id":1,"currency_id":1,"order_partner_id":33,"salesman_id":1,"warehouse_id":5,"route_id":null,"company_id":1,"created_at":"2026-01-07T11:12:56+00:00","updated_at":"2026-01-08T12:59:31+00:00"}]}}'
+        content: '{"data":{"id":1,"name":"SO\/1","state":"draft","invoice_status":"to_invoice","client_order_ref":null,"origin":"SO-3746","reference":null,"date_order":"2026-06-25T00:00:00.000000Z","validity_date":null,"commitment_date":null,"currency_rate":1,"amount_untaxed":2895.5047,"amount_tax":434.3257,"amount_total":3329.8304,"locked":false,"require_signature":false,"require_payment":false,"signed_by":null,"signed_on":null,"prepayment_percent":0,"note":null,"access_token":"cedb0016-40b7-300f-9d80-b0f111c218c7","partner_id":1,"partner_invoice_id":1,"partner_shipping_id":1,"user_id":1,"team_id":null,"company_id":2016,"currency_id":1086,"payment_term_id":null,"fiscal_position_id":null,"journal_id":null,"campaign_id":null,"utm_source_id":null,"medium_id":null,"warehouse_id":null,"created_at":"2026-07-22T07:55:43+00:00","updated_at":"2026-07-22T07:55:43+00:00","deleted_at":null,"partner":{"id":1,"account_type":"individual","sub_type":"company","name":"Truck It In (TIN Pvt)","email":"dummy@dummycorp.local","phone":"1234567890","mobile":"1234567890","avatar":null,"avatar_url":null,"job_title":null,"website":"http:\/\/dummycorp.local","tax_id":"DUM123456","company_registry":"TIN001","reference":null,"is_active":null,"color":"#e80f0f","street1":null,"street2":null,"city":null,"zip":null,"country_id":null,"state_id":null,"parent_id":null,"title_id":null,"company_id":1,"industry_id":null,"user_id":null,"creator_id":1,"created_at":"2026-07-22T07:23:10.000000Z","updated_at":"2026-07-23T10:20:43.000000Z","deleted_at":null,"country":null,"state":null},"lines":[]}}'
         headers: []
         description: ''
       -
@@ -599,7 +599,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -620,7 +620,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -689,7 +689,7 @@ endpoints:
         name: commitment_date
         description: 'Must be a valid date.'
         required: false
-        example: '2026-03-03T04:25:46'
+        example: '2026-07-29T11:41:56'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -956,7 +956,7 @@ endpoints:
       payment_term_id: 1
       date_order: '2026-02-18'
       validity_date: '2026-02-28'
-      commitment_date: '2026-03-03T04:25:46'
+      commitment_date: '2026-07-29T11:41:56'
       client_order_ref: b
       origin: 'n'
       note: 'Delivery within 7 business days.'
@@ -986,7 +986,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":1,"name":"SO\/1","state":"sale","invoice_status":"invoiced","client_order_ref":null,"origin":null,"reference":null,"date_order":"2026-01-07","validity_date":"2026-02-06","commitment_date":null,"currency_rate":0,"amount_untaxed":2440,"amount_tax":366,"amount_total":2806,"locked":true,"require_signature":false,"require_payment":false,"signed_by":null,"signed_on":null,"prepayment_percent":0,"note":"<p><\/p>","access_token":null,"partner_id":33,"partner_invoice_id":33,"partner_shipping_id":33,"user_id":1,"team_id":null,"company_id":1,"currency_id":1,"payment_term_id":2,"fiscal_position_id":null,"journal_id":null,"campaign_id":null,"utm_source_id":null,"medium_id":null,"warehouse_id":5,"created_at":"2026-01-07T11:12:56+00:00","updated_at":"2026-01-08T12:59:31+00:00","deleted_at":null,"partner":{"id":33,"account_type":"individual","sub_type":"customer","name":"Lyle Holman","email":"lyle@holman.com","phone":"12121221212","mobile":"1212121215294","avatar":null,"avatar_url":null,"job_title":"Itaque ratione dicta tenetur omnis reiciendis quidem consequatur","website":"https:\/\/www.zecikapuleze.mobi","tax_id":"Esse dolorum quo vel animi fugiat ipsum dicta et","company_registry":"TEST COMPANY","reference":"Ea aliquid debitis m","is_active":true,"color":null,"street1":"Street 69","street2":"Reprehenderit eos saepe deserunt ut eu ea aliquam magnam saepe reprehenderit cum alias dicta amet ducimus saepe excepturi facere qui","city":"California","zip":"90006","country_id":233,"state_id":13,"parent_id":18,"title_id":1,"company_id":null,"industry_id":null,"user_id":2,"creator_id":null,"created_at":"2025-04-10T10:45:51.000000Z","updated_at":"2025-12-09T11:12:13.000000Z","deleted_at":null,"country":{"id":233,"name":"United States","code":"US","phone_code":"1","state_required":true,"zip_required":true,"currency_id":1,"created_at":"2025-04-07T12:34:34.000000Z","updated_at":"2025-04-07T12:34:34.000000Z"},"state":{"id":13,"name":"California","code":"CA","country_id":233,"created_at":"2025-04-07T12:34:34.000000Z","updated_at":"2025-04-07T12:34:34.000000Z"}},"lines":[{"id":1,"sort":1,"name":"Big Vision 4K Action Camera - Fisheye Lens","display_type":null,"product_uom_qty":5,"product_qty":5,"qty_delivered":5,"qty_invoiced":5,"qty_to_invoice":0,"product_packaging_qty":0.5,"price_unit":210,"technical_price_unit":210,"discount":0,"price_subtotal":1050,"price_tax":157.5,"price_total":1207.5,"price_reduce_taxexcl":210,"price_reduce_taxinc":241.5,"purchase_price":100,"margin":0,"margin_percent":0,"untaxed_amount_invoiced":0,"untaxed_amount_to_invoice":1050,"state":"sale","invoice_status":"invoiced","qty_delivered_method":"stock_move","virtual_id":null,"linked_virtual_id":null,"is_downpayment":false,"is_expense":false,"customer_lead":0,"analytic_distribution":null,"order_id":1,"product_id":2,"linked_sale_order_sale_id":null,"product_uom_id":1,"product_packaging_id":1,"currency_id":1,"order_partner_id":33,"salesman_id":1,"warehouse_id":5,"route_id":null,"company_id":1,"created_at":"2026-01-07T11:12:56+00:00","updated_at":"2026-01-08T12:59:31+00:00"},{"id":2,"sort":2,"name":"Bass Blaze Waterproof Bluetooth Speaker - Blue","display_type":null,"product_uom_qty":4,"product_qty":4,"qty_delivered":4,"qty_invoiced":4,"qty_to_invoice":0,"product_packaging_qty":0.2,"price_unit":60,"technical_price_unit":60,"discount":0,"price_subtotal":240,"price_tax":36,"price_total":276,"price_reduce_taxexcl":60,"price_reduce_taxinc":69,"purchase_price":45,"margin":0,"margin_percent":0,"untaxed_amount_invoiced":0,"untaxed_amount_to_invoice":240,"state":"sale","invoice_status":"invoiced","qty_delivered_method":"stock_move","virtual_id":null,"linked_virtual_id":null,"is_downpayment":false,"is_expense":false,"customer_lead":0,"analytic_distribution":null,"order_id":1,"product_id":12,"linked_sale_order_sale_id":null,"product_uom_id":1,"product_packaging_id":2,"currency_id":1,"order_partner_id":33,"salesman_id":1,"warehouse_id":5,"route_id":null,"company_id":1,"created_at":"2026-01-07T11:12:56+00:00","updated_at":"2026-01-08T12:59:31+00:00"},{"id":3,"sort":3,"name":"Flim Rocket Mini Projector - Telecentric Lens","display_type":null,"product_uom_qty":5,"product_qty":5,"qty_delivered":5,"qty_invoiced":5,"qty_to_invoice":0,"product_packaging_qty":0.5,"price_unit":230,"technical_price_unit":230,"discount":0,"price_subtotal":1150,"price_tax":172.5,"price_total":1322.5,"price_reduce_taxexcl":230,"price_reduce_taxinc":264.5,"purchase_price":120,"margin":0,"margin_percent":0,"untaxed_amount_invoiced":0,"untaxed_amount_to_invoice":1150,"state":"sale","invoice_status":"invoiced","qty_delivered_method":"stock_move","virtual_id":null,"linked_virtual_id":null,"is_downpayment":false,"is_expense":false,"customer_lead":0,"analytic_distribution":null,"order_id":1,"product_id":8,"linked_sale_order_sale_id":null,"product_uom_id":1,"product_packaging_id":1,"currency_id":1,"order_partner_id":33,"salesman_id":1,"warehouse_id":5,"route_id":null,"company_id":1,"created_at":"2026-01-07T11:12:56+00:00","updated_at":"2026-01-08T12:59:31+00:00"}]},"message":"Order updated successfully."}'
+        content: '{"data":{"id":1,"name":"SO\/1","state":"draft","invoice_status":"to_invoice","client_order_ref":null,"origin":"SO-3746","reference":null,"date_order":"2026-06-25T00:00:00.000000Z","validity_date":null,"commitment_date":null,"currency_rate":1,"amount_untaxed":2895.5047,"amount_tax":434.3257,"amount_total":3329.8304,"locked":false,"require_signature":false,"require_payment":false,"signed_by":null,"signed_on":null,"prepayment_percent":0,"note":null,"access_token":"cedb0016-40b7-300f-9d80-b0f111c218c7","partner_id":1,"partner_invoice_id":1,"partner_shipping_id":1,"user_id":1,"team_id":null,"company_id":2016,"currency_id":1086,"payment_term_id":null,"fiscal_position_id":null,"journal_id":null,"campaign_id":null,"utm_source_id":null,"medium_id":null,"warehouse_id":null,"created_at":"2026-07-22T07:55:43+00:00","updated_at":"2026-07-22T07:55:43+00:00","deleted_at":null,"partner":{"id":1,"account_type":"individual","sub_type":"company","name":"Truck It In (TIN Pvt)","email":"dummy@dummycorp.local","phone":"1234567890","mobile":"1234567890","avatar":null,"avatar_url":null,"job_title":null,"website":"http:\/\/dummycorp.local","tax_id":"DUM123456","company_registry":"TIN001","reference":null,"is_active":null,"color":"#e80f0f","street1":null,"street2":null,"city":null,"zip":null,"country_id":null,"state_id":null,"parent_id":null,"title_id":null,"company_id":1,"industry_id":null,"user_id":null,"creator_id":1,"created_at":"2026-07-22T07:23:10.000000Z","updated_at":"2026-07-23T10:20:43.000000Z","deleted_at":null,"country":null,"state":null},"lines":[]},"message":"Order updated successfully."}'
         headers: []
         description: ''
       -
@@ -1011,7 +1011,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -1031,7 +1031,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -1076,7 +1076,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -1096,7 +1096,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -1122,7 +1122,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":1,"name":"SO\/1","state":"sale","invoice_status":"invoiced","client_order_ref":null,"origin":null,"reference":null,"date_order":"2026-01-07","validity_date":"2026-02-06","commitment_date":null,"currency_rate":0,"amount_untaxed":2440,"amount_tax":366,"amount_total":2806,"locked":true,"require_signature":false,"require_payment":false,"signed_by":null,"signed_on":null,"prepayment_percent":0,"note":"<p><\/p>","access_token":null,"partner_id":33,"partner_invoice_id":33,"partner_shipping_id":33,"user_id":1,"team_id":null,"company_id":1,"currency_id":1,"payment_term_id":2,"fiscal_position_id":null,"journal_id":null,"campaign_id":null,"utm_source_id":null,"medium_id":null,"warehouse_id":5,"created_at":"2026-01-07T11:12:56+00:00","updated_at":"2026-01-08T12:59:31+00:00","deleted_at":null,"partner":{"id":33,"account_type":"individual","sub_type":"customer","name":"Lyle Holman","email":"lyle@holman.com","phone":"12121221212","mobile":"1212121215294","avatar":null,"avatar_url":null,"job_title":"Itaque ratione dicta tenetur omnis reiciendis quidem consequatur","website":"https:\/\/www.zecikapuleze.mobi","tax_id":"Esse dolorum quo vel animi fugiat ipsum dicta et","company_registry":"TEST COMPANY","reference":"Ea aliquid debitis m","is_active":true,"color":null,"street1":"Street 69","street2":"Reprehenderit eos saepe deserunt ut eu ea aliquam magnam saepe reprehenderit cum alias dicta amet ducimus saepe excepturi facere qui","city":"California","zip":"90006","country_id":233,"state_id":13,"parent_id":18,"title_id":1,"company_id":null,"industry_id":null,"user_id":2,"creator_id":null,"created_at":"2025-04-10T10:45:51.000000Z","updated_at":"2025-12-09T11:12:13.000000Z","deleted_at":null,"country":{"id":233,"name":"United States","code":"US","phone_code":"1","state_required":true,"zip_required":true,"currency_id":1,"created_at":"2025-04-07T12:34:34.000000Z","updated_at":"2025-04-07T12:34:34.000000Z"},"state":{"id":13,"name":"California","code":"CA","country_id":233,"created_at":"2025-04-07T12:34:34.000000Z","updated_at":"2025-04-07T12:34:34.000000Z"}},"lines":[{"id":1,"sort":1,"name":"Big Vision 4K Action Camera - Fisheye Lens","display_type":null,"product_uom_qty":5,"product_qty":5,"qty_delivered":5,"qty_invoiced":5,"qty_to_invoice":0,"product_packaging_qty":0.5,"price_unit":210,"technical_price_unit":210,"discount":0,"price_subtotal":1050,"price_tax":157.5,"price_total":1207.5,"price_reduce_taxexcl":210,"price_reduce_taxinc":241.5,"purchase_price":100,"margin":0,"margin_percent":0,"untaxed_amount_invoiced":0,"untaxed_amount_to_invoice":1050,"state":"sale","invoice_status":"invoiced","qty_delivered_method":"stock_move","virtual_id":null,"linked_virtual_id":null,"is_downpayment":false,"is_expense":false,"customer_lead":0,"analytic_distribution":null,"order_id":1,"product_id":2,"linked_sale_order_sale_id":null,"product_uom_id":1,"product_packaging_id":1,"currency_id":1,"order_partner_id":33,"salesman_id":1,"warehouse_id":5,"route_id":null,"company_id":1,"created_at":"2026-01-07T11:12:56+00:00","updated_at":"2026-01-08T12:59:31+00:00"},{"id":2,"sort":2,"name":"Bass Blaze Waterproof Bluetooth Speaker - Blue","display_type":null,"product_uom_qty":4,"product_qty":4,"qty_delivered":4,"qty_invoiced":4,"qty_to_invoice":0,"product_packaging_qty":0.2,"price_unit":60,"technical_price_unit":60,"discount":0,"price_subtotal":240,"price_tax":36,"price_total":276,"price_reduce_taxexcl":60,"price_reduce_taxinc":69,"purchase_price":45,"margin":0,"margin_percent":0,"untaxed_amount_invoiced":0,"untaxed_amount_to_invoice":240,"state":"sale","invoice_status":"invoiced","qty_delivered_method":"stock_move","virtual_id":null,"linked_virtual_id":null,"is_downpayment":false,"is_expense":false,"customer_lead":0,"analytic_distribution":null,"order_id":1,"product_id":12,"linked_sale_order_sale_id":null,"product_uom_id":1,"product_packaging_id":2,"currency_id":1,"order_partner_id":33,"salesman_id":1,"warehouse_id":5,"route_id":null,"company_id":1,"created_at":"2026-01-07T11:12:56+00:00","updated_at":"2026-01-08T12:59:31+00:00"},{"id":3,"sort":3,"name":"Flim Rocket Mini Projector - Telecentric Lens","display_type":null,"product_uom_qty":5,"product_qty":5,"qty_delivered":5,"qty_invoiced":5,"qty_to_invoice":0,"product_packaging_qty":0.5,"price_unit":230,"technical_price_unit":230,"discount":0,"price_subtotal":1150,"price_tax":172.5,"price_total":1322.5,"price_reduce_taxexcl":230,"price_reduce_taxinc":264.5,"purchase_price":120,"margin":0,"margin_percent":0,"untaxed_amount_invoiced":0,"untaxed_amount_to_invoice":1150,"state":"sale","invoice_status":"invoiced","qty_delivered_method":"stock_move","virtual_id":null,"linked_virtual_id":null,"is_downpayment":false,"is_expense":false,"customer_lead":0,"analytic_distribution":null,"order_id":1,"product_id":8,"linked_sale_order_sale_id":null,"product_uom_id":1,"product_packaging_id":1,"currency_id":1,"order_partner_id":33,"salesman_id":1,"warehouse_id":5,"route_id":null,"company_id":1,"created_at":"2026-01-07T11:12:56+00:00","updated_at":"2026-01-08T12:59:31+00:00"}]},"message":"Order restored successfully."}'
+        content: '{"data":{"id":1,"name":"SO\/1","state":"draft","invoice_status":"to_invoice","client_order_ref":null,"origin":"SO-3746","reference":null,"date_order":"2026-06-25T00:00:00.000000Z","validity_date":null,"commitment_date":null,"currency_rate":1,"amount_untaxed":2895.5047,"amount_tax":434.3257,"amount_total":3329.8304,"locked":false,"require_signature":false,"require_payment":false,"signed_by":null,"signed_on":null,"prepayment_percent":0,"note":null,"access_token":"cedb0016-40b7-300f-9d80-b0f111c218c7","partner_id":1,"partner_invoice_id":1,"partner_shipping_id":1,"user_id":1,"team_id":null,"company_id":2016,"currency_id":1086,"payment_term_id":null,"fiscal_position_id":null,"journal_id":null,"campaign_id":null,"utm_source_id":null,"medium_id":null,"warehouse_id":null,"created_at":"2026-07-22T07:55:43+00:00","updated_at":"2026-07-22T07:55:43+00:00","deleted_at":null,"partner":{"id":1,"account_type":"individual","sub_type":"company","name":"Truck It In (TIN Pvt)","email":"dummy@dummycorp.local","phone":"1234567890","mobile":"1234567890","avatar":null,"avatar_url":null,"job_title":null,"website":"http:\/\/dummycorp.local","tax_id":"DUM123456","company_registry":"TIN001","reference":null,"is_active":null,"color":"#e80f0f","street1":null,"street2":null,"city":null,"zip":null,"country_id":null,"state_id":null,"parent_id":null,"title_id":null,"company_id":1,"industry_id":null,"user_id":null,"creator_id":1,"created_at":"2026-07-22T07:23:10.000000Z","updated_at":"2026-07-23T10:20:43.000000Z","deleted_at":null,"country":null,"state":null},"lines":[]},"message":"Order restored successfully."}'
         headers: []
         description: ''
       -
@@ -1141,7 +1141,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -1161,7 +1161,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -1206,7 +1206,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -1226,7 +1226,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -1252,7 +1252,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":1,"name":"SO\/1","state":"sale","invoice_status":"invoiced","client_order_ref":null,"origin":null,"reference":null,"date_order":"2026-01-07","validity_date":"2026-02-06","commitment_date":null,"currency_rate":0,"amount_untaxed":2440,"amount_tax":366,"amount_total":2806,"locked":true,"require_signature":false,"require_payment":false,"signed_by":null,"signed_on":null,"prepayment_percent":0,"note":"<p><\/p>","access_token":null,"partner_id":33,"partner_invoice_id":33,"partner_shipping_id":33,"user_id":1,"team_id":null,"company_id":1,"currency_id":1,"payment_term_id":2,"fiscal_position_id":null,"journal_id":null,"campaign_id":null,"utm_source_id":null,"medium_id":null,"warehouse_id":5,"created_at":"2026-01-07T11:12:56+00:00","updated_at":"2026-01-08T12:59:31+00:00","deleted_at":null,"partner":{"id":33,"account_type":"individual","sub_type":"customer","name":"Lyle Holman","email":"lyle@holman.com","phone":"12121221212","mobile":"1212121215294","avatar":null,"avatar_url":null,"job_title":"Itaque ratione dicta tenetur omnis reiciendis quidem consequatur","website":"https:\/\/www.zecikapuleze.mobi","tax_id":"Esse dolorum quo vel animi fugiat ipsum dicta et","company_registry":"TEST COMPANY","reference":"Ea aliquid debitis m","is_active":true,"color":null,"street1":"Street 69","street2":"Reprehenderit eos saepe deserunt ut eu ea aliquam magnam saepe reprehenderit cum alias dicta amet ducimus saepe excepturi facere qui","city":"California","zip":"90006","country_id":233,"state_id":13,"parent_id":18,"title_id":1,"company_id":null,"industry_id":null,"user_id":2,"creator_id":null,"created_at":"2025-04-10T10:45:51.000000Z","updated_at":"2025-12-09T11:12:13.000000Z","deleted_at":null,"country":{"id":233,"name":"United States","code":"US","phone_code":"1","state_required":true,"zip_required":true,"currency_id":1,"created_at":"2025-04-07T12:34:34.000000Z","updated_at":"2025-04-07T12:34:34.000000Z"},"state":{"id":13,"name":"California","code":"CA","country_id":233,"created_at":"2025-04-07T12:34:34.000000Z","updated_at":"2025-04-07T12:34:34.000000Z"}},"lines":[{"id":1,"sort":1,"name":"Big Vision 4K Action Camera - Fisheye Lens","display_type":null,"product_uom_qty":5,"product_qty":5,"qty_delivered":5,"qty_invoiced":5,"qty_to_invoice":0,"product_packaging_qty":0.5,"price_unit":210,"technical_price_unit":210,"discount":0,"price_subtotal":1050,"price_tax":157.5,"price_total":1207.5,"price_reduce_taxexcl":210,"price_reduce_taxinc":241.5,"purchase_price":100,"margin":0,"margin_percent":0,"untaxed_amount_invoiced":0,"untaxed_amount_to_invoice":1050,"state":"sale","invoice_status":"invoiced","qty_delivered_method":"stock_move","virtual_id":null,"linked_virtual_id":null,"is_downpayment":false,"is_expense":false,"customer_lead":0,"analytic_distribution":null,"order_id":1,"product_id":2,"linked_sale_order_sale_id":null,"product_uom_id":1,"product_packaging_id":1,"currency_id":1,"order_partner_id":33,"salesman_id":1,"warehouse_id":5,"route_id":null,"company_id":1,"created_at":"2026-01-07T11:12:56+00:00","updated_at":"2026-01-08T12:59:31+00:00"},{"id":2,"sort":2,"name":"Bass Blaze Waterproof Bluetooth Speaker - Blue","display_type":null,"product_uom_qty":4,"product_qty":4,"qty_delivered":4,"qty_invoiced":4,"qty_to_invoice":0,"product_packaging_qty":0.2,"price_unit":60,"technical_price_unit":60,"discount":0,"price_subtotal":240,"price_tax":36,"price_total":276,"price_reduce_taxexcl":60,"price_reduce_taxinc":69,"purchase_price":45,"margin":0,"margin_percent":0,"untaxed_amount_invoiced":0,"untaxed_amount_to_invoice":240,"state":"sale","invoice_status":"invoiced","qty_delivered_method":"stock_move","virtual_id":null,"linked_virtual_id":null,"is_downpayment":false,"is_expense":false,"customer_lead":0,"analytic_distribution":null,"order_id":1,"product_id":12,"linked_sale_order_sale_id":null,"product_uom_id":1,"product_packaging_id":2,"currency_id":1,"order_partner_id":33,"salesman_id":1,"warehouse_id":5,"route_id":null,"company_id":1,"created_at":"2026-01-07T11:12:56+00:00","updated_at":"2026-01-08T12:59:31+00:00"},{"id":3,"sort":3,"name":"Flim Rocket Mini Projector - Telecentric Lens","display_type":null,"product_uom_qty":5,"product_qty":5,"qty_delivered":5,"qty_invoiced":5,"qty_to_invoice":0,"product_packaging_qty":0.5,"price_unit":230,"technical_price_unit":230,"discount":0,"price_subtotal":1150,"price_tax":172.5,"price_total":1322.5,"price_reduce_taxexcl":230,"price_reduce_taxinc":264.5,"purchase_price":120,"margin":0,"margin_percent":0,"untaxed_amount_invoiced":0,"untaxed_amount_to_invoice":1150,"state":"sale","invoice_status":"invoiced","qty_delivered_method":"stock_move","virtual_id":null,"linked_virtual_id":null,"is_downpayment":false,"is_expense":false,"customer_lead":0,"analytic_distribution":null,"order_id":1,"product_id":8,"linked_sale_order_sale_id":null,"product_uom_id":1,"product_packaging_id":1,"currency_id":1,"order_partner_id":33,"salesman_id":1,"warehouse_id":5,"route_id":null,"company_id":1,"created_at":"2026-01-07T11:12:56+00:00","updated_at":"2026-01-08T12:59:31+00:00"}]},"message":"Order confirmed successfully."}'
+        content: '{"data":{"id":1,"name":"SO\/1","state":"draft","invoice_status":"to_invoice","client_order_ref":null,"origin":"SO-3746","reference":null,"date_order":"2026-06-25T00:00:00.000000Z","validity_date":null,"commitment_date":null,"currency_rate":1,"amount_untaxed":2895.5047,"amount_tax":434.3257,"amount_total":3329.8304,"locked":false,"require_signature":false,"require_payment":false,"signed_by":null,"signed_on":null,"prepayment_percent":0,"note":null,"access_token":"cedb0016-40b7-300f-9d80-b0f111c218c7","partner_id":1,"partner_invoice_id":1,"partner_shipping_id":1,"user_id":1,"team_id":null,"company_id":2016,"currency_id":1086,"payment_term_id":null,"fiscal_position_id":null,"journal_id":null,"campaign_id":null,"utm_source_id":null,"medium_id":null,"warehouse_id":null,"created_at":"2026-07-22T07:55:43+00:00","updated_at":"2026-07-22T07:55:43+00:00","deleted_at":null,"partner":{"id":1,"account_type":"individual","sub_type":"company","name":"Truck It In (TIN Pvt)","email":"dummy@dummycorp.local","phone":"1234567890","mobile":"1234567890","avatar":null,"avatar_url":null,"job_title":null,"website":"http:\/\/dummycorp.local","tax_id":"DUM123456","company_registry":"TIN001","reference":null,"is_active":null,"color":"#e80f0f","street1":null,"street2":null,"city":null,"zip":null,"country_id":null,"state_id":null,"parent_id":null,"title_id":null,"company_id":1,"industry_id":null,"user_id":null,"creator_id":1,"created_at":"2026-07-22T07:23:10.000000Z","updated_at":"2026-07-23T10:20:43.000000Z","deleted_at":null,"country":null,"state":null},"lines":[]},"message":"Order confirmed successfully."}'
         headers: []
         description: ''
       -
@@ -1277,7 +1277,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -1297,7 +1297,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -1361,7 +1361,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":1,"name":"SO\/1","state":"sale","invoice_status":"invoiced","client_order_ref":null,"origin":null,"reference":null,"date_order":"2026-01-07","validity_date":"2026-02-06","commitment_date":null,"currency_rate":0,"amount_untaxed":2440,"amount_tax":366,"amount_total":2806,"locked":true,"require_signature":false,"require_payment":false,"signed_by":null,"signed_on":null,"prepayment_percent":0,"note":"<p><\/p>","access_token":null,"partner_id":33,"partner_invoice_id":33,"partner_shipping_id":33,"user_id":1,"team_id":null,"company_id":1,"currency_id":1,"payment_term_id":2,"fiscal_position_id":null,"journal_id":null,"campaign_id":null,"utm_source_id":null,"medium_id":null,"warehouse_id":5,"created_at":"2026-01-07T11:12:56+00:00","updated_at":"2026-01-08T12:59:31+00:00","deleted_at":null,"partner":{"id":33,"account_type":"individual","sub_type":"customer","name":"Lyle Holman","email":"lyle@holman.com","phone":"12121221212","mobile":"1212121215294","avatar":null,"avatar_url":null,"job_title":"Itaque ratione dicta tenetur omnis reiciendis quidem consequatur","website":"https:\/\/www.zecikapuleze.mobi","tax_id":"Esse dolorum quo vel animi fugiat ipsum dicta et","company_registry":"TEST COMPANY","reference":"Ea aliquid debitis m","is_active":true,"color":null,"street1":"Street 69","street2":"Reprehenderit eos saepe deserunt ut eu ea aliquam magnam saepe reprehenderit cum alias dicta amet ducimus saepe excepturi facere qui","city":"California","zip":"90006","country_id":233,"state_id":13,"parent_id":18,"title_id":1,"company_id":null,"industry_id":null,"user_id":2,"creator_id":null,"created_at":"2025-04-10T10:45:51.000000Z","updated_at":"2025-12-09T11:12:13.000000Z","deleted_at":null,"country":{"id":233,"name":"United States","code":"US","phone_code":"1","state_required":true,"zip_required":true,"currency_id":1,"created_at":"2025-04-07T12:34:34.000000Z","updated_at":"2025-04-07T12:34:34.000000Z"},"state":{"id":13,"name":"California","code":"CA","country_id":233,"created_at":"2025-04-07T12:34:34.000000Z","updated_at":"2025-04-07T12:34:34.000000Z"}},"lines":[{"id":1,"sort":1,"name":"Big Vision 4K Action Camera - Fisheye Lens","display_type":null,"product_uom_qty":5,"product_qty":5,"qty_delivered":5,"qty_invoiced":5,"qty_to_invoice":0,"product_packaging_qty":0.5,"price_unit":210,"technical_price_unit":210,"discount":0,"price_subtotal":1050,"price_tax":157.5,"price_total":1207.5,"price_reduce_taxexcl":210,"price_reduce_taxinc":241.5,"purchase_price":100,"margin":0,"margin_percent":0,"untaxed_amount_invoiced":0,"untaxed_amount_to_invoice":1050,"state":"sale","invoice_status":"invoiced","qty_delivered_method":"stock_move","virtual_id":null,"linked_virtual_id":null,"is_downpayment":false,"is_expense":false,"customer_lead":0,"analytic_distribution":null,"order_id":1,"product_id":2,"linked_sale_order_sale_id":null,"product_uom_id":1,"product_packaging_id":1,"currency_id":1,"order_partner_id":33,"salesman_id":1,"warehouse_id":5,"route_id":null,"company_id":1,"created_at":"2026-01-07T11:12:56+00:00","updated_at":"2026-01-08T12:59:31+00:00"},{"id":2,"sort":2,"name":"Bass Blaze Waterproof Bluetooth Speaker - Blue","display_type":null,"product_uom_qty":4,"product_qty":4,"qty_delivered":4,"qty_invoiced":4,"qty_to_invoice":0,"product_packaging_qty":0.2,"price_unit":60,"technical_price_unit":60,"discount":0,"price_subtotal":240,"price_tax":36,"price_total":276,"price_reduce_taxexcl":60,"price_reduce_taxinc":69,"purchase_price":45,"margin":0,"margin_percent":0,"untaxed_amount_invoiced":0,"untaxed_amount_to_invoice":240,"state":"sale","invoice_status":"invoiced","qty_delivered_method":"stock_move","virtual_id":null,"linked_virtual_id":null,"is_downpayment":false,"is_expense":false,"customer_lead":0,"analytic_distribution":null,"order_id":1,"product_id":12,"linked_sale_order_sale_id":null,"product_uom_id":1,"product_packaging_id":2,"currency_id":1,"order_partner_id":33,"salesman_id":1,"warehouse_id":5,"route_id":null,"company_id":1,"created_at":"2026-01-07T11:12:56+00:00","updated_at":"2026-01-08T12:59:31+00:00"},{"id":3,"sort":3,"name":"Flim Rocket Mini Projector - Telecentric Lens","display_type":null,"product_uom_qty":5,"product_qty":5,"qty_delivered":5,"qty_invoiced":5,"qty_to_invoice":0,"product_packaging_qty":0.5,"price_unit":230,"technical_price_unit":230,"discount":0,"price_subtotal":1150,"price_tax":172.5,"price_total":1322.5,"price_reduce_taxexcl":230,"price_reduce_taxinc":264.5,"purchase_price":120,"margin":0,"margin_percent":0,"untaxed_amount_invoiced":0,"untaxed_amount_to_invoice":1150,"state":"sale","invoice_status":"invoiced","qty_delivered_method":"stock_move","virtual_id":null,"linked_virtual_id":null,"is_downpayment":false,"is_expense":false,"customer_lead":0,"analytic_distribution":null,"order_id":1,"product_id":8,"linked_sale_order_sale_id":null,"product_uom_id":1,"product_packaging_id":1,"currency_id":1,"order_partner_id":33,"salesman_id":1,"warehouse_id":5,"route_id":null,"company_id":1,"created_at":"2026-01-07T11:12:56+00:00","updated_at":"2026-01-08T12:59:31+00:00"}]},"message":"Order canceled successfully."}'
+        content: '{"data":{"id":1,"name":"SO\/1","state":"draft","invoice_status":"to_invoice","client_order_ref":null,"origin":"SO-3746","reference":null,"date_order":"2026-06-25T00:00:00.000000Z","validity_date":null,"commitment_date":null,"currency_rate":1,"amount_untaxed":2895.5047,"amount_tax":434.3257,"amount_total":3329.8304,"locked":false,"require_signature":false,"require_payment":false,"signed_by":null,"signed_on":null,"prepayment_percent":0,"note":null,"access_token":"cedb0016-40b7-300f-9d80-b0f111c218c7","partner_id":1,"partner_invoice_id":1,"partner_shipping_id":1,"user_id":1,"team_id":null,"company_id":2016,"currency_id":1086,"payment_term_id":null,"fiscal_position_id":null,"journal_id":null,"campaign_id":null,"utm_source_id":null,"medium_id":null,"warehouse_id":null,"created_at":"2026-07-22T07:55:43+00:00","updated_at":"2026-07-22T07:55:43+00:00","deleted_at":null,"partner":{"id":1,"account_type":"individual","sub_type":"company","name":"Truck It In (TIN Pvt)","email":"dummy@dummycorp.local","phone":"1234567890","mobile":"1234567890","avatar":null,"avatar_url":null,"job_title":null,"website":"http:\/\/dummycorp.local","tax_id":"DUM123456","company_registry":"TIN001","reference":null,"is_active":null,"color":"#e80f0f","street1":null,"street2":null,"city":null,"zip":null,"country_id":null,"state_id":null,"parent_id":null,"title_id":null,"company_id":1,"industry_id":null,"user_id":null,"creator_id":1,"created_at":"2026-07-22T07:23:10.000000Z","updated_at":"2026-07-23T10:20:43.000000Z","deleted_at":null,"country":null,"state":null},"lines":[]},"message":"Order canceled successfully."}'
         headers: []
         description: ''
       -
@@ -1386,7 +1386,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -1406,7 +1406,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -1432,7 +1432,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":1,"name":"SO\/1","state":"sale","invoice_status":"invoiced","client_order_ref":null,"origin":null,"reference":null,"date_order":"2026-01-07","validity_date":"2026-02-06","commitment_date":null,"currency_rate":0,"amount_untaxed":2440,"amount_tax":366,"amount_total":2806,"locked":true,"require_signature":false,"require_payment":false,"signed_by":null,"signed_on":null,"prepayment_percent":0,"note":"<p><\/p>","access_token":null,"partner_id":33,"partner_invoice_id":33,"partner_shipping_id":33,"user_id":1,"team_id":null,"company_id":1,"currency_id":1,"payment_term_id":2,"fiscal_position_id":null,"journal_id":null,"campaign_id":null,"utm_source_id":null,"medium_id":null,"warehouse_id":5,"created_at":"2026-01-07T11:12:56+00:00","updated_at":"2026-01-08T12:59:31+00:00","deleted_at":null,"partner":{"id":33,"account_type":"individual","sub_type":"customer","name":"Lyle Holman","email":"lyle@holman.com","phone":"12121221212","mobile":"1212121215294","avatar":null,"avatar_url":null,"job_title":"Itaque ratione dicta tenetur omnis reiciendis quidem consequatur","website":"https:\/\/www.zecikapuleze.mobi","tax_id":"Esse dolorum quo vel animi fugiat ipsum dicta et","company_registry":"TEST COMPANY","reference":"Ea aliquid debitis m","is_active":true,"color":null,"street1":"Street 69","street2":"Reprehenderit eos saepe deserunt ut eu ea aliquam magnam saepe reprehenderit cum alias dicta amet ducimus saepe excepturi facere qui","city":"California","zip":"90006","country_id":233,"state_id":13,"parent_id":18,"title_id":1,"company_id":null,"industry_id":null,"user_id":2,"creator_id":null,"created_at":"2025-04-10T10:45:51.000000Z","updated_at":"2025-12-09T11:12:13.000000Z","deleted_at":null,"country":{"id":233,"name":"United States","code":"US","phone_code":"1","state_required":true,"zip_required":true,"currency_id":1,"created_at":"2025-04-07T12:34:34.000000Z","updated_at":"2025-04-07T12:34:34.000000Z"},"state":{"id":13,"name":"California","code":"CA","country_id":233,"created_at":"2025-04-07T12:34:34.000000Z","updated_at":"2025-04-07T12:34:34.000000Z"}},"lines":[{"id":1,"sort":1,"name":"Big Vision 4K Action Camera - Fisheye Lens","display_type":null,"product_uom_qty":5,"product_qty":5,"qty_delivered":5,"qty_invoiced":5,"qty_to_invoice":0,"product_packaging_qty":0.5,"price_unit":210,"technical_price_unit":210,"discount":0,"price_subtotal":1050,"price_tax":157.5,"price_total":1207.5,"price_reduce_taxexcl":210,"price_reduce_taxinc":241.5,"purchase_price":100,"margin":0,"margin_percent":0,"untaxed_amount_invoiced":0,"untaxed_amount_to_invoice":1050,"state":"sale","invoice_status":"invoiced","qty_delivered_method":"stock_move","virtual_id":null,"linked_virtual_id":null,"is_downpayment":false,"is_expense":false,"customer_lead":0,"analytic_distribution":null,"order_id":1,"product_id":2,"linked_sale_order_sale_id":null,"product_uom_id":1,"product_packaging_id":1,"currency_id":1,"order_partner_id":33,"salesman_id":1,"warehouse_id":5,"route_id":null,"company_id":1,"created_at":"2026-01-07T11:12:56+00:00","updated_at":"2026-01-08T12:59:31+00:00"},{"id":2,"sort":2,"name":"Bass Blaze Waterproof Bluetooth Speaker - Blue","display_type":null,"product_uom_qty":4,"product_qty":4,"qty_delivered":4,"qty_invoiced":4,"qty_to_invoice":0,"product_packaging_qty":0.2,"price_unit":60,"technical_price_unit":60,"discount":0,"price_subtotal":240,"price_tax":36,"price_total":276,"price_reduce_taxexcl":60,"price_reduce_taxinc":69,"purchase_price":45,"margin":0,"margin_percent":0,"untaxed_amount_invoiced":0,"untaxed_amount_to_invoice":240,"state":"sale","invoice_status":"invoiced","qty_delivered_method":"stock_move","virtual_id":null,"linked_virtual_id":null,"is_downpayment":false,"is_expense":false,"customer_lead":0,"analytic_distribution":null,"order_id":1,"product_id":12,"linked_sale_order_sale_id":null,"product_uom_id":1,"product_packaging_id":2,"currency_id":1,"order_partner_id":33,"salesman_id":1,"warehouse_id":5,"route_id":null,"company_id":1,"created_at":"2026-01-07T11:12:56+00:00","updated_at":"2026-01-08T12:59:31+00:00"},{"id":3,"sort":3,"name":"Flim Rocket Mini Projector - Telecentric Lens","display_type":null,"product_uom_qty":5,"product_qty":5,"qty_delivered":5,"qty_invoiced":5,"qty_to_invoice":0,"product_packaging_qty":0.5,"price_unit":230,"technical_price_unit":230,"discount":0,"price_subtotal":1150,"price_tax":172.5,"price_total":1322.5,"price_reduce_taxexcl":230,"price_reduce_taxinc":264.5,"purchase_price":120,"margin":0,"margin_percent":0,"untaxed_amount_invoiced":0,"untaxed_amount_to_invoice":1150,"state":"sale","invoice_status":"invoiced","qty_delivered_method":"stock_move","virtual_id":null,"linked_virtual_id":null,"is_downpayment":false,"is_expense":false,"customer_lead":0,"analytic_distribution":null,"order_id":1,"product_id":8,"linked_sale_order_sale_id":null,"product_uom_id":1,"product_packaging_id":1,"currency_id":1,"order_partner_id":33,"salesman_id":1,"warehouse_id":5,"route_id":null,"company_id":1,"created_at":"2026-01-07T11:12:56+00:00","updated_at":"2026-01-08T12:59:31+00:00"}]},"message":"Order set as quotation successfully."}'
+        content: '{"data":{"id":1,"name":"SO\/1","state":"draft","invoice_status":"to_invoice","client_order_ref":null,"origin":"SO-3746","reference":null,"date_order":"2026-06-25T00:00:00.000000Z","validity_date":null,"commitment_date":null,"currency_rate":1,"amount_untaxed":2895.5047,"amount_tax":434.3257,"amount_total":3329.8304,"locked":false,"require_signature":false,"require_payment":false,"signed_by":null,"signed_on":null,"prepayment_percent":0,"note":null,"access_token":"cedb0016-40b7-300f-9d80-b0f111c218c7","partner_id":1,"partner_invoice_id":1,"partner_shipping_id":1,"user_id":1,"team_id":null,"company_id":2016,"currency_id":1086,"payment_term_id":null,"fiscal_position_id":null,"journal_id":null,"campaign_id":null,"utm_source_id":null,"medium_id":null,"warehouse_id":null,"created_at":"2026-07-22T07:55:43+00:00","updated_at":"2026-07-22T07:55:43+00:00","deleted_at":null,"partner":{"id":1,"account_type":"individual","sub_type":"company","name":"Truck It In (TIN Pvt)","email":"dummy@dummycorp.local","phone":"1234567890","mobile":"1234567890","avatar":null,"avatar_url":null,"job_title":null,"website":"http:\/\/dummycorp.local","tax_id":"DUM123456","company_registry":"TIN001","reference":null,"is_active":null,"color":"#e80f0f","street1":null,"street2":null,"city":null,"zip":null,"country_id":null,"state_id":null,"parent_id":null,"title_id":null,"company_id":1,"industry_id":null,"user_id":null,"creator_id":1,"created_at":"2026-07-22T07:23:10.000000Z","updated_at":"2026-07-23T10:20:43.000000Z","deleted_at":null,"country":null,"state":null},"lines":[]},"message":"Order set as quotation successfully."}'
         headers: []
         description: ''
       -
@@ -1457,7 +1457,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -1477,7 +1477,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -1503,7 +1503,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":1,"name":"SO\/1","state":"sale","invoice_status":"invoiced","client_order_ref":null,"origin":null,"reference":null,"date_order":"2026-01-07","validity_date":"2026-02-06","commitment_date":null,"currency_rate":0,"amount_untaxed":2440,"amount_tax":366,"amount_total":2806,"locked":true,"require_signature":false,"require_payment":false,"signed_by":null,"signed_on":null,"prepayment_percent":0,"note":"<p><\/p>","access_token":null,"partner_id":33,"partner_invoice_id":33,"partner_shipping_id":33,"user_id":1,"team_id":null,"company_id":1,"currency_id":1,"payment_term_id":2,"fiscal_position_id":null,"journal_id":null,"campaign_id":null,"utm_source_id":null,"medium_id":null,"warehouse_id":5,"created_at":"2026-01-07T11:12:56+00:00","updated_at":"2026-01-08T12:59:31+00:00","deleted_at":null,"partner":{"id":33,"account_type":"individual","sub_type":"customer","name":"Lyle Holman","email":"lyle@holman.com","phone":"12121221212","mobile":"1212121215294","avatar":null,"avatar_url":null,"job_title":"Itaque ratione dicta tenetur omnis reiciendis quidem consequatur","website":"https:\/\/www.zecikapuleze.mobi","tax_id":"Esse dolorum quo vel animi fugiat ipsum dicta et","company_registry":"TEST COMPANY","reference":"Ea aliquid debitis m","is_active":true,"color":null,"street1":"Street 69","street2":"Reprehenderit eos saepe deserunt ut eu ea aliquam magnam saepe reprehenderit cum alias dicta amet ducimus saepe excepturi facere qui","city":"California","zip":"90006","country_id":233,"state_id":13,"parent_id":18,"title_id":1,"company_id":null,"industry_id":null,"user_id":2,"creator_id":null,"created_at":"2025-04-10T10:45:51.000000Z","updated_at":"2025-12-09T11:12:13.000000Z","deleted_at":null,"country":{"id":233,"name":"United States","code":"US","phone_code":"1","state_required":true,"zip_required":true,"currency_id":1,"created_at":"2025-04-07T12:34:34.000000Z","updated_at":"2025-04-07T12:34:34.000000Z"},"state":{"id":13,"name":"California","code":"CA","country_id":233,"created_at":"2025-04-07T12:34:34.000000Z","updated_at":"2025-04-07T12:34:34.000000Z"}},"lines":[{"id":1,"sort":1,"name":"Big Vision 4K Action Camera - Fisheye Lens","display_type":null,"product_uom_qty":5,"product_qty":5,"qty_delivered":5,"qty_invoiced":5,"qty_to_invoice":0,"product_packaging_qty":0.5,"price_unit":210,"technical_price_unit":210,"discount":0,"price_subtotal":1050,"price_tax":157.5,"price_total":1207.5,"price_reduce_taxexcl":210,"price_reduce_taxinc":241.5,"purchase_price":100,"margin":0,"margin_percent":0,"untaxed_amount_invoiced":0,"untaxed_amount_to_invoice":1050,"state":"sale","invoice_status":"invoiced","qty_delivered_method":"stock_move","virtual_id":null,"linked_virtual_id":null,"is_downpayment":false,"is_expense":false,"customer_lead":0,"analytic_distribution":null,"order_id":1,"product_id":2,"linked_sale_order_sale_id":null,"product_uom_id":1,"product_packaging_id":1,"currency_id":1,"order_partner_id":33,"salesman_id":1,"warehouse_id":5,"route_id":null,"company_id":1,"created_at":"2026-01-07T11:12:56+00:00","updated_at":"2026-01-08T12:59:31+00:00"},{"id":2,"sort":2,"name":"Bass Blaze Waterproof Bluetooth Speaker - Blue","display_type":null,"product_uom_qty":4,"product_qty":4,"qty_delivered":4,"qty_invoiced":4,"qty_to_invoice":0,"product_packaging_qty":0.2,"price_unit":60,"technical_price_unit":60,"discount":0,"price_subtotal":240,"price_tax":36,"price_total":276,"price_reduce_taxexcl":60,"price_reduce_taxinc":69,"purchase_price":45,"margin":0,"margin_percent":0,"untaxed_amount_invoiced":0,"untaxed_amount_to_invoice":240,"state":"sale","invoice_status":"invoiced","qty_delivered_method":"stock_move","virtual_id":null,"linked_virtual_id":null,"is_downpayment":false,"is_expense":false,"customer_lead":0,"analytic_distribution":null,"order_id":1,"product_id":12,"linked_sale_order_sale_id":null,"product_uom_id":1,"product_packaging_id":2,"currency_id":1,"order_partner_id":33,"salesman_id":1,"warehouse_id":5,"route_id":null,"company_id":1,"created_at":"2026-01-07T11:12:56+00:00","updated_at":"2026-01-08T12:59:31+00:00"},{"id":3,"sort":3,"name":"Flim Rocket Mini Projector - Telecentric Lens","display_type":null,"product_uom_qty":5,"product_qty":5,"qty_delivered":5,"qty_invoiced":5,"qty_to_invoice":0,"product_packaging_qty":0.5,"price_unit":230,"technical_price_unit":230,"discount":0,"price_subtotal":1150,"price_tax":172.5,"price_total":1322.5,"price_reduce_taxexcl":230,"price_reduce_taxinc":264.5,"purchase_price":120,"margin":0,"margin_percent":0,"untaxed_amount_invoiced":0,"untaxed_amount_to_invoice":1150,"state":"sale","invoice_status":"invoiced","qty_delivered_method":"stock_move","virtual_id":null,"linked_virtual_id":null,"is_downpayment":false,"is_expense":false,"customer_lead":0,"analytic_distribution":null,"order_id":1,"product_id":8,"linked_sale_order_sale_id":null,"product_uom_id":1,"product_packaging_id":1,"currency_id":1,"order_partner_id":33,"salesman_id":1,"warehouse_id":5,"route_id":null,"company_id":1,"created_at":"2026-01-07T11:12:56+00:00","updated_at":"2026-01-08T12:59:31+00:00"}]},"message":"Order lock state updated successfully."}'
+        content: '{"data":{"id":1,"name":"SO\/1","state":"draft","invoice_status":"to_invoice","client_order_ref":null,"origin":"SO-3746","reference":null,"date_order":"2026-06-25T00:00:00.000000Z","validity_date":null,"commitment_date":null,"currency_rate":1,"amount_untaxed":2895.5047,"amount_tax":434.3257,"amount_total":3329.8304,"locked":false,"require_signature":false,"require_payment":false,"signed_by":null,"signed_on":null,"prepayment_percent":0,"note":null,"access_token":"cedb0016-40b7-300f-9d80-b0f111c218c7","partner_id":1,"partner_invoice_id":1,"partner_shipping_id":1,"user_id":1,"team_id":null,"company_id":2016,"currency_id":1086,"payment_term_id":null,"fiscal_position_id":null,"journal_id":null,"campaign_id":null,"utm_source_id":null,"medium_id":null,"warehouse_id":null,"created_at":"2026-07-22T07:55:43+00:00","updated_at":"2026-07-22T07:55:43+00:00","deleted_at":null,"partner":{"id":1,"account_type":"individual","sub_type":"company","name":"Truck It In (TIN Pvt)","email":"dummy@dummycorp.local","phone":"1234567890","mobile":"1234567890","avatar":null,"avatar_url":null,"job_title":null,"website":"http:\/\/dummycorp.local","tax_id":"DUM123456","company_registry":"TIN001","reference":null,"is_active":null,"color":"#e80f0f","street1":null,"street2":null,"city":null,"zip":null,"country_id":null,"state_id":null,"parent_id":null,"title_id":null,"company_id":1,"industry_id":null,"user_id":null,"creator_id":1,"created_at":"2026-07-22T07:23:10.000000Z","updated_at":"2026-07-23T10:20:43.000000Z","deleted_at":null,"country":null,"state":null},"lines":[]},"message":"Order lock state updated successfully."}'
         headers: []
         description: ''
       -
@@ -1528,7 +1528,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -1548,7 +1548,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -1632,7 +1632,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":[{"id":1,"sort":1,"name":"Big Vision 4K Action Camera - Fisheye Lens","display_type":null,"product_uom_qty":5,"product_qty":5,"qty_delivered":5,"qty_invoiced":5,"qty_to_invoice":0,"product_packaging_qty":0.5,"price_unit":210,"technical_price_unit":210,"discount":0,"price_subtotal":1050,"price_tax":157.5,"price_total":1207.5,"price_reduce_taxexcl":210,"price_reduce_taxinc":241.5,"purchase_price":100,"margin":0,"margin_percent":0,"untaxed_amount_invoiced":0,"untaxed_amount_to_invoice":1050,"state":"sale","invoice_status":"invoiced","qty_delivered_method":"stock_move","virtual_id":null,"linked_virtual_id":null,"is_downpayment":false,"is_expense":false,"customer_lead":0,"analytic_distribution":null,"order_id":1,"product_id":2,"linked_sale_order_sale_id":null,"product_uom_id":1,"product_packaging_id":1,"currency_id":1,"order_partner_id":33,"salesman_id":1,"warehouse_id":5,"route_id":null,"company_id":1,"created_at":"2026-01-07T11:12:56+00:00","updated_at":"2026-01-08T12:59:31+00:00","product":{"id":2,"type":"goods","name":"Big Vision 4K Action Camera - Fisheye Lens","service_tracking":"none","reference":"Action-01-big-vision-4k-action-camera---fisheye-lens","barcode":null,"price":210,"cost":100,"volume":0,"weight":1.2,"description":"<p>A high-quality 4k action camera designed for everyday use.<\/p><p>The <strong>4K Action Camera<\/strong> is crafted with premium materials, ensuring durability and functionality. Perfect for those who value quality and innovation in their everyday essentials.<\/p>","description_purchase":null,"description_sale":null,"enable_sales":false,"enable_purchase":false,"is_favorite":false,"is_configurable":false,"images":["01JR9QKPXFKP1S054PZDM17MEP.png","01JR9QKPXPX1TJKCH0DMZ29M12.png"],"sort":null,"parent_id":1,"uom_id":1,"uom_po_id":1,"category_id":11,"creator_id":1,"company_id":1,"created_at":"2025-04-08T03:49:27.000000Z","updated_at":"2025-09-23T07:28:33.000000Z","deleted_at":null}},{"id":1,"sort":1,"name":"Big Vision 4K Action Camera - Fisheye Lens","display_type":null,"product_uom_qty":5,"product_qty":5,"qty_delivered":5,"qty_invoiced":5,"qty_to_invoice":0,"product_packaging_qty":0.5,"price_unit":210,"technical_price_unit":210,"discount":0,"price_subtotal":1050,"price_tax":157.5,"price_total":1207.5,"price_reduce_taxexcl":210,"price_reduce_taxinc":241.5,"purchase_price":100,"margin":0,"margin_percent":0,"untaxed_amount_invoiced":0,"untaxed_amount_to_invoice":1050,"state":"sale","invoice_status":"invoiced","qty_delivered_method":"stock_move","virtual_id":null,"linked_virtual_id":null,"is_downpayment":false,"is_expense":false,"customer_lead":0,"analytic_distribution":null,"order_id":1,"product_id":2,"linked_sale_order_sale_id":null,"product_uom_id":1,"product_packaging_id":1,"currency_id":1,"order_partner_id":33,"salesman_id":1,"warehouse_id":5,"route_id":null,"company_id":1,"created_at":"2026-01-07T11:12:56+00:00","updated_at":"2026-01-08T12:59:31+00:00","product":{"id":2,"type":"goods","name":"Big Vision 4K Action Camera - Fisheye Lens","service_tracking":"none","reference":"Action-01-big-vision-4k-action-camera---fisheye-lens","barcode":null,"price":210,"cost":100,"volume":0,"weight":1.2,"description":"<p>A high-quality 4k action camera designed for everyday use.<\/p><p>The <strong>4K Action Camera<\/strong> is crafted with premium materials, ensuring durability and functionality. Perfect for those who value quality and innovation in their everyday essentials.<\/p>","description_purchase":null,"description_sale":null,"enable_sales":false,"enable_purchase":false,"is_favorite":false,"is_configurable":false,"images":["01JR9QKPXFKP1S054PZDM17MEP.png","01JR9QKPXPX1TJKCH0DMZ29M12.png"],"sort":null,"parent_id":1,"uom_id":1,"uom_po_id":1,"category_id":11,"creator_id":1,"company_id":1,"created_at":"2025-04-08T03:49:27.000000Z","updated_at":"2025-09-23T07:28:33.000000Z","deleted_at":null}}]}'
+        content: '{"data":[{"id":null,"sort":17,"name":"Ipsa deserunt.","display_type":null,"product_uom_qty":94.27,"product_qty":94.27,"qty_delivered":0,"qty_invoiced":0,"qty_to_invoice":94.27,"product_packaging_qty":0,"price_unit":590.3685,"technical_price_unit":590.3685,"discount":0,"price_subtotal":55654.038495,"price_tax":8348.10577425,"price_total":64002.14426925,"price_reduce_taxexcl":590.3685,"price_reduce_taxinc":678.923775,"purchase_price":354.22110000000004,"margin":22261.615398,"margin_percent":40,"untaxed_amount_invoiced":0,"untaxed_amount_to_invoice":55654.038495,"state":"draft","invoice_status":null,"qty_delivered_method":"stock_move","virtual_id":null,"linked_virtual_id":null,"is_downpayment":false,"is_expense":false,"customer_lead":5,"analytic_distribution":null,"order_id":101,"product_id":981,"linked_sale_order_sale_id":null,"product_uom_id":909,"product_packaging_id":null,"currency_id":1909,"order_partner_id":1,"salesman_id":1,"warehouse_id":null,"route_id":null,"company_id":2908,"created_at":null,"updated_at":null},{"id":null,"sort":89,"name":"Qui ad vel.","display_type":null,"product_uom_qty":82.13,"product_qty":82.13,"qty_delivered":0,"qty_invoiced":0,"qty_to_invoice":82.13,"product_packaging_qty":0,"price_unit":635.0742,"technical_price_unit":635.0742,"discount":0,"price_subtotal":52158.644046,"price_tax":7823.7966068999995,"price_total":59982.4406529,"price_reduce_taxexcl":635.0742,"price_reduce_taxinc":730.33533,"purchase_price":381.04452,"margin":20863.457618400003,"margin_percent":40.00000000000001,"untaxed_amount_invoiced":0,"untaxed_amount_to_invoice":52158.644046,"state":"draft","invoice_status":null,"qty_delivered_method":"stock_move","virtual_id":null,"linked_virtual_id":null,"is_downpayment":false,"is_expense":false,"customer_lead":13,"analytic_distribution":null,"order_id":102,"product_id":982,"linked_sale_order_sale_id":null,"product_uom_id":912,"product_packaging_id":null,"currency_id":1911,"order_partner_id":1,"salesman_id":1,"warehouse_id":null,"route_id":null,"company_id":2911,"created_at":null,"updated_at":null}]}'
         headers: []
         description: ''
       -
@@ -1645,7 +1645,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -1665,7 +1665,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -1715,7 +1715,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":1,"sort":1,"name":"Big Vision 4K Action Camera - Fisheye Lens","display_type":null,"product_uom_qty":5,"product_qty":5,"qty_delivered":5,"qty_invoiced":5,"qty_to_invoice":0,"product_packaging_qty":0.5,"price_unit":210,"technical_price_unit":210,"discount":0,"price_subtotal":1050,"price_tax":157.5,"price_total":1207.5,"price_reduce_taxexcl":210,"price_reduce_taxinc":241.5,"purchase_price":100,"margin":0,"margin_percent":0,"untaxed_amount_invoiced":0,"untaxed_amount_to_invoice":1050,"state":"sale","invoice_status":"invoiced","qty_delivered_method":"stock_move","virtual_id":null,"linked_virtual_id":null,"is_downpayment":false,"is_expense":false,"customer_lead":0,"analytic_distribution":null,"order_id":1,"product_id":2,"linked_sale_order_sale_id":null,"product_uom_id":1,"product_packaging_id":1,"currency_id":1,"order_partner_id":33,"salesman_id":1,"warehouse_id":5,"route_id":null,"company_id":1,"created_at":"2026-01-07T11:12:56+00:00","updated_at":"2026-01-08T12:59:31+00:00","product":{"id":2,"type":"goods","name":"Big Vision 4K Action Camera - Fisheye Lens","service_tracking":"none","reference":"Action-01-big-vision-4k-action-camera---fisheye-lens","barcode":null,"price":210,"cost":100,"volume":0,"weight":1.2,"description":"<p>A high-quality 4k action camera designed for everyday use.<\/p><p>The <strong>4K Action Camera<\/strong> is crafted with premium materials, ensuring durability and functionality. Perfect for those who value quality and innovation in their everyday essentials.<\/p>","description_purchase":null,"description_sale":null,"enable_sales":false,"enable_purchase":false,"is_favorite":false,"is_configurable":false,"images":["01JR9QKPXFKP1S054PZDM17MEP.png","01JR9QKPXPX1TJKCH0DMZ29M12.png"],"sort":null,"parent_id":1,"uom_id":1,"uom_po_id":1,"category_id":11,"creator_id":1,"company_id":1,"created_at":"2025-04-08T03:49:27.000000Z","updated_at":"2025-09-23T07:28:33.000000Z","deleted_at":null}}}'
+        content: '{"data":{"id":null,"sort":50,"name":"Qui commodi incidunt.","display_type":null,"product_uom_qty":1.2,"product_qty":1.2,"qty_delivered":0,"qty_invoiced":0,"qty_to_invoice":1.2,"product_packaging_qty":0,"price_unit":973.9302,"technical_price_unit":973.9302,"discount":0,"price_subtotal":1168.71624,"price_tax":175.307436,"price_total":1344.023676,"price_reduce_taxexcl":973.9302,"price_reduce_taxinc":1120.01973,"purchase_price":584.35812,"margin":467.486496,"margin_percent":40,"untaxed_amount_invoiced":0,"untaxed_amount_to_invoice":1168.71624,"state":"draft","invoice_status":null,"qty_delivered_method":"stock_move","virtual_id":null,"linked_virtual_id":null,"is_downpayment":false,"is_expense":false,"customer_lead":13,"analytic_distribution":null,"order_id":103,"product_id":983,"linked_sale_order_sale_id":null,"product_uom_id":915,"product_packaging_id":null,"currency_id":1913,"order_partner_id":1,"salesman_id":1,"warehouse_id":null,"route_id":null,"company_id":2914,"created_at":null,"updated_at":null}}'
         headers: []
         description: ''
       -
@@ -1734,7 +1734,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -1754,7 +1754,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -1851,7 +1851,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":[{"id":1,"name":"WH\/INT\/1","origin":null,"move_type":"direct","state":"draft","is_favorite":false,"description":null,"has_deadline_issue":false,"is_printed":false,"is_locked":false,"deadline":null,"scheduled_at":"2025-04-10T12:10:18.000000Z","closed_at":null,"created_at":"2025-04-10T12:11:32.000000Z","updated_at":"2025-04-10T12:11:32.000000Z"},{"id":1,"name":"WH\/INT\/1","origin":null,"move_type":"direct","state":"draft","is_favorite":false,"description":null,"has_deadline_issue":false,"is_printed":false,"is_locked":false,"deadline":null,"scheduled_at":"2025-04-10T12:10:18.000000Z","closed_at":null,"created_at":"2025-04-10T12:11:32.000000Z","updated_at":"2025-04-10T12:11:32.000000Z"}],"links":{"first":"\/?page=1","last":"\/?page=1","prev":null,"next":null},"meta":{"current_page":1,"from":1,"last_page":1,"links":[{"url":null,"label":"&laquo; Previous","active":false},{"url":"\/?page=1","label":"1","active":true},{"url":null,"label":"Next &raquo;","active":false}],"path":"\/","per_page":10,"to":2,"total":2}}'
+        content: '{"data":[{"id":548,"name":"MZ\/548","origin":null,"move_type":"direct","state":"draft","is_favorite":false,"description":null,"has_deadline_issue":false,"is_printed":false,"is_locked":false,"deadline":null,"scheduled_at":"2026-07-22T07:55:43.000000Z","closed_at":null,"created_at":"2026-07-22T07:55:43.000000Z","updated_at":"2026-07-22T07:55:43.000000Z"},{"id":548,"name":"MZ\/548","origin":null,"move_type":"direct","state":"draft","is_favorite":false,"description":null,"has_deadline_issue":false,"is_printed":false,"is_locked":false,"deadline":null,"scheduled_at":"2026-07-22T07:55:43.000000Z","closed_at":null,"created_at":"2026-07-22T07:55:43.000000Z","updated_at":"2026-07-22T07:55:43.000000Z"}],"links":{"first":"\/?page=1","last":"\/?page=1","prev":null,"next":null},"meta":{"current_page":1,"from":1,"last_page":1,"links":[{"url":null,"label":"&laquo; Previous","page":null,"active":false},{"url":"\/?page=1","label":"1","page":1,"active":true},{"url":null,"label":"Next &raquo;","page":null,"active":false}],"path":"\/","per_page":10,"to":2,"total":2}}'
         headers: []
         description: ''
       -
@@ -1864,7 +1864,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -1884,7 +1884,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -1981,7 +1981,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":[{"id":1,"sort":1,"journal_id":2,"company_id":1,"campaign_id":null,"tax_cash_basis_origin_move_id":null,"auto_post_origin_id":null,"origin_payment_id":null,"secure_sequence_number":null,"invoice_payment_term_id":null,"partner_id":41,"commercial_partner_id":41,"partner_shipping_id":41,"partner_bank_id":null,"fiscal_position_id":null,"currency_id":1,"reversed_entry_id":null,"invoice_user_id":null,"invoice_incoterm_id":null,"invoice_cash_rounding_id":null,"preferred_payment_method_line_id":null,"creator_id":1,"sequence_prefix":"BILL\/2026","access_token":null,"name":"BILL\/2026\/1","reference":null,"state":"draft","move_type":"in_invoice","auto_post":0,"inalterable_hash":null,"payment_reference":null,"qr_code_method":null,"payment_state":"not_paid","invoice_source_email":null,"invoice_partner_display_name":"Eden Hebert -Supplier","invoice_origin":"PO\/1","incoterm_location":null,"date":"2026-01-08T00:00:00.000000Z","auto_post_until":null,"invoice_date":null,"invoice_date_due":null,"delivery_date":null,"sending_data":null,"narration":null,"invoice_currency_rate":"1.0000","amount_untaxed":"35000.0000","amount_tax":"0.0000","amount_total":"35000.0000","amount_residual":"35000.0000","amount_untaxed_signed":"-35000.0000","amount_untaxed_in_currency_signed":"-35000.0000","amount_tax_signed":"0.0000","amount_total_signed":"-35000.0000","amount_total_in_currency_signed":"-35000.0000","amount_residual_signed":"-35000.0000","quick_edit_total_amount":null,"is_storno":0,"always_tax_exigible":0,"checked":false,"posted_before":0,"made_sequence_gap":0,"is_manually_modified":0,"is_move_sent":0,"source_id":null,"medium_id":null,"created_at":"2026-01-08T12:56:46.000000Z","updated_at":"2026-01-08T12:56:47.000000Z"},{"id":1,"sort":1,"journal_id":2,"company_id":1,"campaign_id":null,"tax_cash_basis_origin_move_id":null,"auto_post_origin_id":null,"origin_payment_id":null,"secure_sequence_number":null,"invoice_payment_term_id":null,"partner_id":41,"commercial_partner_id":41,"partner_shipping_id":41,"partner_bank_id":null,"fiscal_position_id":null,"currency_id":1,"reversed_entry_id":null,"invoice_user_id":null,"invoice_incoterm_id":null,"invoice_cash_rounding_id":null,"preferred_payment_method_line_id":null,"creator_id":1,"sequence_prefix":"BILL\/2026","access_token":null,"name":"BILL\/2026\/1","reference":null,"state":"draft","move_type":"in_invoice","auto_post":0,"inalterable_hash":null,"payment_reference":null,"qr_code_method":null,"payment_state":"not_paid","invoice_source_email":null,"invoice_partner_display_name":"Eden Hebert -Supplier","invoice_origin":"PO\/1","incoterm_location":null,"date":"2026-01-08T00:00:00.000000Z","auto_post_until":null,"invoice_date":null,"invoice_date_due":null,"delivery_date":null,"sending_data":null,"narration":null,"invoice_currency_rate":"1.0000","amount_untaxed":"35000.0000","amount_tax":"0.0000","amount_total":"35000.0000","amount_residual":"35000.0000","amount_untaxed_signed":"-35000.0000","amount_untaxed_in_currency_signed":"-35000.0000","amount_tax_signed":"0.0000","amount_total_signed":"-35000.0000","amount_total_in_currency_signed":"-35000.0000","amount_residual_signed":"-35000.0000","quick_edit_total_amount":null,"is_storno":0,"always_tax_exigible":0,"checked":false,"posted_before":0,"made_sequence_gap":0,"is_manually_modified":0,"is_move_sent":0,"source_id":null,"medium_id":null,"created_at":"2026-01-08T12:56:46.000000Z","updated_at":"2026-01-08T12:56:47.000000Z"}],"links":{"first":"\/?page=1","last":"\/?page=1","prev":null,"next":null},"meta":{"current_page":1,"from":1,"last_page":1,"links":[{"url":null,"label":"&laquo; Previous","active":false},{"url":"\/?page=1","label":"1","active":true},{"url":null,"label":"Next &raquo;","active":false}],"path":"\/","per_page":10,"to":2,"total":2}}'
+        content: '{"data":[{"id":267,"sort":null,"journal_id":3,"company_id":1,"campaign_id":null,"tax_cash_basis_origin_move_id":null,"auto_post_origin_id":null,"origin_payment_id":null,"secure_sequence_number":null,"invoice_payment_term_id":null,"partner_id":null,"commercial_partner_id":null,"partner_shipping_id":null,"partner_bank_id":null,"fiscal_position_id":null,"currency_id":1,"reversed_entry_id":null,"invoice_user_id":null,"invoice_incoterm_id":null,"invoice_cash_rounding_id":null,"preferred_payment_method_line_id":null,"creator_id":null,"sequence_prefix":null,"access_token":null,"name":"Opening Balances (migration)","reference":null,"state":"posted","move_type":"entry","auto_post":0,"inalterable_hash":null,"payment_reference":null,"qr_code_method":null,"payment_state":"not_paid","invoice_source_email":null,"invoice_partner_display_name":null,"invoice_origin":null,"incoterm_location":null,"date":"2026-07-01T00:00:00.000000Z","auto_post_until":null,"invoice_date":null,"invoice_date_due":null,"delivery_date":null,"sending_data":null,"narration":null,"invoice_currency_rate":null,"amount_untaxed":null,"amount_tax":null,"amount_total":null,"amount_residual":null,"amount_untaxed_signed":null,"amount_untaxed_in_currency_signed":null,"amount_tax_signed":null,"amount_total_signed":null,"amount_total_in_currency_signed":null,"amount_residual_signed":null,"quick_edit_total_amount":null,"is_storno":0,"always_tax_exigible":0,"checked":false,"posted_before":0,"made_sequence_gap":0,"is_manually_modified":0,"is_move_sent":0,"source_id":null,"medium_id":null,"created_at":"2026-07-22T10:15:14.000000Z","updated_at":"2026-07-22T10:15:14.000000Z"},{"id":267,"sort":null,"journal_id":3,"company_id":1,"campaign_id":null,"tax_cash_basis_origin_move_id":null,"auto_post_origin_id":null,"origin_payment_id":null,"secure_sequence_number":null,"invoice_payment_term_id":null,"partner_id":null,"commercial_partner_id":null,"partner_shipping_id":null,"partner_bank_id":null,"fiscal_position_id":null,"currency_id":1,"reversed_entry_id":null,"invoice_user_id":null,"invoice_incoterm_id":null,"invoice_cash_rounding_id":null,"preferred_payment_method_line_id":null,"creator_id":null,"sequence_prefix":null,"access_token":null,"name":"Opening Balances (migration)","reference":null,"state":"posted","move_type":"entry","auto_post":0,"inalterable_hash":null,"payment_reference":null,"qr_code_method":null,"payment_state":"not_paid","invoice_source_email":null,"invoice_partner_display_name":null,"invoice_origin":null,"incoterm_location":null,"date":"2026-07-01T00:00:00.000000Z","auto_post_until":null,"invoice_date":null,"invoice_date_due":null,"delivery_date":null,"sending_data":null,"narration":null,"invoice_currency_rate":null,"amount_untaxed":null,"amount_tax":null,"amount_total":null,"amount_residual":null,"amount_untaxed_signed":null,"amount_untaxed_in_currency_signed":null,"amount_tax_signed":null,"amount_total_signed":null,"amount_total_in_currency_signed":null,"amount_residual_signed":null,"quick_edit_total_amount":null,"is_storno":0,"always_tax_exigible":0,"checked":false,"posted_before":0,"made_sequence_gap":0,"is_manually_modified":0,"is_move_sent":0,"source_id":null,"medium_id":null,"created_at":"2026-07-22T10:15:14.000000Z","updated_at":"2026-07-22T10:15:14.000000Z"}],"links":{"first":"\/?page=1","last":"\/?page=1","prev":null,"next":null},"meta":{"current_page":1,"from":1,"last_page":1,"links":[{"url":null,"label":"&laquo; Previous","page":null,"active":false},{"url":"\/?page=1","label":"1","page":1,"active":true},{"url":null,"label":"Next &raquo;","page":null,"active":false}],"path":"\/","per_page":10,"to":2,"total":2}}'
         headers: []
         description: ''
       -
@@ -1994,7 +1994,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -2014,7 +2014,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -2086,7 +2086,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":[{"id":null,"name":"adipisci quidem","color":"#4137f1","creator_id":1,"created_at":null,"updated_at":null},{"id":null,"name":"qui commodi","color":"#bd6da5","creator_id":1,"created_at":null,"updated_at":null}],"links":{"first":"\/?page=1","last":"\/?page=1","prev":null,"next":null},"meta":{"current_page":1,"from":1,"last_page":1,"links":[{"url":null,"label":"&laquo; Previous","active":false},{"url":"\/?page=1","label":"1","active":true},{"url":null,"label":"Next &raquo;","active":false}],"path":"\/","per_page":10,"to":2,"total":2}}'
+        content: '{"data":[{"id":null,"name":"adipisci quidem","color":"#4137f1","creator_id":1,"created_at":null,"updated_at":null},{"id":null,"name":"qui commodi","color":"#bd6da5","creator_id":1,"created_at":null,"updated_at":null}],"links":{"first":"\/?page=1","last":"\/?page=1","prev":null,"next":null},"meta":{"current_page":1,"from":1,"last_page":1,"links":[{"url":null,"label":"&laquo; Previous","page":null,"active":false},{"url":"\/?page=1","label":"1","page":1,"active":true},{"url":null,"label":"Next &raquo;","page":null,"active":false}],"path":"\/","per_page":10,"to":2,"total":2}}'
         headers: []
         description: ''
       -
@@ -2099,7 +2099,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -2119,7 +2119,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -2176,7 +2176,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -2196,7 +2196,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -2253,7 +2253,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -2274,7 +2274,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -2349,7 +2349,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -2369,7 +2369,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -2414,7 +2414,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null

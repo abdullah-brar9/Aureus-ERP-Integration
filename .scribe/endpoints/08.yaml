@@ -17,7 +17,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -111,7 +111,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":[{"id":1,"name":"USD","symbol":"$","iso_numeric":840,"decimal_places":2,"full_name":"United States dollar","rounding":"0.01","active":true,"created_at":"2025-04-07T12:34:34.000000Z","updated_at":"2025-04-07T12:34:34.000000Z"},{"id":1,"name":"USD","symbol":"$","iso_numeric":840,"decimal_places":2,"full_name":"United States dollar","rounding":"0.01","active":true,"created_at":"2025-04-07T12:34:34.000000Z","updated_at":"2025-04-07T12:34:34.000000Z"}],"links":{"first":"\/?page=1","last":"\/?page=1","prev":null,"next":null},"meta":{"current_page":1,"from":1,"last_page":1,"links":[{"url":null,"label":"&laquo; Previous","active":false},{"url":"\/?page=1","label":"1","active":true},{"url":null,"label":"Next &raquo;","active":false}],"path":"\/","per_page":10,"to":2,"total":2}}'
+        content: '{"data":[{"id":1,"name":"USD","symbol":"$","iso_numeric":840,"decimal_places":2,"full_name":"United States dollar","rounding":"0.01","active":true,"created_at":"2026-07-22T07:23:09.000000Z","updated_at":"2026-07-28T10:31:13.000000Z"},{"id":1,"name":"USD","symbol":"$","iso_numeric":840,"decimal_places":2,"full_name":"United States dollar","rounding":"0.01","active":true,"created_at":"2026-07-22T07:23:09.000000Z","updated_at":"2026-07-28T10:31:13.000000Z"}],"links":{"first":"\/?page=1","last":"\/?page=1","prev":null,"next":null},"meta":{"current_page":1,"from":1,"last_page":1,"links":[{"url":null,"label":"&laquo; Previous","page":null,"active":false},{"url":"\/?page=1","label":"1","page":1,"active":true},{"url":null,"label":"Next &raquo;","page":null,"active":false}],"path":"\/","per_page":10,"to":2,"total":2}}'
         headers: []
         description: ''
       -
@@ -124,7 +124,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -144,7 +144,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -223,7 +223,7 @@ endpoints:
         name: active
         description: 'Whether the currency is active.'
         required: true
-        example: false
+        example: true
         type: boolean
         enumValues: []
         exampleWasSpecified: false
@@ -236,13 +236,13 @@ endpoints:
       decimal_places: 2
       full_name: 'United States Dollar'
       rounding: 0.01
-      active: false
+      active: true
     fileParameters: []
     responses:
       -
         custom: []
         status: 201
-        content: '{"data":{"id":1,"name":"USD","symbol":"$","iso_numeric":840,"decimal_places":2,"full_name":"United States dollar","rounding":"0.01","active":true,"created_at":"2025-04-07T12:34:34.000000Z","updated_at":"2025-04-07T12:34:34.000000Z"},"message":"Currency created successfully."}'
+        content: '{"data":{"id":1,"name":"USD","symbol":"$","iso_numeric":840,"decimal_places":2,"full_name":"United States dollar","rounding":"0.01","active":true,"created_at":"2026-07-22T07:23:09.000000Z","updated_at":"2026-07-28T10:31:13.000000Z"},"message":"Currency created successfully."}'
         headers: []
         description: ''
       -
@@ -261,7 +261,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -281,7 +281,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -319,7 +319,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":1,"name":"USD","symbol":"$","iso_numeric":840,"decimal_places":2,"full_name":"United States dollar","rounding":"0.01","active":true,"created_at":"2025-04-07T12:34:34.000000Z","updated_at":"2025-04-07T12:34:34.000000Z"}}'
+        content: '{"data":{"id":1,"name":"USD","symbol":"$","iso_numeric":840,"decimal_places":2,"full_name":"United States dollar","rounding":"0.01","active":true,"created_at":"2026-07-22T07:23:09.000000Z","updated_at":"2026-07-28T10:31:13.000000Z"}}'
         headers: []
         description: ''
       -
@@ -338,7 +338,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -359,7 +359,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -450,7 +450,7 @@ endpoints:
         name: active
         description: 'Whether the currency is active.'
         required: false
-        example: false
+        example: true
         type: boolean
         enumValues: []
         exampleWasSpecified: false
@@ -463,13 +463,13 @@ endpoints:
       decimal_places: 2
       full_name: 'United States Dollar'
       rounding: 0.01
-      active: false
+      active: true
     fileParameters: []
     responses:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":1,"name":"USD","symbol":"$","iso_numeric":840,"decimal_places":2,"full_name":"United States dollar","rounding":"0.01","active":true,"created_at":"2025-04-07T12:34:34.000000Z","updated_at":"2025-04-07T12:34:34.000000Z"},"message":"Currency updated successfully."}'
+        content: '{"data":{"id":1,"name":"USD","symbol":"$","iso_numeric":840,"decimal_places":2,"full_name":"United States dollar","rounding":"0.01","active":true,"created_at":"2026-07-22T07:23:09.000000Z","updated_at":"2026-07-28T10:31:13.000000Z"},"message":"Currency updated successfully."}'
         headers: []
         description: ''
       -
@@ -494,7 +494,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -514,7 +514,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -559,7 +559,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -579,7 +579,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -674,7 +674,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":[{"id":null,"name":"1982-01-07T00:00:00.000000Z","rate":"1.960500","inverse_rate":0.510073960724305,"currency_id":796,"company_id":1406,"creator_id":1,"created_at":null,"updated_at":null},{"id":null,"name":"1992-04-28T00:00:00.000000Z","rate":"0.520292","inverse_rate":1.9219976474748797,"currency_id":797,"company_id":1407,"creator_id":1,"created_at":null,"updated_at":null}],"links":{"first":"\/?page=1","last":"\/?page=1","prev":null,"next":null},"meta":{"current_page":1,"from":1,"last_page":1,"links":[{"url":null,"label":"&laquo; Previous","active":false},{"url":"\/?page=1","label":"1","active":true},{"url":null,"label":"Next &raquo;","active":false}],"path":"\/","per_page":10,"to":2,"total":2}}'
+        content: '{"data":[{"id":null,"name":"1980-04-29T00:00:00.000000Z","rate":"1.716502","inverse_rate":0.5825801542905281,"currency_id":1914,"company_id":2916,"creator_id":1,"created_at":null,"updated_at":null},{"id":null,"name":"2001-10-01T00:00:00.000000Z","rate":"0.544378","inverse_rate":1.8369588778385606,"currency_id":1915,"company_id":2917,"creator_id":1,"created_at":null,"updated_at":null}],"links":{"first":"\/?page=1","last":"\/?page=1","prev":null,"next":null},"meta":{"current_page":1,"from":1,"last_page":1,"links":[{"url":null,"label":"&laquo; Previous","page":null,"active":false},{"url":"\/?page=1","label":"1","page":1,"active":true},{"url":null,"label":"Next &raquo;","page":null,"active":false}],"path":"\/","per_page":10,"to":2,"total":2}}'
         headers: []
         description: ''
       -
@@ -687,7 +687,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -707,7 +707,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -769,7 +769,7 @@ endpoints:
       -
         custom: []
         status: 201
-        content: '{"data":{"id":null,"name":"1996-01-25T00:00:00.000000Z","rate":"1.992991","inverse_rate":0.501758412356102,"currency_id":798,"company_id":1408,"creator_id":1,"created_at":null,"updated_at":null},"message":"Currency rate created successfully."}'
+        content: '{"data":{"id":null,"name":"1996-01-25T00:00:00.000000Z","rate":"1.992991","inverse_rate":0.501758412356102,"currency_id":1916,"company_id":2918,"creator_id":1,"created_at":null,"updated_at":null},"message":"Currency rate created successfully."}'
         headers: []
         description: ''
       -
@@ -788,7 +788,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -808,7 +808,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -858,7 +858,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":null,"name":"1982-01-07T00:00:00.000000Z","rate":"1.960500","inverse_rate":0.510073960724305,"currency_id":799,"company_id":1409,"creator_id":1,"created_at":null,"updated_at":null}}'
+        content: '{"data":{"id":null,"name":"1981-08-12T00:00:00.000000Z","rate":"1.960500","inverse_rate":0.510073960724305,"currency_id":1917,"company_id":2919,"creator_id":1,"created_at":null,"updated_at":null}}'
         headers: []
         description: ''
       -
@@ -877,7 +877,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -898,7 +898,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -972,7 +972,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":null,"name":"1996-01-25T00:00:00.000000Z","rate":"1.992991","inverse_rate":0.501758412356102,"currency_id":800,"company_id":1410,"creator_id":1,"created_at":null,"updated_at":null},"message":"Currency rate updated successfully."}'
+        content: '{"data":{"id":null,"name":"1996-01-25T00:00:00.000000Z","rate":"1.992991","inverse_rate":0.501758412356102,"currency_id":1918,"company_id":2920,"creator_id":1,"created_at":null,"updated_at":null},"message":"Currency rate updated successfully."}'
         headers: []
         description: ''
       -
@@ -997,7 +997,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -1017,7 +1017,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -1074,7 +1074,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -1094,7 +1094,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -1221,7 +1221,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":[{"id":1,"name":"Bank of California","code":"BOC0001","email":"bankocalifornia@ca.com","phone":"2122211211121","street1":"Wallmart Steet Complex","street2":"First Floor","city":"California","zip":"90006","creator_id":1,"created_at":"2025-04-10T10:47:58.000000Z","updated_at":"2025-04-10T10:47:58.000000Z","deleted_at":null,"state":{"id":13,"name":"California","code":"CA","country_id":233,"created_at":"2025-04-07T12:34:34.000000Z","updated_at":"2025-04-07T12:34:34.000000Z"},"country":{"id":233,"name":"United States","code":"US","phone_code":"1","state_required":true,"zip_required":true,"currency_id":1,"created_at":"2025-04-07T12:34:34.000000Z","updated_at":"2025-04-07T12:34:34.000000Z"}},{"id":1,"name":"Bank of California","code":"BOC0001","email":"bankocalifornia@ca.com","phone":"2122211211121","street1":"Wallmart Steet Complex","street2":"First Floor","city":"California","zip":"90006","creator_id":1,"created_at":"2025-04-10T10:47:58.000000Z","updated_at":"2025-04-10T10:47:58.000000Z","deleted_at":null,"state":{"id":13,"name":"California","code":"CA","country_id":233,"created_at":"2025-04-07T12:34:34.000000Z","updated_at":"2025-04-07T12:34:34.000000Z"},"country":{"id":233,"name":"United States","code":"US","phone_code":"1","state_required":true,"zip_required":true,"currency_id":1,"created_at":"2025-04-07T12:34:34.000000Z","updated_at":"2025-04-07T12:34:34.000000Z"}}],"links":{"first":"\/?page=1","last":"\/?page=1","prev":null,"next":null},"meta":{"current_page":1,"from":1,"last_page":1,"links":[{"url":null,"label":"&laquo; Previous","active":false},{"url":"\/?page=1","label":"1","active":true},{"url":null,"label":"Next &raquo;","active":false}],"path":"\/","per_page":10,"to":2,"total":2}}'
+        content: '{"data":[{"id":null,"name":"Morgan Hirthe","code":"DZSNRWVE","email":"vraynor@example.com","phone":"(585) 986-2203","street1":"27905 Fahey Wells","street2":"633 Ward Dale","city":"North Eileen","zip":"79150-6985","creator_id":524,"created_at":null,"updated_at":null,"deleted_at":null,"state":{"id":953,"name":"Friesland","code":"FR","country_id":165,"created_at":"2026-07-22T07:23:09.000000Z","updated_at":"2026-07-22T07:23:09.000000Z"},"country":{"id":107,"name":"Iran","code":"IR","phone_code":"98","state_required":false,"zip_required":true,"currency_id":86,"created_at":"2026-07-22T07:23:09.000000Z","updated_at":"2026-07-22T07:23:09.000000Z"}},{"id":null,"name":"Mr. Nelson Little MD","code":"TTWBKMU3","email":"gthiel@example.com","phone":"484-832-7241","street1":"124 Dorothea Roads","street2":"16146 Orn Landing","city":"South Lenoremouth","zip":"06176","creator_id":1,"created_at":null,"updated_at":null,"deleted_at":null,"state":{"id":72,"name":"Alagoas","code":"AL","country_id":31,"created_at":"2026-07-22T07:23:09.000000Z","updated_at":"2026-07-22T07:23:09.000000Z"},"country":{"id":148,"name":"Northern Mariana Islands","code":"MP","phone_code":"1670","state_required":false,"zip_required":true,"currency_id":1,"created_at":"2026-07-22T07:23:09.000000Z","updated_at":"2026-07-22T07:23:09.000000Z"}}],"links":{"first":"\/?page=1","last":"\/?page=1","prev":null,"next":null},"meta":{"current_page":1,"from":1,"last_page":1,"links":[{"url":null,"label":"&laquo; Previous","page":null,"active":false},{"url":"\/?page=1","label":"1","page":1,"active":true},{"url":null,"label":"Next &raquo;","page":null,"active":false}],"path":"\/","per_page":10,"to":2,"total":2}}'
         headers: []
         description: ''
       -
@@ -1234,7 +1234,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -1254,7 +1254,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -1388,7 +1388,7 @@ endpoints:
       -
         custom: []
         status: 201
-        content: '{"data":{"id":1,"name":"Bank of California","code":"BOC0001","email":"bankocalifornia@ca.com","phone":"2122211211121","street1":"Wallmart Steet Complex","street2":"First Floor","city":"California","zip":"90006","creator_id":1,"created_at":"2025-04-10T10:47:58.000000Z","updated_at":"2025-04-10T10:47:58.000000Z","deleted_at":null,"state":{"id":13,"name":"California","code":"CA","country_id":233,"created_at":"2025-04-07T12:34:34.000000Z","updated_at":"2025-04-07T12:34:34.000000Z"},"country":{"id":233,"name":"United States","code":"US","phone_code":"1","state_required":true,"zip_required":true,"currency_id":1,"created_at":"2025-04-07T12:34:34.000000Z","updated_at":"2025-04-07T12:34:34.000000Z"}},"message":"Bank created successfully."}'
+        content: '{"data":{"id":null,"name":"Ms. Audra Crooks II","code":"YUWPWL36UBQ","email":"bauch.marcelo@example.com","phone":"+1-430-374-7043","street1":"62316 Haag Villages","street2":"282 Ankunding Station","city":"Batzbury","zip":"17418-7351","creator_id":524,"created_at":null,"updated_at":null,"deleted_at":null,"state":{"id":1242,"name":"Jaunjelgavas novads","code":"LV-038","country_id":134,"created_at":"2026-07-22T07:23:09.000000Z","updated_at":"2026-07-22T07:23:09.000000Z"},"country":{"id":183,"name":"Portugal","code":"PT","phone_code":"351","state_required":false,"zip_required":true,"currency_id":125,"created_at":"2026-07-22T07:23:09.000000Z","updated_at":"2026-07-22T07:23:09.000000Z"}},"message":"Bank created successfully."}'
         headers: []
         description: ''
       -
@@ -1407,7 +1407,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -1427,7 +1427,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -1465,7 +1465,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":1,"name":"Bank of California","code":"BOC0001","email":"bankocalifornia@ca.com","phone":"2122211211121","street1":"Wallmart Steet Complex","street2":"First Floor","city":"California","zip":"90006","creator_id":1,"created_at":"2025-04-10T10:47:58.000000Z","updated_at":"2025-04-10T10:47:58.000000Z","deleted_at":null,"state":{"id":13,"name":"California","code":"CA","country_id":233,"created_at":"2025-04-07T12:34:34.000000Z","updated_at":"2025-04-07T12:34:34.000000Z"},"country":{"id":233,"name":"United States","code":"US","phone_code":"1","state_required":true,"zip_required":true,"currency_id":1,"created_at":"2025-04-07T12:34:34.000000Z","updated_at":"2025-04-07T12:34:34.000000Z"}}}'
+        content: '{"data":{"id":null,"name":"Morgan Hirthe","code":"DZSNRWVE","email":"kconsidine@example.net","phone":"+1.518.885.7351","street1":"5824 Doyle Landing Suite 197","street2":"11084 Palma Stream Apt. 368","city":"West Artborough","zip":"10483","creator_id":524,"created_at":null,"updated_at":null,"deleted_at":null,"state":{"id":1232,"name":"Durbes novads","code":"LV-028","country_id":134,"created_at":"2026-07-22T07:23:09.000000Z","updated_at":"2026-07-22T07:23:09.000000Z"},"country":{"id":196,"name":"Sweden","code":"SE","phone_code":"46","state_required":false,"zip_required":true,"currency_id":18,"created_at":"2026-07-22T07:23:09.000000Z","updated_at":"2026-07-22T07:23:09.000000Z"}}}'
         headers: []
         description: ''
       -
@@ -1484,7 +1484,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -1505,7 +1505,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -1651,7 +1651,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":1,"name":"Bank of California","code":"BOC0001","email":"bankocalifornia@ca.com","phone":"2122211211121","street1":"Wallmart Steet Complex","street2":"First Floor","city":"California","zip":"90006","creator_id":1,"created_at":"2025-04-10T10:47:58.000000Z","updated_at":"2025-04-10T10:47:58.000000Z","deleted_at":null,"state":{"id":13,"name":"California","code":"CA","country_id":233,"created_at":"2025-04-07T12:34:34.000000Z","updated_at":"2025-04-07T12:34:34.000000Z"},"country":{"id":233,"name":"United States","code":"US","phone_code":"1","state_required":true,"zip_required":true,"currency_id":1,"created_at":"2025-04-07T12:34:34.000000Z","updated_at":"2025-04-07T12:34:34.000000Z"}},"message":"Bank updated successfully."}'
+        content: '{"data":{"id":null,"name":"Ms. Audra Crooks II","code":"YUWPWL36UBQ","email":"pauline09@example.com","phone":"(585) 986-2203","street1":"27905 Fahey Wells","street2":"633 Ward Dale","city":"North Eileen","zip":"79150-6985","creator_id":1081,"created_at":null,"updated_at":null,"deleted_at":null,"state":{"id":494,"name":"Durango","code":"DUR","country_id":156,"created_at":"2026-07-22T07:23:09.000000Z","updated_at":"2026-07-22T07:23:09.000000Z"},"country":{"id":195,"name":"Sudan","code":"SD","phone_code":"249","state_required":false,"zip_required":true,"currency_id":140,"created_at":"2026-07-22T07:23:09.000000Z","updated_at":"2026-07-22T07:23:09.000000Z"}},"message":"Bank updated successfully."}'
         headers: []
         description: ''
       -
@@ -1676,7 +1676,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -1696,7 +1696,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -1741,7 +1741,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -1761,7 +1761,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -1787,7 +1787,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":1,"name":"Bank of California","code":"BOC0001","email":"bankocalifornia@ca.com","phone":"2122211211121","street1":"Wallmart Steet Complex","street2":"First Floor","city":"California","zip":"90006","creator_id":1,"created_at":"2025-04-10T10:47:58.000000Z","updated_at":"2025-04-10T10:47:58.000000Z","deleted_at":null,"state":{"id":13,"name":"California","code":"CA","country_id":233,"created_at":"2025-04-07T12:34:34.000000Z","updated_at":"2025-04-07T12:34:34.000000Z"},"country":{"id":233,"name":"United States","code":"US","phone_code":"1","state_required":true,"zip_required":true,"currency_id":1,"created_at":"2025-04-07T12:34:34.000000Z","updated_at":"2025-04-07T12:34:34.000000Z"}},"message":"Bank restored successfully."}'
+        content: '{"data":{"id":null,"name":"Morgan Hirthe","code":"DZSNRWVE","email":"micaela88@example.org","phone":"+1 (878) 642-3669","street1":"979 Beier Meadow Suite 188","street2":"4985 Jacques Lakes Apt. 004","city":"Roxanneview","zip":"86037","creator_id":1081,"created_at":null,"updated_at":null,"deleted_at":null,"state":{"id":527,"name":"Southland","code":"STL","country_id":170,"created_at":"2026-07-22T07:23:09.000000Z","updated_at":"2026-07-22T07:23:09.000000Z"},"country":{"id":113,"name":"Japan","code":"JP","phone_code":"81","state_required":true,"zip_required":true,"currency_id":25,"created_at":"2026-07-22T07:23:09.000000Z","updated_at":"2026-07-22T07:23:09.000000Z"}},"message":"Bank restored successfully."}'
         headers: []
         description: ''
       -
@@ -1806,7 +1806,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -1826,7 +1826,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -1871,7 +1871,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -1891,7 +1891,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -1996,7 +1996,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":[{"id":1,"name":"Andorra","code":"AD","phone_code":"376","state_required":false,"zip_required":true,"currency_id":125,"created_at":"2025-04-07T12:34:34.000000Z","updated_at":"2025-04-07T12:34:34.000000Z"},{"id":1,"name":"Andorra","code":"AD","phone_code":"376","state_required":false,"zip_required":true,"currency_id":125,"created_at":"2025-04-07T12:34:34.000000Z","updated_at":"2025-04-07T12:34:34.000000Z"}],"links":{"first":"\/?page=1","last":"\/?page=1","prev":null,"next":null},"meta":{"current_page":1,"from":1,"last_page":1,"links":[{"url":null,"label":"&laquo; Previous","active":false},{"url":"\/?page=1","label":"1","active":true},{"url":null,"label":"Next &raquo;","active":false}],"path":"\/","per_page":10,"to":2,"total":2}}'
+        content: '{"data":[{"id":1,"name":"Andorra","code":"AD","phone_code":"376","state_required":false,"zip_required":true,"currency_id":125,"created_at":"2026-07-22T07:23:09.000000Z","updated_at":"2026-07-22T07:23:09.000000Z"},{"id":1,"name":"Andorra","code":"AD","phone_code":"376","state_required":false,"zip_required":true,"currency_id":125,"created_at":"2026-07-22T07:23:09.000000Z","updated_at":"2026-07-22T07:23:09.000000Z"}],"links":{"first":"\/?page=1","last":"\/?page=1","prev":null,"next":null},"meta":{"current_page":1,"from":1,"last_page":1,"links":[{"url":null,"label":"&laquo; Previous","page":null,"active":false},{"url":"\/?page=1","label":"1","page":1,"active":true},{"url":null,"label":"Next &raquo;","page":null,"active":false}],"path":"\/","per_page":10,"to":2,"total":2}}'
         headers: []
         description: ''
       -
@@ -2009,7 +2009,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -2029,7 +2029,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -2067,7 +2067,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":1,"name":"Andorra","code":"AD","phone_code":"376","state_required":false,"zip_required":true,"currency_id":125,"created_at":"2025-04-07T12:34:34.000000Z","updated_at":"2025-04-07T12:34:34.000000Z"}}'
+        content: '{"data":{"id":1,"name":"Andorra","code":"AD","phone_code":"376","state_required":false,"zip_required":true,"currency_id":125,"created_at":"2026-07-22T07:23:09.000000Z","updated_at":"2026-07-22T07:23:09.000000Z"}}'
         headers: []
         description: ''
       -
@@ -2086,7 +2086,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -2106,7 +2106,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -2200,7 +2200,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":[{"id":1,"name":"Australian Capital Territory","code":"ACT","country_id":13,"created_at":"2025-04-07T12:34:34.000000Z","updated_at":"2025-04-07T12:34:34.000000Z"},{"id":1,"name":"Australian Capital Territory","code":"ACT","country_id":13,"created_at":"2025-04-07T12:34:34.000000Z","updated_at":"2025-04-07T12:34:34.000000Z"}],"links":{"first":"\/?page=1","last":"\/?page=1","prev":null,"next":null},"meta":{"current_page":1,"from":1,"last_page":1,"links":[{"url":null,"label":"&laquo; Previous","active":false},{"url":"\/?page=1","label":"1","active":true},{"url":null,"label":"Next &raquo;","active":false}],"path":"\/","per_page":10,"to":2,"total":2}}'
+        content: '{"data":[{"id":1,"name":"Australian Capital Territory","code":"ACT","country_id":13,"created_at":"2026-07-22T07:23:09.000000Z","updated_at":"2026-07-22T07:23:09.000000Z"},{"id":1,"name":"Australian Capital Territory","code":"ACT","country_id":13,"created_at":"2026-07-22T07:23:09.000000Z","updated_at":"2026-07-22T07:23:09.000000Z"}],"links":{"first":"\/?page=1","last":"\/?page=1","prev":null,"next":null},"meta":{"current_page":1,"from":1,"last_page":1,"links":[{"url":null,"label":"&laquo; Previous","page":null,"active":false},{"url":"\/?page=1","label":"1","page":1,"active":true},{"url":null,"label":"Next &raquo;","page":null,"active":false}],"path":"\/","per_page":10,"to":2,"total":2}}'
         headers: []
         description: ''
       -
@@ -2213,7 +2213,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -2233,7 +2233,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -2283,7 +2283,7 @@ endpoints:
       -
         custom: []
         status: 201
-        content: '{"data":{"id":1,"name":"Australian Capital Territory","code":"ACT","country_id":13,"created_at":"2025-04-07T12:34:34.000000Z","updated_at":"2025-04-07T12:34:34.000000Z"},"message":"State created successfully."}'
+        content: '{"data":{"id":1,"name":"Australian Capital Territory","code":"ACT","country_id":13,"created_at":"2026-07-22T07:23:09.000000Z","updated_at":"2026-07-22T07:23:09.000000Z"},"message":"State created successfully."}'
         headers: []
         description: ''
       -
@@ -2302,7 +2302,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -2322,7 +2322,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -2360,7 +2360,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":1,"name":"Australian Capital Territory","code":"ACT","country_id":13,"created_at":"2025-04-07T12:34:34.000000Z","updated_at":"2025-04-07T12:34:34.000000Z"}}'
+        content: '{"data":{"id":1,"name":"Australian Capital Territory","code":"ACT","country_id":13,"created_at":"2026-07-22T07:23:09.000000Z","updated_at":"2026-07-22T07:23:09.000000Z"}}'
         headers: []
         description: ''
       -
@@ -2379,7 +2379,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -2400,7 +2400,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -2462,7 +2462,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":1,"name":"Australian Capital Territory","code":"ACT","country_id":13,"created_at":"2025-04-07T12:34:34.000000Z","updated_at":"2025-04-07T12:34:34.000000Z"},"message":"State updated successfully."}'
+        content: '{"data":{"id":1,"name":"Australian Capital Territory","code":"ACT","country_id":13,"created_at":"2026-07-22T07:23:09.000000Z","updated_at":"2026-07-22T07:23:09.000000Z"},"message":"State updated successfully."}'
         headers: []
         description: ''
       -
@@ -2487,7 +2487,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -2507,7 +2507,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -2552,7 +2552,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -2572,7 +2572,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -2644,7 +2644,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":[{"id":1,"name":"Unit","created_at":"2025-04-07T12:34:35.000000Z","updated_at":"2025-04-07T12:34:35.000000Z"},{"id":1,"name":"Unit","created_at":"2025-04-07T12:34:35.000000Z","updated_at":"2025-04-07T12:34:35.000000Z"}],"links":{"first":"\/?page=1","last":"\/?page=1","prev":null,"next":null},"meta":{"current_page":1,"from":1,"last_page":1,"links":[{"url":null,"label":"&laquo; Previous","active":false},{"url":"\/?page=1","label":"1","active":true},{"url":null,"label":"Next &raquo;","active":false}],"path":"\/","per_page":10,"to":2,"total":2}}'
+        content: '{"data":[{"id":1,"name":"Unit","created_at":"2026-07-22T07:23:10.000000Z","updated_at":"2026-07-22T07:23:10.000000Z"},{"id":1,"name":"Unit","created_at":"2026-07-22T07:23:10.000000Z","updated_at":"2026-07-22T07:23:10.000000Z"}],"links":{"first":"\/?page=1","last":"\/?page=1","prev":null,"next":null},"meta":{"current_page":1,"from":1,"last_page":1,"links":[{"url":null,"label":"&laquo; Previous","page":null,"active":false},{"url":"\/?page=1","label":"1","page":1,"active":true},{"url":null,"label":"Next &raquo;","page":null,"active":false}],"path":"\/","per_page":10,"to":2,"total":2}}'
         headers: []
         description: ''
       -
@@ -2657,7 +2657,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -2677,7 +2677,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -2703,7 +2703,7 @@ endpoints:
       -
         custom: []
         status: 201
-        content: '{"data":{"id":1,"name":"Unit","created_at":"2025-04-07T12:34:35.000000Z","updated_at":"2025-04-07T12:34:35.000000Z"},"message":"UOM category created successfully."}'
+        content: '{"data":{"id":1,"name":"Unit","created_at":"2026-07-22T07:23:10.000000Z","updated_at":"2026-07-22T07:23:10.000000Z"},"message":"UOM category created successfully."}'
         headers: []
         description: ''
       -
@@ -2722,7 +2722,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -2742,7 +2742,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -2780,7 +2780,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":1,"name":"Unit","created_at":"2025-04-07T12:34:35.000000Z","updated_at":"2025-04-07T12:34:35.000000Z"}}'
+        content: '{"data":{"id":1,"name":"Unit","created_at":"2026-07-22T07:23:10.000000Z","updated_at":"2026-07-22T07:23:10.000000Z"}}'
         headers: []
         description: ''
       -
@@ -2799,7 +2799,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -2820,7 +2820,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -2858,7 +2858,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":1,"name":"Unit","created_at":"2025-04-07T12:34:35.000000Z","updated_at":"2025-04-07T12:34:35.000000Z"},"message":"UOM category updated successfully."}'
+        content: '{"data":{"id":1,"name":"Unit","created_at":"2026-07-22T07:23:10.000000Z","updated_at":"2026-07-22T07:23:10.000000Z"},"message":"UOM category updated successfully."}'
         headers: []
         description: ''
       -
@@ -2883,7 +2883,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -2903,7 +2903,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -2948,7 +2948,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -2968,7 +2968,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -3074,7 +3074,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":[{"id":1,"type":"reference","name":"Units","factor":"1.0000","rounding":"0.0100","category_id":1,"creator_id":null,"created_at":"2025-04-07T12:34:35.000000Z","updated_at":"2025-04-07T12:34:35.000000Z","deleted_at":null,"category":{"id":1,"name":"Unit","created_at":"2025-04-07T12:34:35.000000Z","updated_at":"2025-04-07T12:34:35.000000Z"}},{"id":1,"type":"reference","name":"Units","factor":"1.0000","rounding":"0.0100","category_id":1,"creator_id":null,"created_at":"2025-04-07T12:34:35.000000Z","updated_at":"2025-04-07T12:34:35.000000Z","deleted_at":null,"category":{"id":1,"name":"Unit","created_at":"2025-04-07T12:34:35.000000Z","updated_at":"2025-04-07T12:34:35.000000Z"}}],"links":{"first":"\/?page=1","last":"\/?page=1","prev":null,"next":null},"meta":{"current_page":1,"from":1,"last_page":1,"links":[{"url":null,"label":"&laquo; Previous","active":false},{"url":"\/?page=1","label":"1","active":true},{"url":null,"label":"Next &raquo;","active":false}],"path":"\/","per_page":10,"to":2,"total":2}}'
+        content: '{"data":[{"id":1,"type":"reference","name":"Units","factor":1,"rounding":"0.0100","category_id":1,"creator_id":1,"created_at":"2026-07-22T07:23:10.000000Z","updated_at":"2026-07-22T07:23:10.000000Z","deleted_at":null,"category":{"id":1,"name":"Unit","created_at":"2026-07-22T07:23:10.000000Z","updated_at":"2026-07-22T07:23:10.000000Z"}},{"id":1,"type":"reference","name":"Units","factor":1,"rounding":"0.0100","category_id":1,"creator_id":1,"created_at":"2026-07-22T07:23:10.000000Z","updated_at":"2026-07-22T07:23:10.000000Z","deleted_at":null,"category":{"id":1,"name":"Unit","created_at":"2026-07-22T07:23:10.000000Z","updated_at":"2026-07-22T07:23:10.000000Z"}}],"links":{"first":"\/?page=1","last":"\/?page=1","prev":null,"next":null},"meta":{"current_page":1,"from":1,"last_page":1,"links":[{"url":null,"label":"&laquo; Previous","page":null,"active":false},{"url":"\/?page=1","label":"1","page":1,"active":true},{"url":null,"label":"Next &raquo;","page":null,"active":false}],"path":"\/","per_page":10,"to":2,"total":2}}'
         headers: []
         description: ''
       -
@@ -3087,7 +3087,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -3107,7 +3107,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -3196,7 +3196,7 @@ endpoints:
       -
         custom: []
         status: 201
-        content: '{"data":{"id":1,"type":"reference","name":"Units","factor":"1.0000","rounding":"0.0100","category_id":1,"creator_id":null,"created_at":"2025-04-07T12:34:35.000000Z","updated_at":"2025-04-07T12:34:35.000000Z","deleted_at":null,"category":{"id":1,"name":"Unit","created_at":"2025-04-07T12:34:35.000000Z","updated_at":"2025-04-07T12:34:35.000000Z"}},"message":"UOM created successfully."}'
+        content: '{"data":{"id":1,"type":"reference","name":"Units","factor":1,"rounding":"0.0100","category_id":1,"creator_id":1,"created_at":"2026-07-22T07:23:10.000000Z","updated_at":"2026-07-22T07:23:10.000000Z","deleted_at":null,"category":{"id":1,"name":"Unit","created_at":"2026-07-22T07:23:10.000000Z","updated_at":"2026-07-22T07:23:10.000000Z"}},"message":"UOM created successfully."}'
         headers: []
         description: ''
       -
@@ -3215,7 +3215,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -3235,7 +3235,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -3285,7 +3285,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":1,"type":"reference","name":"Units","factor":"1.0000","rounding":"0.0100","category_id":1,"creator_id":null,"created_at":"2025-04-07T12:34:35.000000Z","updated_at":"2025-04-07T12:34:35.000000Z","deleted_at":null,"category":{"id":1,"name":"Unit","created_at":"2025-04-07T12:34:35.000000Z","updated_at":"2025-04-07T12:34:35.000000Z"}}}'
+        content: '{"data":{"id":1,"type":"reference","name":"Units","factor":1,"rounding":"0.0100","category_id":1,"creator_id":1,"created_at":"2026-07-22T07:23:10.000000Z","updated_at":"2026-07-22T07:23:10.000000Z","deleted_at":null,"category":{"id":1,"name":"Unit","created_at":"2026-07-22T07:23:10.000000Z","updated_at":"2026-07-22T07:23:10.000000Z"}}}'
         headers: []
         description: ''
       -
@@ -3304,7 +3304,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -3325,7 +3325,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -3426,7 +3426,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":1,"type":"reference","name":"Units","factor":"1.0000","rounding":"0.0100","category_id":1,"creator_id":null,"created_at":"2025-04-07T12:34:35.000000Z","updated_at":"2025-04-07T12:34:35.000000Z","deleted_at":null,"category":{"id":1,"name":"Unit","created_at":"2025-04-07T12:34:35.000000Z","updated_at":"2025-04-07T12:34:35.000000Z"}},"message":"UOM updated successfully."}'
+        content: '{"data":{"id":1,"type":"reference","name":"Units","factor":1,"rounding":"0.0100","category_id":1,"creator_id":1,"created_at":"2026-07-22T07:23:10.000000Z","updated_at":"2026-07-22T07:23:10.000000Z","deleted_at":null,"category":{"id":1,"name":"Unit","created_at":"2026-07-22T07:23:10.000000Z","updated_at":"2026-07-22T07:23:10.000000Z"}},"message":"UOM updated successfully."}'
         headers: []
         description: ''
       -
@@ -3451,7 +3451,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -3471,7 +3471,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -3528,7 +3528,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -3548,7 +3548,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -3586,7 +3586,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":1,"type":"reference","name":"Units","factor":"1.0000","rounding":"0.0100","category_id":1,"creator_id":null,"created_at":"2025-04-07T12:34:35.000000Z","updated_at":"2025-04-07T12:34:35.000000Z","deleted_at":null,"category":{"id":1,"name":"Unit","created_at":"2025-04-07T12:34:35.000000Z","updated_at":"2025-04-07T12:34:35.000000Z"}},"message":"UOM restored successfully."}'
+        content: '{"data":{"id":1,"type":"reference","name":"Units","factor":1,"rounding":"0.0100","category_id":1,"creator_id":1,"created_at":"2026-07-22T07:23:10.000000Z","updated_at":"2026-07-22T07:23:10.000000Z","deleted_at":null,"category":{"id":1,"name":"Unit","created_at":"2026-07-22T07:23:10.000000Z","updated_at":"2026-07-22T07:23:10.000000Z"}},"message":"UOM restored successfully."}'
         headers: []
         description: ''
       -
@@ -3605,7 +3605,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -3625,7 +3625,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -3682,7 +3682,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null

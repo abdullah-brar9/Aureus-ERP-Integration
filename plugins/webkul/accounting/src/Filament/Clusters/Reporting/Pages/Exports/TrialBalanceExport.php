@@ -24,6 +24,10 @@ class TrialBalanceExport implements FromArray, ShouldAutoSize, WithStyles, WithT
         protected ?string $company,
         protected string $from,
         protected string $to,
+        protected array $currencyTotals = [],
+        protected string $currencyMode = 'company',
+        protected string $rateBasis = '',
+        protected string $conversionStatus = 'complete',
     ) {}
 
     public function title(): string
@@ -37,28 +41,32 @@ class TrialBalanceExport implements FromArray, ShouldAutoSize, WithStyles, WithT
     public function array(): array
     {
         $grid = [
+            ["Currency mode: {$this->currencyMode}; status: {$this->conversionStatus}; basis: {$this->rateBasis}"],
             ['Trial Balance — '.($this->company ?? '')],
             [$this->from.' to '.$this->to.' (posted ledger lines)'],
             [],
-            ['Code', 'Account', 'Opening Debit', 'Opening Credit', 'Movement Debit', 'Movement Credit', 'Adjustment Debit', 'Adjustment Credit', 'Closing Debit', 'Closing Credit'],
+            ['Code', 'Account', 'Currency', 'Opening Debit', 'Opening Credit', 'Movement Debit', 'Movement Credit', 'Adjustment Debit', 'Adjustment Credit', 'Closing Debit', 'Closing Credit'],
         ];
 
         $cols = ['opening_debit', 'opening_credit', 'movement_debit', 'movement_credit', 'adjustment_debit', 'adjustment_credit', 'closing_debit', 'closing_credit'];
 
         foreach ($this->rows as $row) {
-            $line = [$row['code'], $row['name']];
+            $line = [$row['code'], $row['name'], $row['currency'] ?? ''];
             foreach ($cols as $c) {
                 $line[] = round((float) $row[$c], 2);
             }
             $grid[] = $line;
         }
 
-        $totalLine = ['', 'Total'];
-        foreach ($cols as $c) {
-            $totalLine[] = round((float) ($this->totals[$c] ?? 0), 2);
+        $currencyTotals = $this->currencyTotals ?: ['' => $this->totals];
+        foreach ($currencyTotals as $currency => $totals) {
+            $totalLine = ['', 'Total', $currency];
+            foreach ($cols as $c) {
+                $totalLine[] = round((float) ($totals[$c] ?? 0), 2);
+            }
+            $grid[] = $totalLine;
+            $grid[] = ['', 'Difference', $currency, '', '', '', '', '', '', '', round((float) ($totals['difference'] ?? 0), 2)];
         }
-        $grid[] = $totalLine;
-        $grid[] = ['', 'Difference', '', '', '', '', '', '', '', round((float) ($this->totals['difference'] ?? 0), 2)];
 
         return $grid;
     }
@@ -70,7 +78,7 @@ class TrialBalanceExport implements FromArray, ShouldAutoSize, WithStyles, WithT
     {
         return [
             1                           => ['font' => ['bold' => true, 'size' => 14]],
-            4                           => ['font' => ['bold' => true]],
+            5                           => ['font' => ['bold' => true]],
             $sheet->getHighestRow() - 1 => ['font' => ['bold' => true]],
         ];
     }

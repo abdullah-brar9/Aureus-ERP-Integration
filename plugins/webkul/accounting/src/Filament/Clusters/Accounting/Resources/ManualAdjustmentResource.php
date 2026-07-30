@@ -26,6 +26,7 @@ use Webkul\Accounting\Filament\Clusters\Accounting\Resources\ManualAdjustmentRes
 use Webkul\Accounting\Filament\Clusters\Accounting\Resources\ManualAdjustmentResource\Pages\ListManualAdjustments;
 use Webkul\Accounting\Models\ManualAdjustment;
 use Webkul\Accounting\Services\ManualAdjustmentService;
+use Webkul\Accounting\Support\AccountingPermissions;
 
 class ManualAdjustmentResource extends Resource
 {
@@ -50,18 +51,35 @@ class ManualAdjustmentResource extends Resource
     public static function form(Schema $schema): Schema
     {
         $companyId = Auth::user()?->default_company_id;
-        $accounts = fn () => Account::query()->postable()->where('deprecated', false)
+        $accountSearch = fn (string $search): array => Account::query()->postable()->where('deprecated', false)
             ->whereHas('companies', fn ($query) => $query->where('companies.id', $companyId))
-            ->orderBy('code')->get()->mapWithKeys(fn (Account $account) => [$account->id => "{$account->code} {$account->name}"]);
+            ->where(fn ($query) => $query->where('code', 'like', "%{$search}%")->orWhere('name', 'like', "%{$search}%"))
+            ->orderBy('code')->limit(50)->get()
+            ->mapWithKeys(fn (Account $account): array => [$account->id => "{$account->code} {$account->name}"])->all();
+        $accountLabel = function ($value) use ($companyId): ?string {
+            $account = Account::query()->whereKey($value)
+                ->whereHas('companies', fn ($query) => $query->where('companies.id', $companyId))->first();
+
+            return $account ? "{$account->code} {$account->name}" : null;
+        };
 
         return $schema->components([
             Section::make('Non-bank entry')->columns(2)->schema([
                 Select::make('company_id')->options([$companyId => Auth::user()?->defaultCompany?->name])->default($companyId)->disabled()->dehydrated()->required(),
-                Select::make('journal_id')->label('General journal')->options(Journal::query()->where('company_id', $companyId)->where('type', JournalType::GENERAL)->pluck('name', 'id'))->searchable()->preload(),
+                Select::make('journal_id')->label('General journal')->searchable()
+                    ->options(fn (): array => Journal::query()->where('company_id', $companyId)->where('type', JournalType::GENERAL)
+                        ->orderBy('name')->limit(50)->pluck('name', 'id')->all())
+                    ->getSearchResultsUsing(fn (string $search): array => Journal::query()
+                        ->where('company_id', $companyId)->where('type', JournalType::GENERAL)
+                        ->where('name', 'like', "%{$search}%")->orderBy('name')->limit(50)->pluck('name', 'id')->all())
+                    ->getOptionLabelUsing(fn ($value): ?string => Journal::query()
+                        ->where('company_id', $companyId)->where('type', JournalType::GENERAL)->find($value)?->name),
                 DatePicker::make('date')->required()->default(now()),
                 TextInput::make('amount')->numeric()->minValue(0.01)->required(),
-                Select::make('debit_account_id')->label('Debit account')->options($accounts)->searchable()->preload()->required(),
-                Select::make('credit_account_id')->label('Credit account')->options($accounts)->searchable()->preload()->required(),
+                Select::make('debit_account_id')->label('Debit account')->searchable()
+                    ->options(fn (): array => $accountSearch(''))->getSearchResultsUsing($accountSearch)->getOptionLabelUsing($accountLabel)->required(),
+                Select::make('credit_account_id')->label('Credit account')->searchable()
+                    ->options(fn (): array => $accountSearch(''))->getSearchResultsUsing($accountSearch)->getOptionLabelUsing($accountLabel)->required(),
                 Textarea::make('description')->required()->columnSpanFull(),
                 TextInput::make('supporting_reference')->label('Supporting document/reference'),
                 TextInput::make('tax_treatment'),
@@ -94,14 +112,17 @@ class ManualAdjustmentResource extends Resource
             TextColumn::make('source_classification')->label('Source classification')->badge(),
             TextColumn::make('cash_flow_category')->label('Cash Flow Impact')->badge(),
         ])->recordActions([
-            EditAction::make()->visible(fn (ManualAdjustment $record) => $record->approval_status === ManualAdjustmentStatus::Draft),
+            EditAction::make()->authorize(AccountingPermissions::ManageManualAdjustments)
+                ->visible(fn (ManualAdjustment $record) => $record->approval_status === ManualAdjustmentStatus::Draft),
             Action::make('approve')->icon('heroicon-o-check')->color('success')
+                ->authorize(AccountingPermissions::ApproveJournal)
                 ->visible(fn (ManualAdjustment $record) => $record->approval_status === ManualAdjustmentStatus::Draft)
                 ->action(function (ManualAdjustment $record): void {
                     app(ManualAdjustmentService::class)->approve($record, Auth::user());
                     Notification::make()->success()->title('Manual adjustment approved.')->send();
                 }),
             Action::make('reject')->icon('heroicon-o-x-mark')->color('danger')->requiresConfirmation()
+                ->authorize(AccountingPermissions::ApproveJournal)
                 ->visible(fn (ManualAdjustment $record) => $record->approval_status === ManualAdjustmentStatus::Draft)
                 ->action(fn (ManualAdjustment $record) => $record->update([
                     'approval_status' => ManualAdjustmentStatus::Rejected,
@@ -109,12 +130,14 @@ class ManualAdjustmentResource extends Resource
                     'reviewed_at'     => now(),
                 ])),
             Action::make('draftJournal')->label('Generate draft')->icon('heroicon-o-document-plus')
+                ->authorize(AccountingPermissions::GenerateJournal)
                 ->visible(fn (ManualAdjustment $record) => $record->approval_status === ManualAdjustmentStatus::Approved && $record->move_id === null)
                 ->action(function (ManualAdjustment $record): void {
                     app(ManualAdjustmentService::class)->createDraft($record);
                     Notification::make()->success()->title('Balanced draft adjustment journal created.')->send();
                 }),
             Action::make('post')->icon('heroicon-o-lock-closed')->color('danger')->requiresConfirmation()
+                ->authorize(AccountingPermissions::PostJournal)
                 ->visible(fn (ManualAdjustment $record) => $record->approval_status === ManualAdjustmentStatus::Approved && $record->move_id !== null)
                 ->action(function (ManualAdjustment $record): void {
                     app(ManualAdjustmentService::class)->post($record, Auth::user());
@@ -130,5 +153,15 @@ class ManualAdjustmentResource extends Resource
             'create' => CreateManualAdjustment::route('/create'),
             'edit'   => EditManualAdjustment::route('/{record}/edit'),
         ];
+    }
+
+    public static function canViewAny(): bool
+    {
+        return Auth::user()?->can(AccountingPermissions::ManageManualAdjustments) ?? false;
+    }
+
+    public static function canCreate(): bool
+    {
+        return Auth::user()?->can(AccountingPermissions::ManageManualAdjustments) ?? false;
     }
 }

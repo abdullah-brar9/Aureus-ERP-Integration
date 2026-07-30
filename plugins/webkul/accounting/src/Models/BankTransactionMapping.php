@@ -12,6 +12,7 @@ use Webkul\Accounting\Enums\BankPostingStatus;
 use Webkul\Accounting\Enums\BankReviewStatus;
 use Webkul\Security\Models\User;
 use Webkul\Support\Models\Company;
+use Webkul\Support\Models\Currency;
 
 class BankTransactionMapping extends Model
 {
@@ -27,6 +28,8 @@ class BankTransactionMapping extends Model
             'confidence'     => 'decimal:4',
             'reviewed_at'    => 'datetime',
             'posted_at'      => 'datetime',
+            'exchange_rate'  => 'decimal:15',
+            'rate_date'      => 'date',
         ];
     }
 
@@ -50,6 +53,11 @@ class BankTransactionMapping extends Model
         return $this->belongsTo(Account::class, 'offset_account_id');
     }
 
+    public function fsTag(): BelongsTo
+    {
+        return $this->belongsTo(FsTag::class, 'fs_tag_id');
+    }
+
     public function mappingRule(): BelongsTo
     {
         return $this->belongsTo(BankMappingRule::class, 'mapping_rule_id');
@@ -68,6 +76,21 @@ class BankTransactionMapping extends Model
     public function move(): BelongsTo
     {
         return $this->belongsTo(Move::class);
+    }
+
+    public function originalCurrency(): BelongsTo
+    {
+        return $this->belongsTo(Currency::class, 'original_currency_id');
+    }
+
+    public function companyCurrency(): BelongsTo
+    {
+        return $this->belongsTo(Currency::class, 'company_currency_id');
+    }
+
+    public function exchangeRate(): BelongsTo
+    {
+        return $this->belongsTo(ExchangeRate::class, 'exchange_rate_id');
     }
 
     protected static function booted(): void

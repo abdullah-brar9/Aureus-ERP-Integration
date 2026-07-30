@@ -129,8 +129,11 @@
     <div class="header">
         <h1>{{ __('accounting::filament/clusters/reporting.pages.balance-sheet.navigation.title') }}</h1>
         <p>As of {{ \Carbon\Carbon::parse($data['date'])->format('F j, Y') }}</p>
+        <p>Currency mode: {{ $data['currency_mode'] ?? 'company' }} · status: {{ $data['conversion_status'] ?? 'complete' }} · {{ $data['rate_basis'] ?? '' }}</p>
     </div>
 
+    @foreach (($data['reports'] ?? [($data['currency'] ?? '') => $data]) as $currency => $report)
+    <h2>{{ $currency }}</h2>
     <table>
         <thead>
             <tr>
@@ -139,7 +142,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach($data['sections'] as $section)
+            @foreach($report['sections'] as $section)
                 {{-- Section Header --}}
                 <tr class="section-header">
                     <td colspan="2">{{ $section['title'] }}</td>
@@ -188,11 +191,12 @@
 
             {{-- Grand Total --}}
             <tr class="grand-total">
-                <td>{{ $data['grand_total_label'] }}</td>
-                <td class="text-right">{{ number_format($data['grand_total'], 2) }}</td>
+                <td>{{ $report['grand_total_label'] }}</td>
+                <td class="text-right">{{ number_format($report['grand_total'], 2) }}</td>
             </tr>
         </tbody>
     </table>
+    @endforeach
 
     <div class="footer">
         <div class="page-number"></div>

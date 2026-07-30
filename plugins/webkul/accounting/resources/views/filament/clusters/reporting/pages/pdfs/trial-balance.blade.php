@@ -27,7 +27,7 @@
     @php
         $fmt = fn ($v) => (abs((float) $v) < 0.005) ? '-' : number_format((float) $v, 2);
         $cols = ['opening_debit','opening_credit','movement_debit','movement_credit','adjustment_debit','adjustment_credit','closing_debit','closing_credit'];
-        $diff = (float) ($totals['difference'] ?? 0);
+        $currencyTotals = $currencyTotals ?: ['' => $totals];
     @endphp
 
     <div class="header">
@@ -40,10 +40,12 @@
     </div>
 
     <table>
+        <caption>Currency mode: {{ $currencyMode }}; status: {{ $conversionStatus }}; basis: {{ $rateBasis }}</caption>
         <thead>
             <tr>
                 <th class="caption" rowspan="2">Code</th>
                 <th class="caption" rowspan="2">Account</th>
+                <th class="caption" rowspan="2">Currency</th>
                 <th class="value" colspan="2">Opening</th>
                 <th class="value" colspan="2">Movement</th>
                 <th class="value" colspan="2">Adjustment</th>
@@ -60,6 +62,7 @@
                 <tr class="{{ $row['is_group'] ? 'group' : '' }}">
                     <td class="caption">{{ $row['code'] }}</td>
                     <td class="caption">{{ $row['name'] }}</td>
+                    <td class="caption">{{ $row['currency'] ?? '' }}</td>
                     @foreach ($cols as $c)
                         <td class="value">{{ $fmt($row[$c]) }}</td>
                     @endforeach
@@ -67,12 +70,16 @@
             @endforeach
         </tbody>
         <tfoot>
+            @foreach ($currencyTotals as $currency => $currencyTotal)
+            @php($diff = (float) ($currencyTotal['difference'] ?? 0))
             <tr>
                 <td colspan="2">Total</td>
+                <td>{{ $currency }}</td>
                 @foreach ($cols as $c)
-                    <td class="value">{{ $fmt($totals[$c] ?? 0) }}</td>
+                    <td class="value">{{ $fmt($currencyTotal[$c] ?? 0) }}</td>
                 @endforeach
             </tr>
+            @endforeach
             <tr class="{{ abs($diff) > 0.005 ? 'fail' : 'ok' }}">
                 <td colspan="8">Difference (Closing Debit − Closing Credit)</td>
                 <td class="value" colspan="2">{{ $fmt($diff) }}</td>

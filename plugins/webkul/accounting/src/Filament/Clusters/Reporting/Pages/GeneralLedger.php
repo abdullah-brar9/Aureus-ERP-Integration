@@ -4,6 +4,7 @@ namespace Webkul\Accounting\Filament\Clusters\Reporting\Pages;
 
 use Barryvdh\DomPDF\Facade\Pdf;
 use BezhanSalleh\FilamentShield\Traits\HasPageShield;
+use Brick\Math\BigDecimal;
 use Carbon\Carbon;
 use Filament\Actions\Action;
 use Filament\Forms\Components\Select;
@@ -13,6 +14,7 @@ use Filament\Forms\Contracts\HasForms;
 use Filament\Pages\Dashboard\Concerns\HasFiltersForm;
 use Filament\Pages\Page;
 use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Utilities\Get;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Computed;
@@ -22,9 +24,16 @@ use Webkul\Account\Enums\MoveState;
 use Webkul\Account\Models\Account;
 use Webkul\Account\Models\Journal;
 use Webkul\Account\Models\MoveLine;
+use Webkul\Accounting\Enums\ExchangeRateType;
+use Webkul\Accounting\Enums\ReportCurrencyMode;
+use Webkul\Accounting\Exceptions\MissingExchangeRateException;
 use Webkul\Accounting\Filament\Clusters\Reporting;
 use Webkul\Accounting\Filament\Clusters\Reporting\Pages\Concerns\NormalizeDateFilter;
 use Webkul\Accounting\Filament\Clusters\Reporting\Pages\Exports\GeneralLedgerExport;
+use Webkul\Accounting\Services\Currency\ExchangeRateService;
+use Webkul\Accounting\Support\AccountingPermissions;
+use Webkul\Support\Models\Company;
+use Webkul\Support\Models\Currency;
 
 class GeneralLedger extends Page implements HasForms
 {
@@ -71,10 +80,12 @@ class GeneralLedger extends Page implements HasForms
         $requestedAccountId = (int) request()->query('account_id', 0);
 
         $this->form->fill([
-            'accounts'             => $requestedAccountId > 0 ? [$requestedAccountId] : [],
-            'show_zero_activity'   => true,
-            'show_zero_balance'    => true,
-            'show_classification'  => false,
+            'accounts'              => $requestedAccountId > 0 ? [$requestedAccountId] : [],
+            'show_zero_activity'    => true,
+            'show_zero_balance'     => true,
+            'show_classification'   => false,
+            'currency_mode'         => ReportCurrencyMode::Company->value,
+            'reporting_currency_id' => null,
         ]);
     }
 
@@ -94,7 +105,10 @@ class GeneralLedger extends Page implements HasForms
                             $data['date_from'],
                             $data['date_to'],
                             fn ($accountId) => $this->getAccountMoves($accountId),
-                            $this->expandedAccounts
+                            $this->expandedAccounts,
+                            $data['currency_mode'],
+                            $data['conversion_status'],
+                            $data['rate_basis'],
                         ),
                         'general-ledger-'.$data['date_from']->format('Y-m-d').'-'.$data['date_to']->format('Y-m-d').'.xlsx'
                     );
@@ -160,29 +174,40 @@ class GeneralLedger extends Page implements HasForms
                     Select::make('accounts')
                         ->label('Postable accounts')
                         ->multiple()
-                        ->options(fn () => Account::query()
+                        ->options(fn (): array => Account::query()->postable()->where('deprecated', false)
+                            ->whereHas('companies', fn ($query) => $query->where('companies.id', Auth::user()?->default_company_id))
+                            ->orderBy('code')->limit(50)->get()
+                            ->mapWithKeys(fn (Account $account): array => [$account->id => trim("{$account->code} {$account->name}")])->all())
+                        ->getSearchResultsUsing(fn (string $search): array => Account::query()
                             ->postable()
                             ->where('deprecated', false)
                             ->whereHas('companies', fn ($query) => $query->where('companies.id', Auth::user()?->default_company_id))
+                            ->where(fn ($query) => $query->where('code', 'like', "%{$search}%")->orWhere('name', 'like', "%{$search}%"))
                             ->orderBy('code')
+                            ->limit(50)
                             ->get()
-                            ->mapWithKeys(fn (Account $account) => [$account->id => trim("{$account->code} {$account->name}")]))
+                            ->mapWithKeys(fn (Account $account): array => [$account->id => trim("{$account->code} {$account->name}")])->all())
+                        ->getOptionLabelsUsing(fn (array $values): array => Account::query()->whereKey($values)->get()
+                            ->mapWithKeys(fn (Account $account): array => [$account->id => trim("{$account->code} {$account->name}")])->all())
                         ->searchable()
-                        ->preload()
                         ->live()
                         ->afterStateUpdated(fn () => $this->resetExpandedState()),
 
                     Select::make('groups')
                         ->label('Account groups')
                         ->multiple()
-                        ->options(fn () => Account::query()
+                        ->options(fn (): array => Account::query()->where('is_group', true)->where('deprecated', false)
+                            ->whereHas('companies', fn ($query) => $query->where('companies.id', Auth::user()?->default_company_id))
+                            ->orderBy('name')->limit(50)->pluck('name', 'id')->all())
+                        ->getSearchResultsUsing(fn (string $search): array => Account::query()
                             ->where('is_group', true)
                             ->whereHas('companies', fn ($query) => $query->where('companies.id', Auth::user()?->default_company_id))
+                            ->where(fn ($query) => $query->where('code', 'like', "%{$search}%")->orWhere('name', 'like', "%{$search}%"))
                             ->orderBy('name')
-                            ->pluck('name', 'id'))
+                            ->limit(50)->pluck('name', 'id')->all())
+                        ->getOptionLabelsUsing(fn (array $values): array => Account::query()->whereKey($values)->pluck('name', 'id')->all())
                         ->helperText('Groups filter the tree; journal postings remain limited to postable accounts.')
                         ->searchable()
-                        ->preload()
                         ->live()
                         ->afterStateUpdated(fn () => $this->resetExpandedState()),
 
@@ -202,6 +227,24 @@ class GeneralLedger extends Page implements HasForms
                         ->label('Show account classification')
                         ->default(false)
                         ->live(),
+                    Select::make('currency_mode')
+                        ->label('Currency mode')
+                        ->options(ReportCurrencyMode::options())
+                        ->default(ReportCurrencyMode::Company->value)
+                        ->live()
+                        ->afterStateUpdated(fn () => $this->resetExpandedState()),
+                    Select::make('reporting_currency_id')
+                        ->label('Reporting currency')
+                        ->visible(fn (Get $get): bool => $get('currency_mode') === ReportCurrencyMode::Reporting->value)
+                        ->options(fn () => Currency::query()
+                            ->whereHas('enabledCompanies', fn ($query) => $query
+                                ->where('companies.id', Auth::user()?->default_company_id)
+                                ->where('accounting_company_currencies.reporting_enabled', true))
+                            ->orderBy('display_order')->get()
+                            ->mapWithKeys(fn (Currency $currency): array => [$currency->id => $currency->display_name]))
+                        ->required(fn (Get $get): bool => $get('currency_mode') === ReportCurrencyMode::Reporting->value)
+                        ->searchable()->live()
+                        ->afterStateUpdated(fn () => $this->resetExpandedState()),
                 ])
                 ->columnSpanFull(),
         ];
@@ -224,18 +267,33 @@ class GeneralLedger extends Page implements HasForms
         $accountIds = $state['accounts'] ?? [];
         $groupIds = $state['groups'] ?? [];
         $companyId = Auth::user()->default_company_id;
-
-        $accountsQuery = Account::select(
+        $companyCurrencyId = (int) Auth::user()?->defaultCompany?->currency_id;
+        $currencyMode = $this->authorizedCurrencyMode();
+        $isOriginal = $currencyMode === ReportCurrencyMode::Original->value;
+        $debitExpression = $isOriginal
+            ? 'COALESCE(accounts_account_move_lines.original_debit, accounts_account_move_lines.debit)'
+            : 'accounts_account_move_lines.debit';
+        $creditExpression = $isOriginal
+            ? 'COALESCE(accounts_account_move_lines.original_credit, accounts_account_move_lines.credit)'
+            : 'accounts_account_move_lines.credit';
+        $balanceExpression = "({$debitExpression} - {$creditExpression})";
+        $select = [
             'accounts_accounts.id',
             'accounts_accounts.code',
             'accounts_accounts.name',
             'accounts_accounts.account_type',
             'accounts_accounts.source_classification_path',
-            DB::raw('COALESCE(SUM(CASE WHEN accounts_account_moves.date < ? THEN accounts_account_move_lines.balance ELSE 0 END), 0) as opening_balance'),
-            DB::raw('COALESCE(SUM(CASE WHEN accounts_account_moves.date BETWEEN ? AND ? THEN accounts_account_move_lines.debit ELSE 0 END), 0) as period_debit'),
-            DB::raw('COALESCE(SUM(CASE WHEN accounts_account_moves.date BETWEEN ? AND ? THEN accounts_account_move_lines.credit ELSE 0 END), 0) as period_credit'),
-            DB::raw('COALESCE(SUM(CASE WHEN accounts_account_moves.date <= ? THEN accounts_account_move_lines.balance ELSE 0 END), 0) as ending_balance')
-        )
+            DB::raw("COALESCE(SUM(CASE WHEN accounts_account_moves.date < ? THEN {$balanceExpression} ELSE 0 END), 0) as opening_balance"),
+            DB::raw("COALESCE(SUM(CASE WHEN accounts_account_moves.date BETWEEN ? AND ? THEN {$debitExpression} ELSE 0 END), 0) as period_debit"),
+            DB::raw("COALESCE(SUM(CASE WHEN accounts_account_moves.date BETWEEN ? AND ? THEN {$creditExpression} ELSE 0 END), 0) as period_credit"),
+            DB::raw("COALESCE(SUM(CASE WHEN accounts_account_moves.date <= ? THEN {$balanceExpression} ELSE 0 END), 0) as ending_balance"),
+        ];
+        if ($isOriginal) {
+            $select[] = DB::raw("COALESCE(accounts_account_move_lines.original_currency_id, accounts_account_move_lines.currency_id, {$companyCurrencyId}) as report_currency_id");
+            $select[] = 'currencies.code as report_currency';
+        }
+
+        $accountsQuery = Account::select($select)
             ->leftJoin('accounts_account_move_lines', 'accounts_accounts.id', '=', 'accounts_account_move_lines.account_id')
             ->leftJoin('accounts_account_moves', function ($join) use ($companyId, $journalIds) {
                 $join->on('accounts_account_move_lines.move_id', '=', 'accounts_account_moves.id')
@@ -258,6 +316,18 @@ class GeneralLedger extends Page implements HasForms
                 'accounts_accounts.source_classification_path',
             )
             ->orderBy('accounts_accounts.code');
+
+        if ($isOriginal) {
+            $accountsQuery->leftJoin(
+                'currencies',
+                DB::raw("COALESCE(accounts_account_move_lines.original_currency_id, accounts_account_move_lines.currency_id, {$companyCurrencyId})"),
+                '=',
+                'currencies.id',
+            )->groupBy([
+                DB::raw("COALESCE(accounts_account_move_lines.original_currency_id, accounts_account_move_lines.currency_id, {$companyCurrencyId})"),
+                'currencies.code',
+            ]);
+        }
 
         if ($accountIds !== []) {
             $accountsQuery->whereIn('accounts_accounts.id', $accountIds);
@@ -284,11 +354,27 @@ class GeneralLedger extends Page implements HasForms
             $accountsQuery->havingRaw('ending_balance != 0');
         }
 
+        $accounts = $accountsQuery->get();
+        $conversion = ['status' => 'complete', 'warnings' => [], 'rate_basis' => 'Posted company-currency debit and credit fields.'];
+        if ($currencyMode === ReportCurrencyMode::Reporting->value) {
+            [$accounts, $conversion] = $this->translateAccountSummaries($accounts, $companyId, $dateFrom, $dateTo, $journalIds);
+        }
+        foreach ($accounts as $account) {
+            $account->ledger_key = $isOriginal ? "{$account->id}:{$account->report_currency_id}" : (string) $account->id;
+            $account->report_currency ??= $currencyMode === ReportCurrencyMode::Company->value
+                ? Auth::user()?->defaultCompany?->currency?->code
+                : null;
+        }
+
         return [
-            'accounts'            => $accountsQuery->get(),
+            'accounts'            => $accounts,
             'date_from'           => $dateFrom,
             'date_to'             => $dateTo,
             'show_classification' => (bool) ($state['show_classification'] ?? false),
+            'currency_mode'       => $currencyMode,
+            'conversion_status'   => $conversion['status'],
+            'warnings'            => $conversion['warnings'],
+            'rate_basis'          => $conversion['rate_basis'],
         ];
     }
 
@@ -313,7 +399,7 @@ class GeneralLedger extends Page implements HasForms
     public function expandAll(): void
     {
         $data = $this->generalLedgerData;
-        $this->expandedAccounts = $data['accounts']->pluck('id')->toArray();
+        $this->expandedAccounts = $data['accounts']->pluck('ledger_key')->toArray();
 
         foreach ($this->expandedAccounts as $accountId) {
             if (! isset($this->loadedMoveLines[$accountId])) {
@@ -350,6 +436,10 @@ class GeneralLedger extends Page implements HasForms
         $dateTo = $dateRange ? Carbon::parse($dateRange[1]) : now();
         $journalIds = $this->form->getState()['journals'] ?? [];
         $companyId = Auth::user()->default_company_id;
+        $currencyMode = $this->authorizedCurrencyMode();
+        [$resolvedAccountId, $originalCurrencyId] = str_contains((string) $accountId, ':')
+            ? array_map('intval', explode(':', (string) $accountId, 2))
+            : [(int) $accountId, null];
 
         $query = MoveLine::select(
             'accounts_account_move_lines.*',
@@ -363,7 +453,7 @@ class GeneralLedger extends Page implements HasForms
             ->join('accounts_account_moves', 'accounts_account_move_lines.move_id', '=', 'accounts_account_moves.id')
             ->leftJoin('accounts_journals', 'accounts_account_moves.journal_id', '=', 'accounts_journals.id')
             ->leftJoin('partners_partners', 'accounts_account_move_lines.partner_id', '=', 'partners_partners.id')
-            ->where('accounts_account_move_lines.account_id', $accountId)
+            ->where('accounts_account_move_lines.account_id', $resolvedAccountId)
             ->where('accounts_account_moves.state', MoveState::POSTED)
             ->where('accounts_account_moves.company_id', $companyId)
             ->whereBetween('accounts_account_moves.date', [$dateFrom, $dateTo])
@@ -374,6 +464,121 @@ class GeneralLedger extends Page implements HasForms
             $query->whereIn('accounts_account_moves.journal_id', $journalIds);
         }
 
-        return $query->get()->toArray();
+        if ($currencyMode === ReportCurrencyMode::Original->value && $originalCurrencyId) {
+            $query->whereRaw(
+                'COALESCE(accounts_account_move_lines.original_currency_id, accounts_account_move_lines.currency_id) = ?',
+                [$originalCurrencyId],
+            );
+        }
+
+        $rows = $query->get();
+        if ($currencyMode === ReportCurrencyMode::Original->value) {
+            $currency = Currency::query()->find($originalCurrencyId);
+            $rows->each(function (MoveLine $line) use ($currency): void {
+                $line->debit = $line->original_debit ?? $line->debit;
+                $line->credit = $line->original_credit ?? $line->credit;
+                $line->report_currency = $currency?->code ?: $currency?->name;
+            });
+        } elseif ($currencyMode === ReportCurrencyMode::Reporting->value) {
+            $company = Company::query()->with('currency')->findOrFail($companyId);
+            $target = Currency::query()->findOrFail((int) $this->form->getState()['reporting_currency_id']);
+            $rows->each(function (MoveLine $line) use ($company, $target): void {
+                try {
+                    $rate = app(ExchangeRateService::class)->resolve(
+                        $company,
+                        $company->currency,
+                        $target,
+                        $line->date->toDateString(),
+                        [ExchangeRateType::Transaction, ExchangeRateType::Daily],
+                    );
+                    $line->debit = app(ExchangeRateService::class)->convert((string) $line->debit, $rate);
+                    $line->credit = app(ExchangeRateService::class)->convert((string) $line->credit, $rate);
+                    $line->report_currency = $target->code ?: $target->name;
+                } catch (MissingExchangeRateException) {
+                    $line->debit = '0';
+                    $line->credit = '0';
+                    $line->report_currency = $target->code ?: $target->name;
+                }
+            });
+        } else {
+            $currencyCode = Auth::user()?->defaultCompany?->currency?->code;
+            $rows->each(fn (MoveLine $line) => $line->report_currency = $currencyCode);
+        }
+
+        return $rows->toArray();
+    }
+
+    private function authorizedCurrencyMode(): string
+    {
+        $mode = $this->form->getState()['currency_mode'] ?? ReportCurrencyMode::Company->value;
+        if ($mode !== ReportCurrencyMode::Company->value) {
+            abort_unless(Auth::user()?->can(AccountingPermissions::ViewMultiCurrencyReports), 403);
+        }
+
+        return $mode;
+    }
+
+    private function translateAccountSummaries($accounts, int $companyId, Carbon $dateFrom, Carbon $dateTo, array $journalIds): array
+    {
+        $company = Company::query()->with('currency')->findOrFail($companyId);
+        $target = Currency::query()->findOrFail((int) ($this->form->getState()['reporting_currency_id'] ?? 0));
+        abort_unless($company->enabledCurrencies()->where('currencies.id', $target->id)->wherePivot('reporting_enabled', true)->exists(), 422);
+
+        $daily = DB::table('accounts_account_move_lines as lines')
+            ->join('accounts_account_moves as moves', 'moves.id', '=', 'lines.move_id')
+            ->where('moves.company_id', $companyId)
+            ->where('moves.state', MoveState::POSTED->value)
+            ->whereIn('lines.account_id', $accounts->pluck('id')->unique())
+            ->whereDate('moves.date', '<=', $dateTo)
+            ->when($journalIds !== [], fn ($query) => $query->whereIn('moves.journal_id', $journalIds))
+            ->selectRaw('lines.account_id, moves.date, SUM(lines.debit) debit, SUM(lines.credit) credit')
+            ->groupBy(['lines.account_id', 'moves.date'])
+            ->get();
+        $buckets = [];
+        $warnings = [];
+
+        foreach ($daily as $item) {
+            try {
+                $rate = app(ExchangeRateService::class)->resolve(
+                    $company,
+                    $company->currency,
+                    $target,
+                    substr((string) $item->date, 0, 10),
+                    [ExchangeRateType::Transaction, ExchangeRateType::Daily],
+                );
+            } catch (MissingExchangeRateException $exception) {
+                $warnings[$exception->getMessage()] = true;
+
+                continue;
+            }
+            $debit = BigDecimal::of(app(ExchangeRateService::class)->convert((string) $item->debit, $rate));
+            $credit = BigDecimal::of(app(ExchangeRateService::class)->convert((string) $item->credit, $rate));
+            $bucket = &$buckets[(int) $item->account_id];
+            $bucket ??= ['opening' => BigDecimal::zero(), 'debit' => BigDecimal::zero(), 'credit' => BigDecimal::zero(), 'ending' => BigDecimal::zero()];
+            $net = $debit->minus($credit);
+            $bucket['ending'] = $bucket['ending']->plus($net);
+            if (substr((string) $item->date, 0, 10) < $dateFrom->toDateString()) {
+                $bucket['opening'] = $bucket['opening']->plus($net);
+            } else {
+                $bucket['debit'] = $bucket['debit']->plus($debit);
+                $bucket['credit'] = $bucket['credit']->plus($credit);
+            }
+            unset($bucket);
+        }
+
+        foreach ($accounts as $account) {
+            $bucket = $buckets[$account->id] ?? ['opening' => BigDecimal::zero(), 'debit' => BigDecimal::zero(), 'credit' => BigDecimal::zero(), 'ending' => BigDecimal::zero()];
+            $account->opening_balance = $bucket['opening']->__toString();
+            $account->period_debit = $bucket['debit']->__toString();
+            $account->period_credit = $bucket['credit']->__toString();
+            $account->ending_balance = $bucket['ending']->__toString();
+            $account->report_currency = $target->code ?: $target->name;
+        }
+
+        return [$accounts, [
+            'status'     => $warnings === [] ? 'complete' : 'incomplete',
+            'warnings'   => array_keys($warnings),
+            'rate_basis' => 'Approved transaction-date/daily rates applied to each posted journal date.',
+        ]];
     }
 }

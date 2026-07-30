@@ -165,3 +165,32 @@ in DB transactions with full rollback; never drop/alter existing data;
 The 16 Phase-6 checks (exact totals 800k/685k/20k, closing 1,170,000/0 diff,
 the 16 non-zero closing balances, company isolation, idempotency, rollback,
 group non-postable, export parity) + 6 Stage 5 templates visible.
+
+---
+
+## Post-Implementation Accounting Boundary Notes (2026-07-28)
+
+The CoA importer and source-format display remain the canonical entry points for
+the workbook hierarchy. The multi-currency work does not store balances on
+accounts and does not alter imported source rows or posted migration amounts.
+
+Trial Balance classification is persistent and journal-based:
+
+- opening is posted debit minus credit before the report From Date;
+- in-period movement excludes moves whose `coa_migration_kind` is `opening` or
+  `adjustment`;
+- adjustment is the in-period posted `adjustment` kind;
+- closing is opening plus movement plus adjustment.
+
+Opening journals dated inside the requested period are excluded from movement
+and surfaced as warnings. The migration-journal service validates that opening
+precedes movement and that adjustment is not earlier than movement. All journal
+lookups are company-scoped. The exact acceptance anchor remains Opening
+800,000/800,000, Movement 685,000/685,000, Adjustment 20,000/20,000, Closing
+1,170,000/1,170,000, difference 0.
+
+Multi-currency modes preserve this classification. Company mode uses posted
+company amounts; original mode groups balances by currency; reporting mode uses
+approved dated rates and reports incompleteness instead of silently substituting
+a value. Screen and export calculation paths for Trial Balance share the same
+service and metadata.

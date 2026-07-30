@@ -6,6 +6,8 @@ use Filament\Panel;
 use Filament\Support\Assets\Css;
 use Filament\Support\Facades\FilamentAsset;
 use Livewire\Livewire;
+use Webkul\Accounting\Database\Seeders\AccountingPermissionSeeder;
+use Webkul\Accounting\Database\Seeders\IsoCurrencySeeder;
 use Webkul\Accounting\Database\Seeders\ReportWorkbookSeeder;
 use Webkul\Accounting\Filament\Widgets\JournalChartWidget;
 use Webkul\Accounting\Livewire\InvoiceSummary;
@@ -50,9 +52,15 @@ class AccountingServiceProvider extends PackageServiceProvider
                 '2026_07_20_000003_add_coa_migration_fields_to_accounts_account_moves_table',
                 '2026_07_27_074828_implement_bank_statement_workflow',
                 '2026_07_27_082400_allow_multiple_bank_sheets_per_workbook',
+                '2026_07_28_000001_implement_multi_currency_accounting',
+                '2026_07_28_000002_implement_configurable_import_platform',
             ])
             ->runsMigrations()
-            ->hasSeeder(ReportWorkbookSeeder::class)
+            ->hasSeeders([
+                ReportWorkbookSeeder::class,
+                IsoCurrencySeeder::class,
+                AccountingPermissionSeeder::class,
+            ])
             ->icon('accounting')
             ->hasInstallCommand(function (InstallCommand $command) {
                 $command->installDependencies();

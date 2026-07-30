@@ -2,6 +2,8 @@
 
 namespace Webkul\Accounting\Services\Bank;
 
+use Brick\Math\BigDecimal;
+use Brick\Math\RoundingMode;
 use Carbon\Carbon;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
@@ -210,22 +212,26 @@ abstract class AbstractSpreadsheetBankStatementParser implements BankStatementPa
         return $text === '' ? null : $text;
     }
 
-    protected function nullableNumber(mixed $value): ?float
+    protected function nullableNumber(mixed $value): ?string
     {
         return $value === null || trim((string) $value) === '' ? null : $this->number($value);
     }
 
-    protected function number(mixed $value): float
+    protected function number(mixed $value): string
     {
         $text = trim((string) ($value ?? ''));
         if ($text === '' || $text === '-') {
-            return 0.0;
+            return '0.0000';
         }
 
         $negative = str_starts_with($text, '(') && str_ends_with($text, ')');
         $clean = preg_replace('/[^0-9.\-]/', '', $text) ?? '';
-        $number = in_array($clean, ['', '-', '.'], true) ? 0.0 : (float) $clean;
+        $number = in_array($clean, ['', '-', '.'], true) ? BigDecimal::zero() : BigDecimal::of($clean);
 
-        return $negative ? -abs($number) : $number;
+        if ($negative) {
+            $number = $number->abs()->negated();
+        }
+
+        return $number->toScale(4, RoundingMode::HalfUp)->__toString();
     }
 }

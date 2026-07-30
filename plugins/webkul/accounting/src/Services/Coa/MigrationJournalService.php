@@ -47,6 +47,12 @@ class MigrationJournalService
         if (! $openingDate || ! $movementDate || ! $adjustmentDate) {
             throw new RuntimeException('Migration journals require opening, movement and adjustment dates.');
         }
+        if ($openingDate >= $movementDate) {
+            throw new RuntimeException('The opening journal date must be before the movement period date.');
+        }
+        if ($adjustmentDate < $movementDate) {
+            throw new RuntimeException('The adjustment date cannot be before the movement date.');
+        }
 
         $journalId = $this->migrationJournalId($company);
         $accountIdByCode = $this->postableAccountIdsByCode($company, $rows);
@@ -201,10 +207,11 @@ class MigrationJournalService
     protected function migrationJournalId(Company $company): int
     {
         $journal = Journal::query()
+            ->where('company_id', $company->id)
             ->where('type', 'general')
             ->orderBy('id')
             ->first()
-            ?? Journal::query()->orderBy('id')->first();
+            ?? Journal::query()->where('company_id', $company->id)->orderBy('id')->first();
 
         if (! $journal) {
             throw new RuntimeException('No journal available for migration entries.');

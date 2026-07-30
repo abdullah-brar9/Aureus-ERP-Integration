@@ -5,16 +5,20 @@ namespace Webkul\Accounting\Filament\Clusters\Accounting\Resources;
 use Filament\Actions\Action;
 use Filament\Actions\EditAction;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
+use Webkul\Account\Enums\AccountType;
 use Webkul\Account\Models\Account;
 use Webkul\Accounting\Enums\BankPostingStatus;
 use Webkul\Accounting\Enums\BankReviewStatus;
@@ -22,9 +26,15 @@ use Webkul\Accounting\Enums\CashFlowCategory;
 use Webkul\Accounting\Filament\Clusters\Accounting;
 use Webkul\Accounting\Filament\Clusters\Accounting\Resources\BankTransactionMappingResource\Pages\ListBankTransactionMappings;
 use Webkul\Accounting\Models\BankTransactionMapping;
+use Webkul\Accounting\Models\FsTag;
+use Webkul\Accounting\Services\Account\CanonicalAccountCreationService;
 use Webkul\Accounting\Services\Bank\BankJournalService;
 use Webkul\Accounting\Services\Bank\BankMappingService;
 use Webkul\Accounting\Services\Bank\BankTransferMatchingService;
+use Webkul\Accounting\Services\FsTagService;
+use Webkul\Accounting\Support\AccountingPermissions;
+use Webkul\Support\Models\Company;
+use Webkul\Support\Models\Currency;
 
 class BankTransactionMappingResource extends Resource
 {
@@ -45,23 +55,178 @@ class BankTransactionMappingResource extends Resource
     {
         return parent::getEloquentQuery()
             ->where('company_id', Auth::user()?->default_company_id)
-            ->with(['statementLine.statement', 'bankGlAccount', 'offsetAccount', 'mappingRule', 'reviewer', 'transferMatch']);
+            ->with(['statementLine.statement', 'bankGlAccount', 'offsetAccount', 'fsTag.account', 'mappingRule', 'reviewer', 'transferMatch']);
     }
 
     public static function form(Schema $schema): Schema
     {
         $companyId = Auth::user()?->default_company_id;
-        $accountOptions = fn () => Account::query()->postable()->where('deprecated', false)
+        $accountSearch = fn (string $search): array => Account::query()->postable()->where('deprecated', false)
             ->whereHas('companies', fn ($query) => $query->where('companies.id', $companyId))
-            ->orderBy('code')->get()->mapWithKeys(fn (Account $account) => [$account->id => "{$account->code} {$account->name}"]);
+            ->where(fn ($query) => $query->where('code', 'like', "%{$search}%")->orWhere('name', 'like', "%{$search}%"))
+            ->orderBy('code')->limit(50)->get()->mapWithKeys(fn (Account $account): array => [$account->id => "{$account->code} {$account->name}"])->all();
+        $accountLabel = function ($value) use ($companyId): ?string {
+            $account = Account::query()
+                ->postable()
+                ->where('deprecated', false)
+                ->whereHas('companies', fn ($query) => $query->where('companies.id', $companyId))
+                ->find($value);
+
+            return $account ? "{$account->code} {$account->name}" : null;
+        };
+        $bankAccountSearch = fn (string $search): array => Account::query()
+            ->postable()
+            ->where('deprecated', false)
+            ->where('account_type', AccountType::ASSET_CASH)
+            ->whereHas('companies', fn ($query) => $query->where('companies.id', $companyId))
+            ->where(fn ($query) => $query->where('code', 'like', "%{$search}%")->orWhere('name', 'like', "%{$search}%"))
+            ->orderBy('code')
+            ->limit(50)
+            ->get()
+            ->mapWithKeys(fn (Account $account): array => [$account->id => "{$account->code} {$account->name}"])
+            ->all();
+        $bankAccountLabel = function ($value) use ($companyId): ?string {
+            $account = Account::query()
+                ->postable()
+                ->where('deprecated', false)
+                ->where('account_type', AccountType::ASSET_CASH)
+                ->whereHas('companies', fn ($query) => $query->where('companies.id', $companyId))
+                ->find($value);
+
+            return $account ? "{$account->code} {$account->name}" : null;
+        };
+        $fsTagQuery = fn (): Builder => FsTag::query()
+            ->where('company_id', $companyId)
+            ->where('is_active', true)
+            ->whereNotNull('account_id')
+            ->whereHas('account', fn ($query) => $query->postable()->where('deprecated', false)
+                ->whereHas('companies', fn ($companyQuery) => $companyQuery->where('companies.id', $companyId)));
+        $fsTagLabel = fn (FsTag $tag): string => "{$tag->code} {$tag->name}";
 
         return $schema->components([
             Section::make('Mapping review')->columns(2)->schema([
                 TextInput::make('transaction_type'),
                 TextInput::make('counterparty'),
                 TextInput::make('supporting_document')->label('Supporting document/reference'),
-                Select::make('bank_gl_account_id')->label('Bank GL')->options($accountOptions)->searchable()->preload()->required(),
-                Select::make('offset_account_id')->label('Offset GL')->options($accountOptions)->searchable()->preload()->required(),
+                Select::make('bank_gl_account_id')->label('Bank GL')->searchable()
+                    ->options(fn (): array => $bankAccountSearch(''))
+                    ->getSearchResultsUsing($bankAccountSearch)->getOptionLabelUsing($bankAccountLabel)->required(),
+                Select::make('fs_tag_id')->label('FS Tag')->searchable()->live()
+                    ->helperText('Selecting a mapped FS Tag supplies the offset GL, cash-flow category and tax treatment.')
+                    ->options(fn (): array => $fsTagQuery()->orderBy('code')->limit(50)->get()->mapWithKeys(fn (FsTag $tag): array => [$tag->id => $fsTagLabel($tag)])->all())
+                    ->getSearchResultsUsing(fn (string $search): array => $fsTagQuery()
+                        ->where(fn ($query) => $query->where('code', 'like', "%{$search}%")->orWhere('name', 'like', "%{$search}%"))
+                        ->orderBy('code')->limit(50)->get()->mapWithKeys(fn (FsTag $tag): array => [$tag->id => $fsTagLabel($tag)])->all())
+                    ->getOptionLabelUsing(fn ($value): ?string => ($tag = $fsTagQuery()->find($value)) ? $fsTagLabel($tag) : null)
+                    ->createOptionForm([
+                        TextInput::make('code')->label('FS Tag code')->helperText('Leave blank for automatic numbering.')->maxLength(60),
+                        TextInput::make('name')->label('FS Tag name')->required()->maxLength(255),
+                        Select::make('account_id')->label('Existing GL account')->searchable()
+                            ->options(fn (): array => $accountSearch(''))
+                            ->getSearchResultsUsing($accountSearch)->getOptionLabelUsing($accountLabel),
+                        Toggle::make('create_account')->label('Create a new GL account')->live(),
+                        TextInput::make('account_code')->label('New GL code')->helperText('Leave blank for automatic numbering.')
+                            ->visible(fn (Get $get): bool => (bool) $get('create_account')),
+                        TextInput::make('account_name')->label('New GL title')
+                            ->required(fn (Get $get): bool => (bool) $get('create_account'))
+                            ->visible(fn (Get $get): bool => (bool) $get('create_account')),
+                        Select::make('account_type')->options(collect([
+                            AccountType::EXPENSE, AccountType::EXPENSE_DEPRECIATION, AccountType::EXPENSE_DIRECT_COST,
+                            AccountType::INCOME, AccountType::INCOME_OTHER, AccountType::ASSET_CURRENT,
+                            AccountType::ASSET_NON_CURRENT, AccountType::ASSET_PREPAYMENTS, AccountType::ASSET_FIXED,
+                            AccountType::LIABILITY_CURRENT, AccountType::LIABILITY_NON_CURRENT, AccountType::EQUITY,
+                        ])->mapWithKeys(fn (AccountType $type): array => [$type->value => $type->getLabel()])->all())
+                            ->default(AccountType::EXPENSE->value)
+                            ->required(fn (Get $get): bool => (bool) $get('create_account'))
+                            ->visible(fn (Get $get): bool => (bool) $get('create_account')),
+                        Select::make('currency_id')->label('GL currency')->searchable()
+                            ->options(fn (): array => Currency::query()->active()
+                                ->whereHas('enabledCompanies', fn ($query) => $query->where('companies.id', $companyId))
+                                ->orderBy('display_order')->limit(50)->get()
+                                ->mapWithKeys(fn (Currency $currency): array => [$currency->id => $currency->display_name])->all())
+                            ->visible(fn (Get $get): bool => (bool) $get('create_account')),
+                        Select::make('cash_flow_category')->options(CashFlowCategory::options())->required(),
+                        TextInput::make('tax_treatment'),
+                        Toggle::make('is_active')->default(true)->disabled()->dehydrated(),
+                    ])
+                    ->createOptionAction(fn (Action $action) => $action->modalHeading('Create FS Tag')
+                        ->visible(Auth::user()?->can(AccountingPermissions::ManageFsTags) ?? false))
+                    ->createOptionUsing(function (array $data) use ($companyId): int {
+                        abort_unless(Auth::user()?->can(AccountingPermissions::ManageFsTags), 403);
+
+                        return app(FsTagService::class)->create(Company::query()->findOrFail($companyId), $data)->id;
+                    }),
+                Select::make('offset_account_id')->label('Offset GL')->searchable()
+                    ->options(fn (): array => $accountSearch(''))
+                    ->getSearchResultsUsing($accountSearch)->getOptionLabelUsing($accountLabel)
+                    ->required(fn (Get $get): bool => ! filled($get('fs_tag_id')))
+                    ->createOptionForm([
+                        TextInput::make('code')->label('GL code')->required()->maxLength(64),
+                        TextInput::make('name')->label('Title')->required()->maxLength(255),
+                        Select::make('currency_id')
+                            ->label('Currency behavior')
+                            ->helperText('Leave blank to use the company base currency.')
+                            ->searchable()
+                            ->options(fn () => Currency::query()->active()
+                                ->whereHas('enabledCompanies', fn ($query) => $query->where('companies.id', $companyId))
+                                ->orderBy('display_order')->limit(50)->get()
+                                ->mapWithKeys(fn (Currency $currency): array => [$currency->id => $currency->display_name])),
+                        Select::make('parent_id')
+                            ->label('Parent account')
+                            ->searchable()
+                            ->options(fn (): array => app(CanonicalAccountCreationService::class)
+                                ->offsetParentAccountQuery(Company::query()->findOrFail($companyId), null)
+                                ->orderBy('code')->limit(50)->get()
+                                ->mapWithKeys(fn (Account $account): array => [$account->id => trim("{$account->code} {$account->name}")])->all())
+                            ->getSearchResultsUsing(fn (string $search): array => app(CanonicalAccountCreationService::class)
+                                ->offsetParentAccountQuery(Company::query()->findOrFail($companyId), null)
+                                ->where(fn ($query) => $query->where('code', 'like', "%{$search}%")->orWhere('name', 'like', "%{$search}%"))
+                                ->orderBy('code')->limit(50)->get()
+                                ->mapWithKeys(fn (Account $account): array => [$account->id => trim("{$account->code} {$account->name}")])->all())
+                            ->getOptionLabelUsing(function ($value) use ($companyId): ?string {
+                                $account = app(CanonicalAccountCreationService::class)
+                                    ->offsetParentAccountQuery(Company::query()->findOrFail($companyId), null)->find($value);
+
+                                return $account ? trim("{$account->code} {$account->name}") : null;
+                            }),
+                        Select::make('account_type')
+                            ->options(collect([
+                                AccountType::EXPENSE,
+                                AccountType::EXPENSE_DEPRECIATION,
+                                AccountType::EXPENSE_DIRECT_COST,
+                                AccountType::INCOME,
+                                AccountType::INCOME_OTHER,
+                                AccountType::ASSET_CURRENT,
+                                AccountType::ASSET_NON_CURRENT,
+                                AccountType::ASSET_PREPAYMENTS,
+                                AccountType::ASSET_FIXED,
+                                AccountType::LIABILITY_CURRENT,
+                                AccountType::LIABILITY_NON_CURRENT,
+                                AccountType::EQUITY,
+                            ])->mapWithKeys(fn (AccountType $type): array => [$type->value => $type->getLabel()])->all())
+                            ->required(),
+                        TextInput::make('nature'),
+                        TextInput::make('classification_1')->label('Classification 1'),
+                        TextInput::make('classification_2')->label('Classification 2'),
+                        TextInput::make('classification_3')->label('Classification 3'),
+                        TextInput::make('classification_4')->label('Classification 4'),
+                        TextInput::make('classification_5')->label('Classification 5'),
+                        TextInput::make('classification_6')->label('Classification 6'),
+                        TextInput::make('classification_7')->label('Classification 7'),
+                        Toggle::make('is_group')->label('Group account')->default(false)->disabled()->dehydrated(),
+                        Toggle::make('active')->default(true),
+                        Textarea::make('description'),
+                    ])
+                    ->createOptionAction(fn (Action $action) => $action
+                        ->modalHeading('Create Offset GL')
+                        ->visible(Auth::user()?->can(AccountingPermissions::CreateOffsetAccount) ?? false))
+                    ->createOptionUsing(function (array $data): int {
+                        abort_unless(Auth::user()?->can(AccountingPermissions::CreateOffsetAccount), 403);
+
+                        return app(CanonicalAccountCreationService::class)
+                            ->createOffsetAccount(Company::query()->findOrFail(Auth::user()?->default_company_id), $data)
+                            ->id;
+                    }),
                 TextInput::make('tax_treatment'),
                 Select::make('cash_flow_category')->options(CashFlowCategory::options())->required(),
                 TextInput::make('confidence')->numeric()->minValue(0)->maxValue(1)->disabled(),
@@ -87,6 +252,7 @@ class BankTransactionMappingResource extends Resource
                 TextColumn::make('supporting_document')->label('Supporting document')->placeholder('—')->toggleable(),
                 TextColumn::make('bankGlAccount.code')->label('Bank GL'),
                 TextColumn::make('offsetAccount.code')->label('Offset GL')->placeholder('—'),
+                TextColumn::make('fsTag.code')->label('FS Tag')->placeholder('—'),
                 TextColumn::make('tax_treatment')->placeholder('—')->toggleable(),
                 TextColumn::make('company.name')->label('Entity')->toggleable(),
                 TextColumn::make('review_status')->badge(),
@@ -107,8 +273,10 @@ class BankTransactionMappingResource extends Resource
             ])
             ->recordActions([
                 EditAction::make()->visible(fn (BankTransactionMapping $record) => $record->move_id === null
-                    && ! in_array($record->posting_status, [BankPostingStatus::Posted, BankPostingStatus::MatchedDoNotPost], true)),
+                    && ! in_array($record->posting_status, [BankPostingStatus::Posted, BankPostingStatus::MatchedDoNotPost], true))
+                    ->authorize(AccountingPermissions::ReviewBankTransactions),
                 Action::make('approve')
+                    ->authorize(AccountingPermissions::ReviewBankTransactions)
                     ->icon('heroicon-o-check')
                     ->color('success')
                     ->visible(fn (BankTransactionMapping $record) => $record->transfer_match_id === null && $record->review_status !== BankReviewStatus::Posted)
@@ -117,6 +285,7 @@ class BankTransactionMappingResource extends Resource
                         Notification::make()->success()->title('Mapping approved; learned rule updated.')->send();
                     }),
                 Action::make('approveTransfer')
+                    ->authorize(AccountingPermissions::ReviewBankTransactions)
                     ->label('Approve transfer')
                     ->icon('heroicon-o-arrows-right-left')
                     ->visible(fn (BankTransactionMapping $record) => $record->transferMatch?->status === 'suggested'
@@ -126,6 +295,7 @@ class BankTransactionMappingResource extends Resource
                         Notification::make()->success()->title('Transfer pair approved.')->send();
                     }),
                 Action::make('draft')
+                    ->authorize(AccountingPermissions::GenerateJournal)
                     ->label('Generate draft')
                     ->icon('heroicon-o-document-plus')
                     ->visible(fn (BankTransactionMapping $record) => $record->move_id === null
@@ -135,6 +305,7 @@ class BankTransactionMappingResource extends Resource
                         Notification::make()->success()->title('Balanced draft journal created.')->send();
                     }),
                 Action::make('post')
+                    ->authorize(AccountingPermissions::PostJournal)
                     ->icon('heroicon-o-lock-closed')
                     ->color('danger')
                     ->requiresConfirmation()
@@ -144,6 +315,7 @@ class BankTransactionMappingResource extends Resource
                         Notification::make()->success()->title('Journal posted to the ledger.')->send();
                     }),
                 Action::make('doNotPost')
+                    ->authorize(AccountingPermissions::ReviewBankTransactions)
                     ->label('Do not post')
                     ->color('gray')
                     ->requiresConfirmation()
@@ -155,6 +327,7 @@ class BankTransactionMappingResource extends Resource
                         'reviewed_at'    => now(),
                     ])),
                 Action::make('reject')
+                    ->authorize(AccountingPermissions::ReviewBankTransactions)
                     ->icon('heroicon-o-x-mark')
                     ->color('danger')
                     ->requiresConfirmation()
@@ -173,6 +346,11 @@ class BankTransactionMappingResource extends Resource
     public static function canCreate(): bool
     {
         return false;
+    }
+
+    public static function canViewAny(): bool
+    {
+        return Auth::user()?->can(AccountingPermissions::BankTransactions) ?? false;
     }
 
     public static function getPages(): array

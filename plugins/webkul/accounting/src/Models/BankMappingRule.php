@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Webkul\Account\Models\Account;
 use Webkul\Security\Models\User;
 use Webkul\Support\Models\Company;
+use Webkul\Support\Models\Currency;
 
 class BankMappingRule extends Model
 {
@@ -33,6 +34,11 @@ class BankMappingRule extends Model
     public function bankGlAccount(): BelongsTo
     {
         return $this->belongsTo(Account::class, 'bank_gl_account_id');
+    }
+
+    public function currency(): BelongsTo
+    {
+        return $this->belongsTo(Currency::class);
     }
 
     public function offsetAccount(): BelongsTo

@@ -22,6 +22,8 @@ use Webkul\Accounting\Filament\Clusters\Configuration\Resources\BankMappingRuleR
 use Webkul\Accounting\Filament\Clusters\Configuration\Resources\BankMappingRuleResource\Pages\EditBankMappingRule;
 use Webkul\Accounting\Filament\Clusters\Configuration\Resources\BankMappingRuleResource\Pages\ListBankMappingRules;
 use Webkul\Accounting\Models\BankMappingRule;
+use Webkul\Accounting\Support\AccountingPermissions;
+use Webkul\Support\Models\Currency;
 
 class BankMappingRuleResource extends Resource
 {
@@ -46,16 +48,42 @@ class BankMappingRuleResource extends Resource
     public static function form(Schema $schema): Schema
     {
         $companyId = Auth::user()?->default_company_id;
-        $accounts = fn () => Account::query()->postable()->where('deprecated', false)
+        $accountSearch = fn (string $search): array => Account::query()->postable()->where('deprecated', false)
             ->whereHas('companies', fn ($query) => $query->where('companies.id', $companyId))
-            ->orderBy('code')->get()->mapWithKeys(fn (Account $account) => [$account->id => "{$account->code} {$account->name}"]);
+            ->where(fn ($query) => $query->where('code', 'like', "%{$search}%")->orWhere('name', 'like', "%{$search}%"))
+            ->orderBy('code')->limit(50)->get()
+            ->mapWithKeys(fn (Account $account): array => [$account->id => "{$account->code} {$account->name}"])->all();
+        $accountLabel = function ($value) use ($companyId): ?string {
+            $account = Account::query()->whereKey($value)
+                ->whereHas('companies', fn ($query) => $query->where('companies.id', $companyId))->first();
+
+            return $account ? "{$account->code} {$account->name}" : null;
+        };
 
         return $schema->components([
             Section::make('Rule')->columns(2)->schema([
                 TextInput::make('name')->required(),
                 TextInput::make('bank_account_number'),
-                Select::make('bank_gl_account_id')->label('Bank GL')->options($accounts)->searchable()->preload(),
-                Select::make('offset_account_id')->label('Offset GL')->options($accounts)->searchable()->preload()->required(),
+                Select::make('currency_id')
+                    ->label('Statement currency')
+                    ->searchable()
+                    ->options(fn (): array => Currency::query()->active()
+                        ->whereHas('enabledCompanies', fn ($query) => $query->where('companies.id', $companyId))
+                        ->orderBy('display_order')->limit(50)->get()
+                        ->mapWithKeys(fn (Currency $currency): array => [$currency->id => $currency->display_name])->all())
+                    ->getSearchResultsUsing(fn (string $search): array => Currency::query()->active()
+                        ->whereHas('enabledCompanies', fn ($query) => $query->where('companies.id', $companyId))
+                        ->where(fn ($query) => $query->where('code', 'like', "%{$search}%")->orWhere('full_name', 'like', "%{$search}%"))
+                        ->orderBy('display_order')->limit(50)->get()
+                        ->mapWithKeys(fn (Currency $currency): array => [$currency->id => $currency->display_name])->all())
+                    ->getOptionLabelUsing(fn ($value): ?string => Currency::query()->whereKey($value)
+                        ->whereHas('enabledCompanies', fn ($query) => $query->where('companies.id', $companyId))
+                        ->first()?->display_name)
+                    ->required(),
+                Select::make('bank_gl_account_id')->label('Bank GL')->searchable()
+                    ->options(fn (): array => $accountSearch(''))->getSearchResultsUsing($accountSearch)->getOptionLabelUsing($accountLabel),
+                Select::make('offset_account_id')->label('Offset GL')->searchable()
+                    ->options(fn (): array => $accountSearch(''))->getSearchResultsUsing($accountSearch)->getOptionLabelUsing($accountLabel)->required(),
                 TextInput::make('description_pattern')->helperText('Case-insensitive text or a /regular expression/.'),
                 TextInput::make('reference_pattern'),
                 Select::make('direction')->options(['debit' => 'Debit/payment', 'credit' => 'Credit/receipt']),
@@ -78,6 +106,7 @@ class BankMappingRuleResource extends Resource
         return $table->columns([
             TextColumn::make('name')->searchable()->sortable(),
             TextColumn::make('bank_account_number')->label('Bank account')->placeholder('Any'),
+            TextColumn::make('currency.code')->label('Currency'),
             TextColumn::make('description_pattern')->label('Description pattern')->placeholder('Any'),
             TextColumn::make('direction')->placeholder('Any'),
             TextColumn::make('offsetAccount.code')->label('Offset GL'),
@@ -85,7 +114,10 @@ class BankMappingRuleResource extends Resource
             TextColumn::make('confidence')->numeric(2),
             TextColumn::make('usage_count')->label('Uses')->sortable(),
             IconColumn::make('is_active')->boolean(),
-        ])->recordActions([EditAction::make(), DeleteAction::make()]);
+        ])->recordActions([
+            EditAction::make()->authorize(AccountingPermissions::ManageBankMappingRules),
+            DeleteAction::make()->authorize(AccountingPermissions::ManageBankMappingRules),
+        ]);
     }
 
     public static function getPages(): array
@@ -95,5 +127,15 @@ class BankMappingRuleResource extends Resource
             'create' => CreateBankMappingRule::route('/create'),
             'edit'   => EditBankMappingRule::route('/{record}/edit'),
         ];
+    }
+
+    public static function canViewAny(): bool
+    {
+        return Auth::user()?->can(AccountingPermissions::ManageBankMappingRules) ?? false;
+    }
+
+    public static function canCreate(): bool
+    {
+        return Auth::user()?->can(AccountingPermissions::ManageBankMappingRules) ?? false;
     }
 }

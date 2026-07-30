@@ -353,7 +353,7 @@ class ReportCalculationEngine
     protected function lineContext(ReportLine $line, ReportColumnSpec $column, ReportContext $context): ReportContext
     {
         if ($line->company_id !== null) {
-            return ReportContext::forCompanies([(int) $line->company_id], $context->postedOnly);
+            return ReportContext::forCompanies([(int) $line->company_id], $context->postedOnly, $context->originalCurrencyId);
         }
 
         return $column->contextFor($context);

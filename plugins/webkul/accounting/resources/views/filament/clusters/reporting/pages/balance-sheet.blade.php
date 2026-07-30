@@ -9,14 +9,19 @@
             {{ $completeness['status']->value }} · {{ $completeness['provisional_label'] }}
         </x-filament::section>
 
-        {{-- Report Header --}}
+        @php $reportData = $this->balanceSheetData; @endphp
+        <x-filament::section compact>
+            Currency mode: {{ $reportData['currency_mode'] }} · status: {{ $reportData['conversion_status'] }} · {{ $reportData['rate_basis'] }}
+            @foreach ($reportData['warnings'] as $warning)
+                <div class="text-warning-600">{{ $warning }}</div>
+            @endforeach
+        </x-filament::section>
+
+        @foreach ($reportData['reports'] as $currency => $data)
         <x-filament::section>
-            @php
-                $data = $this->balanceSheetData;
-            @endphp
             
             <x-slot name="heading">
-                Balance Sheet - As of {{ \Carbon\Carbon::parse($data['date'])->format('M d, Y') }}
+                Balance Sheet - As of {{ \Carbon\Carbon::parse($data['date'])->format('M d, Y') }} — {{ $currency }}
             </x-slot>
             
             {{-- Balance Sheet Table --}}
@@ -108,5 +113,6 @@
                 </table>
             </div>
         </x-filament::section>
+        @endforeach
     </div>
 </x-filament-panels::page>

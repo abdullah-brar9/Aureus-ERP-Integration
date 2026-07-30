@@ -42,7 +42,7 @@ final class ReportColumnSpec
     public function contextFor(ReportContext $base): ReportContext
     {
         if ($this->companyIds !== null && $this->companyIds !== []) {
-            return ReportContext::forCompanies($this->companyIds, $base->postedOnly);
+            return ReportContext::forCompanies($this->companyIds, $base->postedOnly, $base->originalCurrencyId);
         }
 
         return $base;

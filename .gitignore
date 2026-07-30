@@ -6,8 +6,15 @@
 /public/storage
 /storage/*.key
 /storage/pail
+/storage/app/backups/
+/storage/app/runtime/
+/storage/app/public/*
+/storage/logs/*
+!/storage/logs/.gitignore
 /vendor
 .env
+.env.*
+!.env.example
 .env.testing
 .env.backup
 .env.production
@@ -29,6 +36,13 @@ opencode.json
 /playwright-report
 /test-results
 /nativephp
+/hi.txt
+.DS_Store
+Thumbs.db
+*.log
+/*.sqlite
+/*.sqlite3
+/*.db
 
 # Credential files (keystores, private keys, etc.)
 /credentials/

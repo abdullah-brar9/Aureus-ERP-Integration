@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Spatie\EloquentSortable\Sortable;
 use Spatie\EloquentSortable\SortableTrait;
+use Webkul\Account\Database\Factories\MoveLineFactory;
 use Webkul\Account\Enums\AccountType;
 use Webkul\Account\Enums\DisplayType;
 use Webkul\Account\Enums\DocumentType;
@@ -17,7 +18,7 @@ use Webkul\Account\Enums\JournalType;
 use Webkul\Account\Enums\MoveState;
 use Webkul\Account\Enums\MoveType;
 use Webkul\Account\Enums\TypeTaxUse;
-use Webkul\Account\Database\Factories\MoveLineFactory;
+use Webkul\Accounting\Models\ExchangeRate;
 use Webkul\Security\Models\User;
 use Webkul\Support\Models\Company;
 use Webkul\Support\Models\Currency;
@@ -40,6 +41,8 @@ class MoveLine extends Model implements Sortable
         'tax_repartition_line_id',
         'account_id',
         'currency_id',
+        'original_currency_id',
+        'reporting_currency_id',
         'partner_id',
         'group_tax_id',
         'tax_line_id',
@@ -62,6 +65,18 @@ class MoveLine extends Model implements Sortable
         'analytic_distribution',
         'debit',
         'credit',
+        'original_debit',
+        'original_credit',
+        'original_signed_amount',
+        'company_debit',
+        'company_credit',
+        'company_signed_amount',
+        'exchange_rate_id',
+        'exchange_rate',
+        'rate_date',
+        'rate_source',
+        'rate_type',
+        'conversion_status',
         'balance',
         'amount_currency',
         'tax_base_amount',
@@ -89,6 +104,14 @@ class MoveLine extends Model implements Sortable
         'analytic_distribution' => 'array',
         'parent_state'          => MoveState::class,
         'display_type'          => DisplayType::class,
+        'original_debit'        => 'decimal:4',
+        'original_credit'       => 'decimal:4',
+        'original_signed_amount'=> 'decimal:4',
+        'company_debit'         => 'decimal:4',
+        'company_credit'        => 'decimal:4',
+        'company_signed_amount' => 'decimal:4',
+        'exchange_rate'         => 'decimal:15',
+        'rate_date'             => 'date',
     ];
 
     public $sortable = [
@@ -124,6 +147,21 @@ class MoveLine extends Model implements Sortable
     public function companyCurrency()
     {
         return $this->belongsTo(Currency::class);
+    }
+
+    public function originalCurrency()
+    {
+        return $this->belongsTo(Currency::class, 'original_currency_id');
+    }
+
+    public function reportingCurrency()
+    {
+        return $this->belongsTo(Currency::class, 'reporting_currency_id');
+    }
+
+    public function exchangeRate()
+    {
+        return $this->belongsTo(ExchangeRate::class, 'exchange_rate_id');
     }
 
     public function partner()

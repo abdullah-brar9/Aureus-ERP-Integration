@@ -13,6 +13,7 @@ use Webkul\Accounting\Enums\BankImportStatus;
 use Webkul\Accounting\Enums\BankPostingStatus;
 use Webkul\Accounting\Enums\BankReviewStatus;
 use Webkul\Accounting\Enums\CashFlowCategory;
+use Webkul\Accounting\Enums\ConversionStatus;
 use Webkul\Accounting\Enums\ManualAdjustmentStatus;
 use Webkul\Accounting\Enums\ReportCompletenessStatus;
 use Webkul\Accounting\Filament\Clusters\Accounting\Pages\ImportBankStatement;
@@ -35,9 +36,9 @@ use Webkul\Support\Models\Currency;
 
 function bankAccountingWorkbookPath(): string
 {
-    $path = getenv('ACCOUNTING_WORKBOOK_FIXTURE') ?: 'C:/Users/HP/Downloads/Copy of preview.xlsx';
+    $path = getenv('ACCOUNTING_WORKBOOK_FIXTURE');
 
-    if (! is_file($path)) {
+    if (! is_string($path) || $path === '' || ! is_file($path)) {
         test()->markTestSkipped('Set ACCOUNTING_WORKBOOK_FIXTURE to Copy of preview.xlsx.');
     }
 
@@ -163,11 +164,24 @@ it('detects both workbook transfer pairs without duplicating income or expense',
     expect(app(BankTransferMatchingService::class)->detect($fixture['company']->id))->toBe([]);
 });
 
-it('keeps a failed reconciliation out of the posting pipeline', function (): void {
+it('rejects disabled currencies and allows raw foreign import while blocking posting without a rate', function (): void {
     $fixture = bankWorkflowFixture();
-    $wrongCurrency = Currency::query()->where('name', '!=', 'PKR')->firstOrFail();
+    $wrongCurrency = Currency::query()->active()->whereKeyNot($fixture['currency']->id)->firstOrFail();
     $fixture['hbl_journal']->update(['currency_id' => $wrongCurrency->id]);
     $fixture['hbl_bank']->update(['currency_id' => $wrongCurrency->id]);
+
+    expect(fn () => app(BankStatementImportService::class)->import(
+        bankAccountingWorkbookPath(),
+        $fixture['company'],
+        $fixture['hbl_journal'],
+        $fixture['hbl_bank'],
+        $wrongCurrency,
+        'hbl',
+    ))->toThrow(RuntimeException::class, 'not enabled for this company');
+
+    $fixture['company']->enabledCurrencies()->syncWithoutDetaching([
+        $wrongCurrency->id => ['transaction_enabled' => true, 'reporting_enabled' => false],
+    ]);
     $statement = app(BankStatementImportService::class)->import(
         bankAccountingWorkbookPath(),
         $fixture['company'],
@@ -177,8 +191,9 @@ it('keeps a failed reconciliation out of the posting pipeline', function (): voi
         'hbl',
     );
 
-    expect($statement->import_status)->toBe(BankImportStatus::ReconciliationFailed->value)
-        ->and(collect($statement->validation_errors)->pluck('code'))->toContain('currency_mismatch');
+    expect($statement->import_status)->toBe(BankImportStatus::Validated->value)
+        ->and($statement->conversion_status)->toBe(ConversionStatus::MissingRate->value)
+        ->and($statement->currency_was_overridden)->toBeTrue();
 
     $mapping = $statement->lines()->firstOrFail()->mapping;
     $mapping->update([
@@ -188,7 +203,7 @@ it('keeps a failed reconciliation out of the posting pipeline', function (): voi
     $mapping = app(BankMappingService::class)->approve($mapping->fresh(), $fixture['user']);
 
     expect(fn () => app(BankJournalService::class)->createDraft($mapping))
-        ->toThrow(RuntimeException::class, 'Only reconciled, validated statements');
+        ->toThrow(RuntimeException::class, 'blocked until an approved exchange rate');
 });
 
 it('approves a mapping, creates one balanced draft, and posts idempotently', function (): void {

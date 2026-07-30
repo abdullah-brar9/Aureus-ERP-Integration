@@ -11,6 +11,7 @@ use Filament\Forms\Contracts\HasForms;
 use Filament\Navigation\NavigationItem;
 use Filament\Pages\Page;
 use Filament\Schemas\Components\Section;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Livewire\Attributes\Computed;
 use Maatwebsite\Excel\Facades\Excel;
@@ -90,6 +91,10 @@ class FinancialReports extends Page implements HasForms
         try {
             $templates = ReportTemplate::query()
                 ->where('status', '!=', TemplateStatus::ARCHIVED->value)
+                ->where(function ($query): void {
+                    $query->whereNull('company_id')
+                        ->orWhereIn('company_id', static::authorizedCompanyIds());
+                })
                 ->orderBy('sort')
                 ->get(['id', 'name']);
         } catch (\Throwable) {
@@ -163,7 +168,10 @@ class FinancialReports extends Page implements HasForms
 
     protected function companyScopeLabel(): string
     {
-        $ids = array_map('intval', $this->data['companies'] ?? []);
+        $ids = array_values(array_intersect(
+            array_map('intval', $this->data['companies'] ?? []),
+            static::authorizedCompanyIds(),
+        ));
 
         if ($ids === []) {
             return __('accounting::filament/clusters/reporting/pages/financial-reports.filters.companies-placeholder');
@@ -177,10 +185,14 @@ class FinancialReports extends Page implements HasForms
         $this->form->fill([
             'template_id' => request()->integer('template') ?: ReportTemplate::query()
                 ->where('status', '!=', TemplateStatus::ARCHIVED->value)
+                ->where(function ($query): void {
+                    $query->whereNull('company_id')
+                        ->orWhereIn('company_id', static::authorizedCompanyIds());
+                })
                 ->orderBy('sort')
                 ->value('id'),
             'year'      => request()->integer('year') ?: now()->year,
-            'companies' => [],
+            'companies' => array_filter([Auth::user()?->default_company_id]),
         ]);
     }
 
@@ -197,6 +209,10 @@ class FinancialReports extends Page implements HasForms
                         ->label(__('accounting::filament/clusters/reporting/pages/financial-reports.filters.report'))
                         ->options(fn () => ReportTemplate::query()
                             ->where('status', '!=', TemplateStatus::ARCHIVED->value)
+                            ->where(function ($query): void {
+                                $query->whereNull('company_id')
+                                    ->orWhereIn('company_id', static::authorizedCompanyIds());
+                            })
                             ->orderBy('sort')
                             ->pluck('name', 'id'))
                         ->live()
@@ -210,8 +226,22 @@ class FinancialReports extends Page implements HasForms
                         ->live(),
                     Select::make('companies')
                         ->label(__('accounting::filament/clusters/reporting/pages/financial-reports.filters.companies'))
-                        ->options(fn () => Company::query()->pluck('name', 'id'))
                         ->multiple()
+                        ->searchable()
+                        ->options(fn (): array => Company::query()->whereKey(static::authorizedCompanyIds())
+                            ->orderBy('name')->limit(50)->pluck('name', 'id')->all())
+                        ->getSearchResultsUsing(fn (string $search): array => Company::query()
+                            ->whereKey(static::authorizedCompanyIds())
+                            ->where('name', 'like', "%{$search}%")
+                            ->orderBy('name')
+                            ->limit(50)
+                            ->pluck('name', 'id')
+                            ->all())
+                        ->getOptionLabelsUsing(fn (array $values): array => Company::query()
+                            ->whereKey(static::authorizedCompanyIds())
+                            ->whereKey($values)
+                            ->pluck('name', 'id')
+                            ->all())
                         ->live()
                         ->placeholder(__('accounting::filament/clusters/reporting/pages/financial-reports.filters.companies-placeholder')),
                 ])
@@ -233,14 +263,26 @@ class FinancialReports extends Page implements HasForms
             return null;
         }
 
-        $template = ReportTemplate::query()->find($templateId);
+        $template = ReportTemplate::query()
+            ->where(function ($query): void {
+                $query->whereNull('company_id')
+                    ->orWhereIn('company_id', static::authorizedCompanyIds());
+            })
+            ->find($templateId);
 
         if (! $template) {
             return null;
         }
 
         $year = (int) ($this->data['year'] ?? now()->year);
-        $context = ReportContext::forCompanies(array_map('intval', $this->data['companies'] ?? []));
+        $requestedCompanyIds = array_values(array_intersect(
+            array_map('intval', $this->data['companies'] ?? []),
+            static::authorizedCompanyIds(),
+        ));
+        if ($requestedCompanyIds === []) {
+            return null;
+        }
+        $context = ReportContext::forCompanies($requestedCompanyIds);
 
         $service = app(ReportQueryService::class);
 
@@ -292,5 +334,26 @@ class FinancialReports extends Page implements HasForms
         }
 
         return $value < 0 ? "({$formatted})" : $formatted;
+    }
+
+    /**
+     * @return array<int, int>
+     */
+    protected static function authorizedCompanyIds(): array
+    {
+        $user = Auth::user();
+
+        if (! $user) {
+            return [];
+        }
+
+        return $user->allowedCompanies()
+            ->pluck('companies.id')
+            ->push($user->default_company_id)
+            ->filter()
+            ->map(fn ($id): int => (int) $id)
+            ->unique()
+            ->values()
+            ->all();
     }
 }

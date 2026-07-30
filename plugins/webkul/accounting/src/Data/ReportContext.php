@@ -18,21 +18,27 @@ final class ReportContext
     public function __construct(
         public readonly array $companyIds,
         public readonly bool $postedOnly = true,
+        public readonly ?int $originalCurrencyId = null,
     ) {}
 
     /**
      * @param  array<int, int>  $companyIds
      */
-    public static function forCompanies(array $companyIds, bool $postedOnly = true): self
+    public static function forCompanies(array $companyIds, bool $postedOnly = true, ?int $originalCurrencyId = null): self
     {
         $normalized = array_values(array_unique(array_map('intval', $companyIds)));
 
-        return new self($normalized, $postedOnly);
+        return new self($normalized, $postedOnly, $originalCurrencyId);
     }
 
     public static function forCompany(int $companyId, bool $postedOnly = true): self
     {
         return new self([$companyId], $postedOnly);
+    }
+
+    public static function forCompanyOriginalCurrency(int $companyId, int $currencyId, bool $postedOnly = true): self
+    {
+        return new self([$companyId], $postedOnly, $currencyId);
     }
 
     public function hasCompanyScope(): bool

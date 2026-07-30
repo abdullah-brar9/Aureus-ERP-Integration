@@ -5,6 +5,7 @@ namespace Webkul\Accounting\Services;
 use Illuminate\Support\Facades\DB;
 use Webkul\Account\Enums\MoveState;
 use Webkul\Account\Models\Account;
+use Webkul\Support\Models\Company;
 
 /**
  * Computes a Trial Balance strictly from posted account-move lines, following
@@ -24,12 +25,17 @@ class TrialBalanceService
 
     protected string $moveTable = 'accounts_account_moves';
 
+    public function __construct(protected MultiCurrencyTrialBalanceService $multiCurrency) {}
+
     /**
      * @param  array<string, mixed>  $filters
      * @return array{rows: array<int, array<string, mixed>>, totals: array<string, float>}
      */
     public function compute(int $companyId, string $fromDate, string $toDate, array $filters = []): array
     {
+        if (($filters['currency_mode'] ?? 'company') !== 'company') {
+            return $this->multiCurrency->compute($companyId, $fromDate, $toDate, $filters);
+        }
         $postedOnly = $filters['posted_only'] ?? true;
         $journalIds = $filters['journal_ids'] ?? [];
         $accountIds = $filters['account_ids'] ?? [];
@@ -38,6 +44,7 @@ class TrialBalanceService
 
         $opening = $this->openingNets($companyId, $fromDate, $postedOnly, $journalIds);
         $range = $this->rangeSums($companyId, $fromDate, $toDate, $postedOnly, $journalIds);
+        $warnings = $this->openingDateWarnings($companyId, $fromDate, $toDate, $postedOnly, $journalIds);
 
         // Leaf accounts of the company (postable), optionally filtered.
         $accounts = Account::query()
@@ -97,7 +104,18 @@ class TrialBalanceService
             $rows = $this->withGroupAggregates($companyId, $rows);
         }
 
-        return ['rows' => $rows, 'totals' => $totals];
+        $company = Company::query()->with('currency')->find($companyId);
+        $currencyCode = $company?->currency?->code ?: $company?->currency?->name ?: 'COMPANY';
+
+        return [
+            'rows'              => $rows,
+            'totals'            => $totals,
+            'currency_totals'   => [$currencyCode => $totals],
+            'currency_mode'     => 'company',
+            'rate_basis'        => 'Posted company-currency debit and credit fields; no translation.',
+            'conversion_status' => $warnings === [] ? 'complete' : 'review_required',
+            'warnings'          => $warnings,
+        ];
     }
 
     /**
@@ -127,13 +145,14 @@ class TrialBalanceService
     {
         $adj = "({$this->moveTable}.coa_migration_kind = 'adjustment'"
             ." OR {$this->moveTable}.accounting_source_type = 'manual_adjustment')";
+        $opening = "({$this->moveTable}.coa_migration_kind = 'opening')";
 
         $query = DB::table($this->lineTable)
             ->join($this->moveTable, "{$this->lineTable}.move_id", '=', "{$this->moveTable}.id")
             ->select([
                 "{$this->lineTable}.account_id",
-                DB::raw("SUM(CASE WHEN {$adj} THEN 0 ELSE {$this->lineTable}.debit END) as mov_debit"),
-                DB::raw("SUM(CASE WHEN {$adj} THEN 0 ELSE {$this->lineTable}.credit END) as mov_credit"),
+                DB::raw("SUM(CASE WHEN {$adj} OR {$opening} THEN 0 ELSE {$this->lineTable}.debit END) as mov_debit"),
+                DB::raw("SUM(CASE WHEN {$adj} OR {$opening} THEN 0 ELSE {$this->lineTable}.credit END) as mov_credit"),
                 DB::raw("SUM(CASE WHEN {$adj} THEN {$this->lineTable}.debit ELSE 0 END) as adj_debit"),
                 DB::raw("SUM(CASE WHEN {$adj} THEN {$this->lineTable}.credit ELSE 0 END) as adj_credit"),
             ])
@@ -159,6 +178,19 @@ class TrialBalanceService
         if ($journalIds !== []) {
             $query->whereIn("{$this->moveTable}.journal_id", $journalIds);
         }
+    }
+
+    protected function openingDateWarnings(int $companyId, string $fromDate, string $toDate, bool $postedOnly, array $journalIds): array
+    {
+        $query = DB::table($this->moveTable)
+            ->where('company_id', $companyId)
+            ->where('coa_migration_kind', 'opening')
+            ->whereBetween('date', [$fromDate, $toDate]);
+        $this->applyPostedJournal($query, $postedOnly, $journalIds);
+
+        return $query->exists()
+            ? ['An opening-classified journal falls inside the report period. It is excluded from movement; repair its date through an audited data-repair procedure.']
+            : [];
     }
 
     /**

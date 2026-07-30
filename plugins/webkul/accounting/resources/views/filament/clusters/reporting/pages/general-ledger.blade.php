@@ -12,6 +12,13 @@
             <x-slot name="heading">
                 {{ __('accounting::filament/clusters/reporting.common.from-to', ['report' => __('accounting::filament/clusters/reporting.pages.general-ledger.navigation.title'), 'from' => \Carbon\Carbon::parse($data['date_from'])->format('M d, Y'), 'to' => \Carbon\Carbon::parse($data['date_to'])->format('M d, Y')]) }}
             </x-slot>
+            <p>
+                Currency mode: {{ $data['currency_mode'] }}; conversion: {{ $data['conversion_status'] }};
+                basis: {{ $data['rate_basis'] }}.
+            </p>
+            @foreach ($data['warnings'] as $warning)
+                <p>{{ $warning }}</p>
+            @endforeach
 
             <x-slot name="afterHeader">
                 <div class="flex gap-2 items-center">
@@ -76,16 +83,16 @@
                                 $totalCredit += $account->period_credit;
                             @endphp
 
-                            <tbody wire:key="account-{{ $account->id }}" class="divide-y divide-gray-200 dark:divide-white/5!">
+                            <tbody wire:key="account-{{ $account->ledger_key }}" class="divide-y divide-gray-200 dark:divide-white/5!">
                                 {{-- Account Header Row --}}
                                     <tr 
                                         class="bg-gray-50/50 dark:bg-white/5 cursor-pointer hover:bg-gray-100/50 dark:hover:bg-white/5!"
                                         x-data="{ loading: false }"
-                                        @click="loading = true; $wire.toggleAccountLines({{ $account->id }}).then(() => loading = false)"
+                                        @click="loading = true; $wire.toggleAccountLines('{{ $account->ledger_key }}').then(() => loading = false)"
                                     >
                                         <td class="px-4 py-3 whitespace-nowrap">
                                             <div class="flex items-center">
-                                                <svg x-show="!loading" class="w-4 h-4 transition-transform @if($this->isAccountExpanded($account->id)) rotate-90 @endif" fill="currentColor" viewBox="0 0 20 20">
+                                                <svg x-show="!loading" class="w-4 h-4 transition-transform @if($this->isAccountExpanded($account->ledger_key)) rotate-90 @endif" fill="currentColor" viewBox="0 0 20 20">
                                                     <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
                                                 </svg>
                                                 <x-filament::loading-indicator x-show="loading" x-cloak class="h-4 w-4" />
@@ -93,7 +100,7 @@
                                         </td>
                                         <td class="px-4 py-3 whitespace-nowrap">
                                             <span class="font-medium text-gray-900 dark:text-white">
-                                                {{ $account->code }} {{ $account->name }}
+                                                {{ $account->code }} {{ $account->name }} ({{ $account->report_currency }})
                                             </span>
                                             <div class="text-xs text-gray-500 dark:text-gray-400">
                                                 Opening {{ number_format($account->opening_balance, 2) }}
@@ -125,7 +132,7 @@
                                     </tr>
 
                                     {{-- Opening Balance Row --}}
-                                    @if($account->opening_balance != 0 && $this->isAccountExpanded($account->id))
+                                    @if($account->opening_balance != 0 && $this->isAccountExpanded($account->ledger_key))
                                         <tr class="bg-white dark:bg-gray-900">
                                             <td class="px-4 py-2"></td>
                                             <td class="px-4 py-2 pl-8 whitespace-nowrap text-sm">
@@ -158,8 +165,8 @@
                                         $runningBalance = $account->opening_balance;
                                     @endphp
 
-                                    @if($this->isAccountExpanded($account->id))
-                                        @foreach($this->getAccountMoves($account->id) as $move)
+                                    @if($this->isAccountExpanded($account->ledger_key))
+                                        @foreach($this->getAccountMoves($account->ledger_key) as $move)
                                             @php
                                                 $runningBalance += ($move['debit'] - $move['credit']);
                                             @endphp

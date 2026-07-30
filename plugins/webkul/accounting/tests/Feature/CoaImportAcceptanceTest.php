@@ -1,6 +1,8 @@
 <?php
 
+use Webkul\Account\Enums\JournalType;
 use Webkul\Account\Models\Account;
+use Webkul\Account\Models\Journal;
 use Webkul\Accounting\Data\Coa\CoaRow;
 use Webkul\Accounting\Data\Coa\CoaWarning;
 use Webkul\Accounting\Services\Coa\CoaHeaderDetector;
@@ -19,10 +21,17 @@ function coaFile(): string
 
 function coaCompany(string $name = 'CoA Test Co'): Company
 {
-    return Company::factory()->create([
+    $company = Company::factory()->create([
         'name'        => $name,
         'currency_id' => Currency::query()->orderBy('id')->value('id'),
     ]);
+    Journal::factory()->create([
+        'company_id'  => $company->id,
+        'currency_id' => $company->currency_id,
+        'type'        => JournalType::GENERAL,
+    ]);
+
+    return $company;
 }
 
 /**

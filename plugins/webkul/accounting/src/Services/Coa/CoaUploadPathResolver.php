@@ -24,9 +24,9 @@ use Illuminate\Support\Str;
  *
  * The previous importer assumed only the last case and wrapped every value in
  * Storage::disk('local')->path(), which turned an absolute upload path such as
- *   C:\Users\HP\AppData\Local\Temp\phpB063.tmp
+ *   C:\Users\Example\AppData\Local\Temp\phpB063.tmp
  * into
- *   storage/app/private/C:\Users\HP\AppData\Local\Temp\phpB063.tmp
+ *   storage/app/private/C:\Users\Example\AppData\Local\Temp\phpB063.tmp
  * — a file that can never exist. This resolver is the single, shared place that
  * classifies the path correctly and never double-prefixes an absolute path.
  */

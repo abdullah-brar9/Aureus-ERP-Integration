@@ -18,6 +18,7 @@ use Webkul\Account\Enums\MoveState;
 use Webkul\Account\Enums\MoveType;
 use Webkul\Account\Enums\PaymentState;
 use Webkul\Account\Enums\PaymentStatus;
+use Webkul\Accounting\Models\ExchangeRate;
 use Webkul\Chatter\Traits\HasChatter;
 use Webkul\Chatter\Traits\HasLogActivity;
 use Webkul\Field\Traits\HasCustomFields;
@@ -60,6 +61,9 @@ class Move extends Model implements Sortable
         'partner_bank_id',
         'fiscal_position_id',
         'currency_id',
+        'original_currency_id',
+        'company_currency_id',
+        'reporting_currency_id',
         'reversed_entry_id',
         'invoice_user_id',
         'invoice_incoterm_id',
@@ -116,6 +120,12 @@ class Move extends Model implements Sortable
         'cash_flow_category',
         'tax_treatment',
         'review_status',
+        'exchange_rate_id',
+        'exchange_rate',
+        'rate_date',
+        'rate_source',
+        'rate_type',
+        'conversion_status',
     ];
 
     protected function getLogAttributeLabels(): array
@@ -161,6 +171,8 @@ class Move extends Model implements Sortable
         'move_type'                         => MoveType::class,
         'invoice_date'                      => 'date',
         'date'                              => 'date',
+        'exchange_rate'                     => 'decimal:15',
+        'rate_date'                         => 'date',
     ];
 
     public $typeReverseMapping = [
@@ -246,6 +258,26 @@ class Move extends Model implements Sortable
     public function currency()
     {
         return $this->belongsTo(Currency::class, 'currency_id');
+    }
+
+    public function originalCurrency()
+    {
+        return $this->belongsTo(Currency::class, 'original_currency_id');
+    }
+
+    public function companyCurrency()
+    {
+        return $this->belongsTo(Currency::class, 'company_currency_id');
+    }
+
+    public function reportingCurrency()
+    {
+        return $this->belongsTo(Currency::class, 'reporting_currency_id');
+    }
+
+    public function exchangeRate()
+    {
+        return $this->belongsTo(ExchangeRate::class, 'exchange_rate_id');
     }
 
     public function reversedEntry()

@@ -1,5 +1,11 @@
 # Aureus ERP — Accounting / Reporting Project Handoff
 
+> **2026-07-28 configurable import checkpoint:** the forward-only configurable
+> import/FS Tag platform and canonical adapters are implemented. See
+> `docs/CONFIGURABLE_IMPORT_PLATFORM.md`. The verified pre-migration backup is
+> `storage/app/backups/pre-data-platform-20260728-222706/aureuserp.sql` with
+> SHA-256 `7DB99FE9EC09F1AD70180313AC1689A5B443CA5442A636137EFF867D7C79BD70`.
+>
 > Audited against the working tree on branch `accounting-stage2` (protected base
 > commit `d72300d`). Every claim below was verified by reading the current files,
 > not from memory. Nothing is committed — all work is in the working tree.
@@ -632,3 +638,107 @@ import() already accepts $typeOverrides; the page just needs to collect and pass
 them). Follow §8's step-by-step and acceptance criteria. Verify with the suite
 and path-scoped `pint --test`; do not commit unless asked.
 ```
+
+---
+
+## 10. Multi-Currency, Permissions, and Bank Workflow Handoff (2026-07-28)
+
+### Implemented architecture
+
+- Accounting permissions are registered idempotently through
+  `AccountingPermissionRegistrar` and `php artisan accounting:sync-permissions`.
+  Page access and sensitive actions (import, mapping, journal generation/posting,
+  rate approval, inline account creation, and FX revaluation) use the same
+  permission catalog.
+- `IsoCurrencySynchronizer` maintains the current ISO 4217 fiat master by code
+  without replacing existing IDs or customized display fields. Run
+  `php artisan accounting:sync-currencies` for a manual resynchronization.
+- Company currency settings retain the base currency, enabled transaction and
+  reporting currencies, FX gain/loss accounts, rate-source priority, explicit
+  previous-rate fallback, and P&L/Balance Sheet translation policies.
+- `ExchangeRateService` resolves approved, company-scoped, dated rates with
+  decimal-safe direct/inverse conversion, source priority, optional configured
+  fallback, and versioned cache invalidation. Missing rates never become 1:1
+  unless the currencies are identical.
+- Bank imports preserve source and company currencies/amounts plus the exact
+  rate snapshot. Raw foreign statements may be imported with a missing-rate
+  status, but journal posting is blocked until an approved rate exists.
+- `CanonicalAccountCreationService` is the single inline creation path for Bank
+  GL and Offset GL accounts. It enforces company, parent, account type,
+  postability, currency, code, account-number, and IBAN constraints.
+- Approved mappings create company/bank/currency-scoped reusable rules with
+  normalized descriptions, confidence, explanation, priority, and review state.
+  Cross-currency transfers remain blocked until an explicit conversion, charge,
+  and FX workflow is supplied.
+- `FxRevaluationService` creates idempotent draft period-closing revaluation
+  journals and optional reversal drafts. It never rewrites posted history.
+- GL, Trial Balance, Balance Sheet, P&L, and Direct Cash Flow support company,
+  original-currency, and selected-reporting-currency calculations with missing
+  rate warnings. Original mode never sums unrelated currencies. The configurable
+  Financial Reports template page has company isolation and original-currency
+  context support, but its complete three-mode UI/conversion workflow remains a
+  documented blocker.
+
+### Migration and deployment
+
+The forward-only migration is
+`plugins/webkul/accounting/database/migrations/2026_07_28_000001_implement_multi_currency_accounting.php`.
+It adds ISO metadata, company currency/rate policy fields, company-currency
+pivots, dated rates, account bank metadata, source/company/rate snapshots,
+mapping and transfer metadata, FX revaluations, and lookup indexes. Its backfill
+sets rate 1 only when source and company currencies are identical; uncertain
+foreign history is flagged for review. It also performs idempotent ISO and
+permission synchronization. The rollback is intentionally empty because the
+migration is forward-only and preserves accounting evidence.
+
+The migration was restored and run successfully on an isolated copy of the
+primary database. It has **not** been applied to `aureuserp`. After a fresh
+verified backup, apply it with:
+
+```bat
+php artisan migrate --force
+php artisan erp:doctor
+```
+
+### Configuration order
+
+1. Confirm each company's base and enabled transaction/reporting currencies.
+2. Configure company FX gain and FX loss postable accounts.
+3. Set rate-source priority and whether previous-valid fallback is allowed.
+4. Set P&L and Balance Sheet translation policies.
+5. Enter and approve dated rates before posting foreign transactions or running
+   complete reporting-currency reports.
+6. Create Bank GL accounts as Cash/Bank Assets in the statement currency; create
+   Offset GL accounts only in the supported postable account types.
+
+### Verification evidence
+
+- Isolated restored migration: all three accounting migrations completed;
+  174 currency rows, 155 active ISO fiat codes, zero duplicate non-null codes,
+  20 company-currency pivots, and zero posted move imbalances.
+- Accounting tests: `128 passed (627 assertions)` using
+  `vendor\\bin\\pest --compact plugins/webkul/accounting/tests`.
+- The expanded multi-currency/FX focused file subsequently passed
+  `8 tests (53 assertions)`, including gain, loss, reversal balance, and
+  revaluation idempotency.
+- Support feature tests: `97 passed (700 assertions)`.
+- Accounting route discovery: 146 routes.
+- `php artisan erp:doctor`: all checks passed against the unchanged primary DB.
+- Production assets built successfully; Vite still reports the pre-existing CSS
+  minifier warning for an empty `:is()` selector.
+
+### Known limitations and checkpoint rule
+
+- The configurable Financial Reports template engine is not yet complete for
+  all three currency modes.
+- Cross-currency bank-transfer matching intentionally blocks instead of
+  inventing FX/charge accounting.
+- FX revaluation aggregate state is not automatically synchronized when a draft
+  journal is posted through a generic journal screen.
+- Import writes are still row-oriented; a measured 1,000-row before/after
+  benchmark and equivalent page/export timings were not completed.
+- The expanded accounting suite is green but is slower in this environment; do
+  not claim a performance improvement without an apples-to-apples benchmark.
+- Do not stage `.env.before-performance`, `hi.txt`, database dumps, logs,
+  private uploads, or generated assets. Do not commit/tag/push until the above
+  functional and performance blockers are accepted or resolved.

@@ -103,10 +103,13 @@
     <div class="header">
         <h1>{{ __('accounting::filament/clusters/reporting.pages.profit-loss.navigation.title') }}</h1>
         <p>From {{ \Carbon\Carbon::parse($data['date_from'])->format('M d, Y') }} to {{ \Carbon\Carbon::parse($data['date_to'])->format('M d, Y') }}</p>
+        <p>Currency mode: {{ $data['currency_mode'] ?? 'company' }} · status: {{ $data['conversion_status'] ?? 'complete' }} · {{ $data['rate_basis'] ?? '' }}</p>
     </div>
 
+    @foreach (($data['reports'] ?? [($data['currency'] ?? '') => $data]) as $currency => $report)
+    <h2>{{ $currency }}</h2>
     <table>
-        @foreach($data['sections'] as $section)
+        @foreach($report['sections'] as $section)
             <tr>
                 <td colspan="2" class="section-header">{{ $section['title'] }}</td>
             </tr>
@@ -135,10 +138,11 @@
         @endforeach
 
         <tr>
-            <td class="net-income">{{ $data['is_profit'] ? 'Net Profit' : 'Net Loss' }}</td>
-            <td class="net-income amount">{{ number_format(abs($data['net_income']), 2) }}</td>
+            <td class="net-income">{{ $report['is_profit'] ? 'Net Profit' : 'Net Loss' }}</td>
+            <td class="net-income amount">{{ number_format(abs($report['net_income']), 2) }}</td>
         </tr>
     </table>
+    @endforeach
 
     <div class="footer">
         <div>Generated on {{ now()->format('F j, Y \\a\\t g:i A') }}</div>

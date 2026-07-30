@@ -16,9 +16,9 @@ use Webkul\Accounting\Services\Coa\CoaUploadPathResolver;
  *
  * The original bug: Preview wrapped EVERY FileUpload state value in
  * Storage::disk('local')->path(), so an absolute Windows temp upload path
- *   C:\Users\HP\AppData\Local\Temp\phpB063.tmp
+ *   C:\Users\Example\AppData\Local\Temp\phpB063.tmp
  * became the impossible
- *   storage/app/private/C:\Users\HP\AppData\Local\Temp\phpB063.tmp
+ *   storage/app/private/C:\Users\Example\AppData\Local\Temp\phpB063.tmp
  * and Preview died with a raw "File not found" exception.
  */
 
@@ -48,7 +48,7 @@ afterEach(function () {
 });
 
 it('keeps an absolute Windows temp path unchanged (the exact reported bug)', function () {
-    $windowsPath = 'C:\\Users\\HP\\AppData\\Local\\Temp\\phpB063.tmp';
+    $windowsPath = 'C:\\Users\\Example\\AppData\\Local\\Temp\\phpB063.tmp';
 
     expect($this->resolver->isAbsolutePath($windowsPath))->toBeTrue()
         ->and($this->resolver->toAbsolutePath($windowsPath))->toBe($windowsPath);

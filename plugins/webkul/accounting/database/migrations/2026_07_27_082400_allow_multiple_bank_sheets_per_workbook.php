@@ -11,13 +11,20 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('accounts_bank_statements', function (Blueprint $table) {
-            $table->dropUnique('bank_statements_company_file_hash_unique');
-            $table->unique(
-                ['company_id', 'file_hash', 'parser'],
-                'bank_statements_company_file_parser_unique',
-            );
-        });
+        if (Schema::hasIndex('accounts_bank_statements', 'bank_statements_company_file_hash_unique')) {
+            Schema::table('accounts_bank_statements', function (Blueprint $table) {
+                $table->dropUnique('bank_statements_company_file_hash_unique');
+            });
+        }
+
+        if (! Schema::hasIndex('accounts_bank_statements', 'bank_statements_company_file_parser_unique')) {
+            Schema::table('accounts_bank_statements', function (Blueprint $table) {
+                $table->unique(
+                    ['company_id', 'file_hash', 'parser'],
+                    'bank_statements_company_file_parser_unique',
+                );
+            });
+        }
     }
 
     /**

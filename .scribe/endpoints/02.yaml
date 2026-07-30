@@ -17,7 +17,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -89,7 +89,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":[{"id":1,"name":"Mr","short_name":"John","creator_id":1,"created_at":"2025-04-10T10:44:48.000000Z","updated_at":"2025-04-10T10:44:48.000000Z"},{"id":1,"name":"Mr","short_name":"John","creator_id":1,"created_at":"2025-04-10T10:44:48.000000Z","updated_at":"2025-04-10T10:44:48.000000Z"}],"links":{"first":"\/?page=1","last":"\/?page=1","prev":null,"next":null},"meta":{"current_page":1,"from":1,"last_page":1,"links":[{"url":null,"label":"&laquo; Previous","active":false},{"url":"\/?page=1","label":"1","active":true},{"url":null,"label":"Next &raquo;","active":false}],"path":"\/","per_page":10,"to":2,"total":2}}'
+        content: '{"data":[{"id":null,"name":"Morgan Hirthe","short_name":"Pearl Hauck Sr.","creator_id":1,"created_at":null,"updated_at":null},{"id":null,"name":"Alanis McLaughlin","short_name":"Ferne Fritsch","creator_id":1,"created_at":null,"updated_at":null}],"links":{"first":"\/?page=1","last":"\/?page=1","prev":null,"next":null},"meta":{"current_page":1,"from":1,"last_page":1,"links":[{"url":null,"label":"&laquo; Previous","page":null,"active":false},{"url":"\/?page=1","label":"1","page":1,"active":true},{"url":null,"label":"Next &raquo;","page":null,"active":false}],"path":"\/","per_page":10,"to":2,"total":2}}'
         headers: []
         description: ''
       -
@@ -102,7 +102,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -122,7 +122,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -160,7 +160,7 @@ endpoints:
       -
         custom: []
         status: 201
-        content: '{"data":{"id":1,"name":"Mr","short_name":"John","creator_id":1,"created_at":"2025-04-10T10:44:48.000000Z","updated_at":"2025-04-10T10:44:48.000000Z"},"message":"Title created successfully."}'
+        content: '{"data":{"id":null,"name":"Ms. Audra Crooks II","short_name":"Aleen O''Kon","creator_id":1,"created_at":null,"updated_at":null},"message":"Title created successfully."}'
         headers: []
         description: ''
       -
@@ -179,7 +179,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -199,7 +199,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -237,7 +237,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":1,"name":"Mr","short_name":"John","creator_id":1,"created_at":"2025-04-10T10:44:48.000000Z","updated_at":"2025-04-10T10:44:48.000000Z"}}'
+        content: '{"data":{"id":null,"name":"Morgan Hirthe","short_name":"Pearl Hauck Sr.","creator_id":1,"created_at":null,"updated_at":null}}'
         headers: []
         description: ''
       -
@@ -256,7 +256,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -277,7 +277,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -327,7 +327,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":1,"name":"Mr","short_name":"John","creator_id":1,"created_at":"2025-04-10T10:44:48.000000Z","updated_at":"2025-04-10T10:44:48.000000Z"},"message":"Title updated successfully."}'
+        content: '{"data":{"id":null,"name":"Ms. Audra Crooks II","short_name":"Aleen O''Kon","creator_id":1,"created_at":null,"updated_at":null},"message":"Title updated successfully."}'
         headers: []
         description: ''
       -
@@ -352,7 +352,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -372,7 +372,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -417,7 +417,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -437,7 +437,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -520,7 +520,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":[{"id":1,"name":"New Customer","color":"#35ff39","creator_id":null,"created_at":"2025-04-10T10:44:31.000000Z","updated_at":"2025-04-10T10:44:31.000000Z"},{"id":1,"name":"New Customer","color":"#35ff39","creator_id":null,"created_at":"2025-04-10T10:44:31.000000Z","updated_at":"2025-04-10T10:44:31.000000Z"}],"links":{"first":"\/?page=1","last":"\/?page=1","prev":null,"next":null},"meta":{"current_page":1,"from":1,"last_page":1,"links":[{"url":null,"label":"&laquo; Previous","active":false},{"url":"\/?page=1","label":"1","active":true},{"url":null,"label":"Next &raquo;","active":false}],"path":"\/","per_page":10,"to":2,"total":2}}'
+        content: '{"data":[{"id":null,"name":"aut adipisci","color":"#f76df4","creator_id":1,"created_at":null,"updated_at":null},{"id":null,"name":"nostrum qui","color":"#79ca4d","creator_id":1,"created_at":null,"updated_at":null}],"links":{"first":"\/?page=1","last":"\/?page=1","prev":null,"next":null},"meta":{"current_page":1,"from":1,"last_page":1,"links":[{"url":null,"label":"&laquo; Previous","page":null,"active":false},{"url":"\/?page=1","label":"1","page":1,"active":true},{"url":null,"label":"Next &raquo;","page":null,"active":false}],"path":"\/","per_page":10,"to":2,"total":2}}'
         headers: []
         description: ''
       -
@@ -533,7 +533,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -553,7 +553,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -591,7 +591,7 @@ endpoints:
       -
         custom: []
         status: 201
-        content: '{"data":{"id":1,"name":"New Customer","color":"#35ff39","creator_id":null,"created_at":"2025-04-10T10:44:31.000000Z","updated_at":"2025-04-10T10:44:31.000000Z"},"message":"Tag created successfully."}'
+        content: '{"data":{"id":null,"name":"architecto eius","color":"#4285c6","creator_id":1,"created_at":null,"updated_at":null},"message":"Tag created successfully."}'
         headers: []
         description: ''
       -
@@ -610,7 +610,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -630,7 +630,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -668,7 +668,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":1,"name":"New Customer","color":"#35ff39","creator_id":null,"created_at":"2025-04-10T10:44:31.000000Z","updated_at":"2025-04-10T10:44:31.000000Z"}}'
+        content: '{"data":{"id":null,"name":"aut adipisci","color":"#f76df4","creator_id":1,"created_at":null,"updated_at":null}}'
         headers: []
         description: ''
       -
@@ -687,7 +687,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -708,7 +708,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -758,7 +758,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":1,"name":"New Customer","color":"#35ff39","creator_id":null,"created_at":"2025-04-10T10:44:31.000000Z","updated_at":"2025-04-10T10:44:31.000000Z"},"message":"Tag updated successfully."}'
+        content: '{"data":{"id":null,"name":"architecto eius","color":"#4285c6","creator_id":1,"created_at":null,"updated_at":null},"message":"Tag updated successfully."}'
         headers: []
         description: ''
       -
@@ -783,7 +783,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -803,7 +803,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -848,7 +848,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -868,7 +868,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -913,7 +913,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -933,7 +933,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -978,7 +978,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -998,7 +998,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -1081,7 +1081,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":[{"id":null,"name":"Morgan Hirthe","description":"Qui commodi incidunt iure odit.","creator_id":1,"created_at":null,"updated_at":null},{"id":null,"name":"Mina Bauch","description":"Nostrum omnis autem et consequatur aut.","creator_id":1,"created_at":null,"updated_at":null}],"links":{"first":"\/?page=1","last":"\/?page=1","prev":null,"next":null},"meta":{"current_page":1,"from":1,"last_page":1,"links":[{"url":null,"label":"&laquo; Previous","active":false},{"url":"\/?page=1","label":"1","active":true},{"url":null,"label":"Next &raquo;","active":false}],"path":"\/","per_page":10,"to":2,"total":2}}'
+        content: '{"data":[{"id":null,"name":"Benjamin O''Keefe Sr.","description":"Non eveniet est assumenda.","creator_id":1,"created_at":null,"updated_at":null},{"id":null,"name":"Dr. Ansel Crooks","description":"Culpa rerum rem earum laborum sit.","creator_id":1,"created_at":null,"updated_at":null}],"links":{"first":"\/?page=1","last":"\/?page=1","prev":null,"next":null},"meta":{"current_page":1,"from":1,"last_page":1,"links":[{"url":null,"label":"&laquo; Previous","page":null,"active":false},{"url":"\/?page=1","label":"1","page":1,"active":true},{"url":null,"label":"Next &raquo;","page":null,"active":false}],"path":"\/","per_page":10,"to":2,"total":2}}'
         headers: []
         description: ''
       -
@@ -1094,7 +1094,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -1114,7 +1114,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -1171,7 +1171,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -1191,7 +1191,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -1248,7 +1248,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -1269,7 +1269,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -1344,7 +1344,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -1364,7 +1364,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -1409,7 +1409,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -1429,7 +1429,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -1474,7 +1474,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -1494,7 +1494,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -1539,7 +1539,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -1559,7 +1559,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -1755,7 +1755,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":[{"id":1,"account_type":"individual","sub_type":"company","name":"TechNova Solutions Pvt. Ltd.","email":"technova@solutions.com","phone":"1234567890","mobile":"1234567890","avatar":"company-logos\/01JRA5TEK5HTHJAYXSDBZRJF8B.png","avatar_url":"http:\/\/127.0.0.1:8000\/storage\/company-logos\/01JRA5TEK5HTHJAYXSDBZRJF8B.png","job_title":null,"website":"https:\/\/www.technovasolutions.com","tax_id":"TNS123456","company_registry":"TN-20251234","reference":null,"is_active":true,"color":"#AAAAAA","street1":"1234 Silicon Street","street2":"Tech Park","city":"New York","zip":"10001","country_id":233,"state_id":35,"parent_id":null,"title_id":null,"company_id":1,"industry_id":null,"user_id":null,"creator_id":1,"created_at":"2025-04-07T12:34:34.000000Z","updated_at":"2025-04-08T07:46:16.000000Z","deleted_at":null,"country":{"id":233,"name":"United States","code":"US","phone_code":"1","state_required":true,"zip_required":true,"currency_id":1,"created_at":"2025-04-07T12:34:34.000000Z","updated_at":"2025-04-07T12:34:34.000000Z"},"state":{"id":35,"name":"New York","code":"NY","country_id":233,"created_at":"2025-04-07T12:34:34.000000Z","updated_at":"2025-04-07T12:34:34.000000Z"}},{"id":1,"account_type":"individual","sub_type":"company","name":"TechNova Solutions Pvt. Ltd.","email":"technova@solutions.com","phone":"1234567890","mobile":"1234567890","avatar":"company-logos\/01JRA5TEK5HTHJAYXSDBZRJF8B.png","avatar_url":"http:\/\/127.0.0.1:8000\/storage\/company-logos\/01JRA5TEK5HTHJAYXSDBZRJF8B.png","job_title":null,"website":"https:\/\/www.technovasolutions.com","tax_id":"TNS123456","company_registry":"TN-20251234","reference":null,"is_active":true,"color":"#AAAAAA","street1":"1234 Silicon Street","street2":"Tech Park","city":"New York","zip":"10001","country_id":233,"state_id":35,"parent_id":null,"title_id":null,"company_id":1,"industry_id":null,"user_id":null,"creator_id":1,"created_at":"2025-04-07T12:34:34.000000Z","updated_at":"2025-04-08T07:46:16.000000Z","deleted_at":null,"country":{"id":233,"name":"United States","code":"US","phone_code":"1","state_required":true,"zip_required":true,"currency_id":1,"created_at":"2025-04-07T12:34:34.000000Z","updated_at":"2025-04-07T12:34:34.000000Z"},"state":{"id":35,"name":"New York","code":"NY","country_id":233,"created_at":"2025-04-07T12:34:34.000000Z","updated_at":"2025-04-07T12:34:34.000000Z"}}],"links":{"first":"\/?page=1","last":"\/?page=1","prev":null,"next":null},"meta":{"current_page":1,"from":1,"last_page":1,"links":[{"url":null,"label":"&laquo; Previous","active":false},{"url":"\/?page=1","label":"1","active":true},{"url":null,"label":"Next &raquo;","active":false}],"path":"\/","per_page":10,"to":2,"total":2}}'
+        content: '{"data":[{"id":1,"account_type":"individual","sub_type":"company","name":"Truck It In (TIN Pvt)","email":"dummy@dummycorp.local","phone":"1234567890","mobile":"1234567890","avatar":null,"avatar_url":null,"job_title":null,"website":"http:\/\/dummycorp.local","tax_id":"DUM123456","company_registry":"TIN001","reference":null,"is_active":null,"color":"#e80f0f","street1":null,"street2":null,"city":null,"zip":null,"country_id":null,"state_id":null,"parent_id":null,"title_id":null,"company_id":1,"industry_id":null,"user_id":null,"creator_id":1,"created_at":"2026-07-22T07:23:10.000000Z","updated_at":"2026-07-23T10:20:43.000000Z","deleted_at":null,"country":null,"state":null},{"id":1,"account_type":"individual","sub_type":"company","name":"Truck It In (TIN Pvt)","email":"dummy@dummycorp.local","phone":"1234567890","mobile":"1234567890","avatar":null,"avatar_url":null,"job_title":null,"website":"http:\/\/dummycorp.local","tax_id":"DUM123456","company_registry":"TIN001","reference":null,"is_active":null,"color":"#e80f0f","street1":null,"street2":null,"city":null,"zip":null,"country_id":null,"state_id":null,"parent_id":null,"title_id":null,"company_id":1,"industry_id":null,"user_id":null,"creator_id":1,"created_at":"2026-07-22T07:23:10.000000Z","updated_at":"2026-07-23T10:20:43.000000Z","deleted_at":null,"country":null,"state":null}],"links":{"first":"\/?page=1","last":"\/?page=1","prev":null,"next":null},"meta":{"current_page":1,"from":1,"last_page":1,"links":[{"url":null,"label":"&laquo; Previous","page":null,"active":false},{"url":"\/?page=1","label":"1","page":1,"active":true},{"url":null,"label":"Next &raquo;","page":null,"active":false}],"path":"\/","per_page":10,"to":2,"total":2}}'
         headers: []
         description: ''
       -
@@ -1768,7 +1768,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -1788,7 +1788,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -2080,7 +2080,7 @@ endpoints:
       -
         custom: []
         status: 201
-        content: '{"data":{"id":1,"account_type":"individual","sub_type":"company","name":"TechNova Solutions Pvt. Ltd.","email":"technova@solutions.com","phone":"1234567890","mobile":"1234567890","avatar":"company-logos\/01JRA5TEK5HTHJAYXSDBZRJF8B.png","avatar_url":"http:\/\/127.0.0.1:8000\/storage\/company-logos\/01JRA5TEK5HTHJAYXSDBZRJF8B.png","job_title":null,"website":"https:\/\/www.technovasolutions.com","tax_id":"TNS123456","company_registry":"TN-20251234","reference":null,"is_active":true,"color":"#AAAAAA","street1":"1234 Silicon Street","street2":"Tech Park","city":"New York","zip":"10001","country_id":233,"state_id":35,"parent_id":null,"title_id":null,"company_id":1,"industry_id":null,"user_id":null,"creator_id":1,"created_at":"2025-04-07T12:34:34.000000Z","updated_at":"2025-04-08T07:46:16.000000Z","deleted_at":null,"country":{"id":233,"name":"United States","code":"US","phone_code":"1","state_required":true,"zip_required":true,"currency_id":1,"created_at":"2025-04-07T12:34:34.000000Z","updated_at":"2025-04-07T12:34:34.000000Z"},"state":{"id":35,"name":"New York","code":"NY","country_id":233,"created_at":"2025-04-07T12:34:34.000000Z","updated_at":"2025-04-07T12:34:34.000000Z"}},"message":"Partner created successfully."}'
+        content: '{"data":{"id":1,"account_type":"individual","sub_type":"company","name":"Truck It In (TIN Pvt)","email":"dummy@dummycorp.local","phone":"1234567890","mobile":"1234567890","avatar":null,"avatar_url":null,"job_title":null,"website":"http:\/\/dummycorp.local","tax_id":"DUM123456","company_registry":"TIN001","reference":null,"is_active":null,"color":"#e80f0f","street1":null,"street2":null,"city":null,"zip":null,"country_id":null,"state_id":null,"parent_id":null,"title_id":null,"company_id":1,"industry_id":null,"user_id":null,"creator_id":1,"created_at":"2026-07-22T07:23:10.000000Z","updated_at":"2026-07-23T10:20:43.000000Z","deleted_at":null,"country":null,"state":null},"message":"Partner created successfully."}'
         headers: []
         description: ''
       -
@@ -2099,7 +2099,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -2119,7 +2119,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -2157,7 +2157,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":1,"account_type":"individual","sub_type":"company","name":"TechNova Solutions Pvt. Ltd.","email":"technova@solutions.com","phone":"1234567890","mobile":"1234567890","avatar":"company-logos\/01JRA5TEK5HTHJAYXSDBZRJF8B.png","avatar_url":"http:\/\/127.0.0.1:8000\/storage\/company-logos\/01JRA5TEK5HTHJAYXSDBZRJF8B.png","job_title":null,"website":"https:\/\/www.technovasolutions.com","tax_id":"TNS123456","company_registry":"TN-20251234","reference":null,"is_active":true,"color":"#AAAAAA","street1":"1234 Silicon Street","street2":"Tech Park","city":"New York","zip":"10001","country_id":233,"state_id":35,"parent_id":null,"title_id":null,"company_id":1,"industry_id":null,"user_id":null,"creator_id":1,"created_at":"2025-04-07T12:34:34.000000Z","updated_at":"2025-04-08T07:46:16.000000Z","deleted_at":null,"country":{"id":233,"name":"United States","code":"US","phone_code":"1","state_required":true,"zip_required":true,"currency_id":1,"created_at":"2025-04-07T12:34:34.000000Z","updated_at":"2025-04-07T12:34:34.000000Z"},"state":{"id":35,"name":"New York","code":"NY","country_id":233,"created_at":"2025-04-07T12:34:34.000000Z","updated_at":"2025-04-07T12:34:34.000000Z"}}}'
+        content: '{"data":{"id":1,"account_type":"individual","sub_type":"company","name":"Truck It In (TIN Pvt)","email":"dummy@dummycorp.local","phone":"1234567890","mobile":"1234567890","avatar":null,"avatar_url":null,"job_title":null,"website":"http:\/\/dummycorp.local","tax_id":"DUM123456","company_registry":"TIN001","reference":null,"is_active":null,"color":"#e80f0f","street1":null,"street2":null,"city":null,"zip":null,"country_id":null,"state_id":null,"parent_id":null,"title_id":null,"company_id":1,"industry_id":null,"user_id":null,"creator_id":1,"created_at":"2026-07-22T07:23:10.000000Z","updated_at":"2026-07-23T10:20:43.000000Z","deleted_at":null,"country":null,"state":null}}'
         headers: []
         description: ''
       -
@@ -2176,7 +2176,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -2197,7 +2197,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -2501,7 +2501,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":1,"account_type":"individual","sub_type":"company","name":"TechNova Solutions Pvt. Ltd.","email":"technova@solutions.com","phone":"1234567890","mobile":"1234567890","avatar":"company-logos\/01JRA5TEK5HTHJAYXSDBZRJF8B.png","avatar_url":"http:\/\/127.0.0.1:8000\/storage\/company-logos\/01JRA5TEK5HTHJAYXSDBZRJF8B.png","job_title":null,"website":"https:\/\/www.technovasolutions.com","tax_id":"TNS123456","company_registry":"TN-20251234","reference":null,"is_active":true,"color":"#AAAAAA","street1":"1234 Silicon Street","street2":"Tech Park","city":"New York","zip":"10001","country_id":233,"state_id":35,"parent_id":null,"title_id":null,"company_id":1,"industry_id":null,"user_id":null,"creator_id":1,"created_at":"2025-04-07T12:34:34.000000Z","updated_at":"2025-04-08T07:46:16.000000Z","deleted_at":null,"country":{"id":233,"name":"United States","code":"US","phone_code":"1","state_required":true,"zip_required":true,"currency_id":1,"created_at":"2025-04-07T12:34:34.000000Z","updated_at":"2025-04-07T12:34:34.000000Z"},"state":{"id":35,"name":"New York","code":"NY","country_id":233,"created_at":"2025-04-07T12:34:34.000000Z","updated_at":"2025-04-07T12:34:34.000000Z"}},"message":"Partner updated successfully."}'
+        content: '{"data":{"id":1,"account_type":"individual","sub_type":"company","name":"Truck It In (TIN Pvt)","email":"dummy@dummycorp.local","phone":"1234567890","mobile":"1234567890","avatar":null,"avatar_url":null,"job_title":null,"website":"http:\/\/dummycorp.local","tax_id":"DUM123456","company_registry":"TIN001","reference":null,"is_active":null,"color":"#e80f0f","street1":null,"street2":null,"city":null,"zip":null,"country_id":null,"state_id":null,"parent_id":null,"title_id":null,"company_id":1,"industry_id":null,"user_id":null,"creator_id":1,"created_at":"2026-07-22T07:23:10.000000Z","updated_at":"2026-07-23T10:20:43.000000Z","deleted_at":null,"country":null,"state":null},"message":"Partner updated successfully."}'
         headers: []
         description: ''
       -
@@ -2526,7 +2526,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -2546,7 +2546,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -2591,7 +2591,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -2611,7 +2611,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -2656,7 +2656,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -2676,7 +2676,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -2721,7 +2721,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -2741,7 +2741,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -2885,7 +2885,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":[{"id":1,"sub_type":"company","name":"TechNova Solutions Pvt. Ltd.","email":"technova@solutions.com","phone":"1234567890","mobile":"1234567890","street1":"1234 Silicon Street","street2":"Tech Park","city":"New York","zip":"10001","country_id":233,"state_id":35,"parent_id":null,"creator_id":1,"created_at":"2025-04-07T12:34:34.000000Z","updated_at":"2025-04-08T07:46:16.000000Z","deleted_at":null,"country":{"id":233,"name":"United States","code":"US","phone_code":"1","state_required":true,"zip_required":true,"currency_id":1,"created_at":"2025-04-07T12:34:34.000000Z","updated_at":"2025-04-07T12:34:34.000000Z"},"state":{"id":35,"name":"New York","code":"NY","country_id":233,"created_at":"2025-04-07T12:34:34.000000Z","updated_at":"2025-04-07T12:34:34.000000Z"}},{"id":1,"sub_type":"company","name":"TechNova Solutions Pvt. Ltd.","email":"technova@solutions.com","phone":"1234567890","mobile":"1234567890","street1":"1234 Silicon Street","street2":"Tech Park","city":"New York","zip":"10001","country_id":233,"state_id":35,"parent_id":null,"creator_id":1,"created_at":"2025-04-07T12:34:34.000000Z","updated_at":"2025-04-08T07:46:16.000000Z","deleted_at":null,"country":{"id":233,"name":"United States","code":"US","phone_code":"1","state_required":true,"zip_required":true,"currency_id":1,"created_at":"2025-04-07T12:34:34.000000Z","updated_at":"2025-04-07T12:34:34.000000Z"},"state":{"id":35,"name":"New York","code":"NY","country_id":233,"created_at":"2025-04-07T12:34:34.000000Z","updated_at":"2025-04-07T12:34:34.000000Z"}}],"links":{"first":"\/?page=1","last":"\/?page=1","prev":null,"next":null},"meta":{"current_page":1,"from":1,"last_page":1,"links":[{"url":null,"label":"&laquo; Previous","active":false},{"url":"\/?page=1","label":"1","active":true},{"url":null,"label":"Next &raquo;","active":false}],"path":"\/","per_page":10,"to":2,"total":2}}'
+        content: '{"data":[{"id":1,"sub_type":"company","name":"Truck It In (TIN Pvt)","email":"dummy@dummycorp.local","phone":"1234567890","mobile":"1234567890","street1":null,"street2":null,"city":null,"zip":null,"country_id":null,"state_id":null,"parent_id":null,"creator_id":1,"created_at":"2026-07-22T07:23:10.000000Z","updated_at":"2026-07-23T10:20:43.000000Z","deleted_at":null,"country":null,"state":null},{"id":1,"sub_type":"company","name":"Truck It In (TIN Pvt)","email":"dummy@dummycorp.local","phone":"1234567890","mobile":"1234567890","street1":null,"street2":null,"city":null,"zip":null,"country_id":null,"state_id":null,"parent_id":null,"creator_id":1,"created_at":"2026-07-22T07:23:10.000000Z","updated_at":"2026-07-23T10:20:43.000000Z","deleted_at":null,"country":null,"state":null}],"links":{"first":"\/?page=1","last":"\/?page=1","prev":null,"next":null},"meta":{"current_page":1,"from":1,"last_page":1,"links":[{"url":null,"label":"&laquo; Previous","page":null,"active":false},{"url":"\/?page=1","label":"1","page":1,"active":true},{"url":null,"label":"Next &raquo;","page":null,"active":false}],"path":"\/","per_page":10,"to":2,"total":2}}'
         headers: []
         description: ''
       -
@@ -2898,7 +2898,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -2918,7 +2918,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -3081,7 +3081,7 @@ endpoints:
       -
         custom: []
         status: 201
-        content: '{"data":{"id":1,"sub_type":"company","name":"TechNova Solutions Pvt. Ltd.","email":"technova@solutions.com","phone":"1234567890","mobile":"1234567890","street1":"1234 Silicon Street","street2":"Tech Park","city":"New York","zip":"10001","country_id":233,"state_id":35,"parent_id":null,"creator_id":1,"created_at":"2025-04-07T12:34:34.000000Z","updated_at":"2025-04-08T07:46:16.000000Z","deleted_at":null,"country":{"id":233,"name":"United States","code":"US","phone_code":"1","state_required":true,"zip_required":true,"currency_id":1,"created_at":"2025-04-07T12:34:34.000000Z","updated_at":"2025-04-07T12:34:34.000000Z"},"state":{"id":35,"name":"New York","code":"NY","country_id":233,"created_at":"2025-04-07T12:34:34.000000Z","updated_at":"2025-04-07T12:34:34.000000Z"}},"message":"Address created successfully."}'
+        content: '{"data":{"id":1,"sub_type":"company","name":"Truck It In (TIN Pvt)","email":"dummy@dummycorp.local","phone":"1234567890","mobile":"1234567890","street1":null,"street2":null,"city":null,"zip":null,"country_id":null,"state_id":null,"parent_id":null,"creator_id":1,"created_at":"2026-07-22T07:23:10.000000Z","updated_at":"2026-07-23T10:20:43.000000Z","deleted_at":null,"country":null,"state":null},"message":"Address created successfully."}'
         headers: []
         description: ''
       -
@@ -3100,7 +3100,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -3120,7 +3120,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -3170,7 +3170,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":1,"sub_type":"company","name":"TechNova Solutions Pvt. Ltd.","email":"technova@solutions.com","phone":"1234567890","mobile":"1234567890","street1":"1234 Silicon Street","street2":"Tech Park","city":"New York","zip":"10001","country_id":233,"state_id":35,"parent_id":null,"creator_id":1,"created_at":"2025-04-07T12:34:34.000000Z","updated_at":"2025-04-08T07:46:16.000000Z","deleted_at":null,"country":{"id":233,"name":"United States","code":"US","phone_code":"1","state_required":true,"zip_required":true,"currency_id":1,"created_at":"2025-04-07T12:34:34.000000Z","updated_at":"2025-04-07T12:34:34.000000Z"},"state":{"id":35,"name":"New York","code":"NY","country_id":233,"created_at":"2025-04-07T12:34:34.000000Z","updated_at":"2025-04-07T12:34:34.000000Z"},"parent":null}}'
+        content: '{"data":{"id":1,"sub_type":"company","name":"Truck It In (TIN Pvt)","email":"dummy@dummycorp.local","phone":"1234567890","mobile":"1234567890","street1":null,"street2":null,"city":null,"zip":null,"country_id":null,"state_id":null,"parent_id":null,"creator_id":1,"created_at":"2026-07-22T07:23:10.000000Z","updated_at":"2026-07-23T10:20:43.000000Z","deleted_at":null,"country":null,"state":null,"parent":null}}'
         headers: []
         description: ''
       -
@@ -3189,7 +3189,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -3210,7 +3210,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -3385,7 +3385,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":1,"sub_type":"company","name":"TechNova Solutions Pvt. Ltd.","email":"technova@solutions.com","phone":"1234567890","mobile":"1234567890","street1":"1234 Silicon Street","street2":"Tech Park","city":"New York","zip":"10001","country_id":233,"state_id":35,"parent_id":null,"creator_id":1,"created_at":"2025-04-07T12:34:34.000000Z","updated_at":"2025-04-08T07:46:16.000000Z","deleted_at":null,"country":{"id":233,"name":"United States","code":"US","phone_code":"1","state_required":true,"zip_required":true,"currency_id":1,"created_at":"2025-04-07T12:34:34.000000Z","updated_at":"2025-04-07T12:34:34.000000Z"},"state":{"id":35,"name":"New York","code":"NY","country_id":233,"created_at":"2025-04-07T12:34:34.000000Z","updated_at":"2025-04-07T12:34:34.000000Z"},"parent":null},"message":"Address updated successfully."}'
+        content: '{"data":{"id":1,"sub_type":"company","name":"Truck It In (TIN Pvt)","email":"dummy@dummycorp.local","phone":"1234567890","mobile":"1234567890","street1":null,"street2":null,"city":null,"zip":null,"country_id":null,"state_id":null,"parent_id":null,"creator_id":1,"created_at":"2026-07-22T07:23:10.000000Z","updated_at":"2026-07-23T10:20:43.000000Z","deleted_at":null,"country":null,"state":null,"parent":null},"message":"Address updated successfully."}'
         headers: []
         description: ''
       -
@@ -3410,7 +3410,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -3430,7 +3430,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -3487,7 +3487,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -3507,7 +3507,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -3564,7 +3564,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -3584,7 +3584,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -3641,7 +3641,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -3661,7 +3661,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -3756,7 +3756,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":[{"id":1,"account_number":"123123123123","account_holder_name":"Ethan Young","can_send_money":false,"bank_id":1,"created_at":"2025-04-10T10:48:09.000000Z","updated_at":"2025-04-10T10:51:16.000000Z"},{"id":1,"account_number":"123123123123","account_holder_name":"Ethan Young","can_send_money":false,"bank_id":1,"created_at":"2025-04-10T10:48:09.000000Z","updated_at":"2025-04-10T10:51:16.000000Z"}],"links":{"first":"\/?page=1","last":"\/?page=1","prev":null,"next":null},"meta":{"current_page":1,"from":1,"last_page":1,"links":[{"url":null,"label":"&laquo; Previous","active":false},{"url":"\/?page=1","label":"1","active":true},{"url":null,"label":"Next &raquo;","active":false}],"path":"\/","per_page":10,"to":2,"total":2}}'
+        content: '{"data":[{"id":null,"account_number":"031881","account_holder_name":"Miss Jazlyn Keebler III","can_send_money":true,"bank_id":38,"created_at":null,"updated_at":null},{"id":null,"account_number":"6739857477","account_holder_name":"Miss Vella Ziemann PhD","can_send_money":true,"bank_id":39,"created_at":null,"updated_at":null}],"links":{"first":"\/?page=1","last":"\/?page=1","prev":null,"next":null},"meta":{"current_page":1,"from":1,"last_page":1,"links":[{"url":null,"label":"&laquo; Previous","page":null,"active":false},{"url":"\/?page=1","label":"1","page":1,"active":true},{"url":null,"label":"Next &raquo;","page":null,"active":false}],"path":"\/","per_page":10,"to":2,"total":2}}'
         headers: []
         description: ''
       -
@@ -3769,7 +3769,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -3789,7 +3789,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -3825,7 +3825,7 @@ endpoints:
         name: can_send_money
         description: 'Whether money can be sent from this account.'
         required: true
-        example: false
+        example: true
         type: boolean
         enumValues: []
         exampleWasSpecified: false
@@ -3844,14 +3844,14 @@ endpoints:
         deprecated: false
     cleanBodyParameters:
       account_number: '1234567890'
-      can_send_money: false
+      can_send_money: true
       bank_id: 1
     fileParameters: []
     responses:
       -
         custom: []
         status: 201
-        content: '{"data":{"id":1,"account_number":"123123123123","account_holder_name":"Ethan Young","can_send_money":false,"bank_id":1,"created_at":"2025-04-10T10:48:09.000000Z","updated_at":"2025-04-10T10:51:16.000000Z"},"message":"Bank account created successfully."}'
+        content: '{"data":{"id":null,"account_number":"88002631600564","account_holder_name":"Mr. Gerhard Dach Jr.","can_send_money":true,"bank_id":40,"created_at":null,"updated_at":null},"message":"Bank account created successfully."}'
         headers: []
         description: ''
       -
@@ -3870,7 +3870,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -3890,7 +3890,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -3940,7 +3940,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":1,"account_number":"123123123123","account_holder_name":"Ethan Young","can_send_money":false,"bank_id":1,"created_at":"2025-04-10T10:48:09.000000Z","updated_at":"2025-04-10T10:51:16.000000Z"}}'
+        content: '{"data":{"id":null,"account_number":"031881","account_holder_name":"Miss Jazlyn Keebler III","can_send_money":true,"bank_id":41,"created_at":null,"updated_at":null}}'
         headers: []
         description: ''
       -
@@ -3959,7 +3959,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -3980,7 +3980,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -4028,7 +4028,7 @@ endpoints:
         name: can_send_money
         description: 'Whether money can be sent from this account.'
         required: false
-        example: false
+        example: true
         type: boolean
         enumValues: []
         exampleWasSpecified: false
@@ -4047,14 +4047,14 @@ endpoints:
         deprecated: false
     cleanBodyParameters:
       account_number: '1234567890'
-      can_send_money: false
+      can_send_money: true
       bank_id: 1
     fileParameters: []
     responses:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":1,"account_number":"123123123123","account_holder_name":"Ethan Young","can_send_money":false,"bank_id":1,"created_at":"2025-04-10T10:48:09.000000Z","updated_at":"2025-04-10T10:51:16.000000Z"},"message":"Bank account updated successfully."}'
+        content: '{"data":{"id":null,"account_number":"88002631600564","account_holder_name":"Mr. Gerhard Dach Jr.","can_send_money":true,"bank_id":42,"created_at":null,"updated_at":null},"message":"Bank account updated successfully."}'
         headers: []
         description: ''
       -
@@ -4079,7 +4079,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -4099,7 +4099,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -4156,7 +4156,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -4176,7 +4176,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -4233,7 +4233,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -4253,7 +4253,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -4310,7 +4310,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null

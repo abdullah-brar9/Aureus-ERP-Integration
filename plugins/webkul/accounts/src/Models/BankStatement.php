@@ -21,6 +21,7 @@ class BankStatement extends Model
         'company_id',
         'journal_id',
         'currency_id',
+        'company_currency_id',
         'bank_gl_account_id',
         'creator_id',
         'name',
@@ -36,6 +37,13 @@ class BankStatement extends Model
         'total_debits',
         'total_credits',
         'closing_balance',
+        'detected_currency_code',
+        'currency_was_overridden',
+        'company_opening_balance',
+        'company_total_debits',
+        'company_total_credits',
+        'company_closing_balance',
+        'conversion_status',
         'original_filename',
         'file_hash',
         'source_sheet',
@@ -52,19 +60,24 @@ class BankStatement extends Model
     protected function casts(): array
     {
         return [
-            'date'                 => 'date',
-            'statement_start_date' => 'date',
-            'statement_end_date'   => 'date',
-            'opening_balance'      => 'decimal:4',
-            'total_debits'         => 'decimal:4',
-            'total_credits'        => 'decimal:4',
-            'closing_balance'      => 'decimal:4',
-            'balance_start'        => 'decimal:4',
-            'balance_end'          => 'decimal:4',
-            'balance_end_real'     => 'decimal:4',
-            'is_completed'         => 'boolean',
-            'validation_errors'    => 'array',
-            'raw_header'           => 'array',
+            'date'                    => 'date',
+            'statement_start_date'    => 'date',
+            'statement_end_date'      => 'date',
+            'opening_balance'         => 'decimal:4',
+            'total_debits'            => 'decimal:4',
+            'total_credits'           => 'decimal:4',
+            'closing_balance'         => 'decimal:4',
+            'currency_was_overridden' => 'boolean',
+            'company_opening_balance' => 'decimal:4',
+            'company_total_debits'    => 'decimal:4',
+            'company_total_credits'   => 'decimal:4',
+            'company_closing_balance' => 'decimal:4',
+            'balance_start'           => 'decimal:4',
+            'balance_end'             => 'decimal:4',
+            'balance_end_real'        => 'decimal:4',
+            'is_completed'            => 'boolean',
+            'validation_errors'       => 'array',
+            'raw_header'              => 'array',
         ];
     }
 
@@ -86,6 +99,11 @@ class BankStatement extends Model
     public function currency(): BelongsTo
     {
         return $this->belongsTo(Currency::class);
+    }
+
+    public function companyCurrency(): BelongsTo
+    {
+        return $this->belongsTo(Currency::class, 'company_currency_id');
     }
 
     public function bankGlAccount(): BelongsTo

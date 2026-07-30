@@ -41,7 +41,7 @@ class LedgerBalanceRepository
             ->join($this->moveTable, "{$this->lineTable}.move_id", '=', "{$this->moveTable}.id")
             ->select([
                 "{$this->lineTable}.account_id",
-                DB::raw("SUM({$this->lineTable}.balance) as balance"),
+                DB::raw('SUM('.$this->balanceExpression($context).') as balance'),
             ])
             ->whereIn("{$this->lineTable}.account_id", $accountIds)
             ->whereBetween("{$this->moveTable}.date", [
@@ -166,7 +166,7 @@ class LedgerBalanceRepository
             ->join($this->moveTable, "{$this->lineTable}.move_id", '=', "{$this->moveTable}.id")
             ->select([
                 "{$this->lineTable}.account_id",
-                DB::raw("SUM({$this->lineTable}.balance) as balance"),
+                DB::raw('SUM('.$this->balanceExpression($context).') as balance'),
             ])
             ->whereIn("{$this->lineTable}.account_id", $accountIds)
             ->where("{$this->moveTable}.date", '<=', $period->endDate->toDateString())
@@ -194,7 +194,7 @@ class LedgerBalanceRepository
             ->select([
                 "{$this->lineTable}.account_id",
                 "{$this->moveTable}.date as date",
-                DB::raw("SUM({$this->lineTable}.balance) as balance"),
+                DB::raw('SUM('.$this->balanceExpression($context).') as balance'),
             ])
             ->whereIn("{$this->lineTable}.account_id", $accountIds)
             ->whereBetween("{$this->moveTable}.date", [$rangeStart, $rangeEnd])
@@ -218,7 +218,7 @@ class LedgerBalanceRepository
             ->join($this->moveTable, "{$this->lineTable}.move_id", '=', "{$this->moveTable}.id")
             ->select([
                 "{$this->lineTable}.account_id",
-                DB::raw("SUM({$this->lineTable}.balance) as balance"),
+                DB::raw('SUM('.$this->balanceExpression($context).') as balance'),
             ])
             ->whereIn("{$this->lineTable}.account_id", $accountIds)
             ->where("{$this->moveTable}.date", '<', $dateExclusive)
@@ -243,5 +243,23 @@ class LedgerBalanceRepository
         if ($context->postedOnly) {
             $query->where("{$this->moveTable}.state", MoveState::POSTED->value);
         }
+
+        if ($context->originalCurrencyId !== null) {
+            $query->whereRaw($this->originalCurrencyExpression().' = ?', [$context->originalCurrencyId]);
+        }
+    }
+
+    protected function balanceExpression(ReportContext $context): string
+    {
+        if ($context->originalCurrencyId !== null) {
+            return "COALESCE({$this->lineTable}.original_debit, {$this->lineTable}.debit, 0) - COALESCE({$this->lineTable}.original_credit, {$this->lineTable}.credit, 0)";
+        }
+
+        return "{$this->lineTable}.balance";
+    }
+
+    protected function originalCurrencyExpression(): string
+    {
+        return "COALESCE({$this->lineTable}.original_currency_id, {$this->lineTable}.currency_id, {$this->moveTable}.original_currency_id, {$this->moveTable}.currency_id)";
     }
 }

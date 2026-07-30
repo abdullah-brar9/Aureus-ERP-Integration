@@ -31,9 +31,15 @@ function reportsPurgeAndSeed(): void
     test()->seed(ReportWorkbookSeeder::class);
 }
 
-function reportsPageUser(): User
+function reportsPageUser(?Company $company = null): User
 {
-    $user = User::factory()->create(['is_active' => true]);
+    $user = User::factory()->create([
+        'is_active'          => true,
+        'default_company_id' => $company?->id,
+    ]);
+    if ($company) {
+        $user->allowedCompanies()->syncWithoutDetaching([$company->id]);
+    }
 
     foreach (['page_accounting_financial_reports', 'page_accounting_report_mapping_review', 'page_accounting_external_providers'] as $permission) {
         Permission::findOrCreate($permission, 'web');
@@ -132,7 +138,7 @@ it('renders every seeded workbook template through the Financial Reports page', 
         'notes'             => ['Workings', 'Bank Reconciliations', 'MIS Reconciliation'],
     ];
 
-    test()->actingAs(reportsPageUser());
+    test()->actingAs(reportsPageUser($company));
 
     foreach ($expectations as $code => $needles) {
         $template = ReportTemplate::query()->where('code', $code)->firstOrFail();

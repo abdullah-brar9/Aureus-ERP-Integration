@@ -31,9 +31,9 @@ use Webkul\Support\Models\Currency;
 
 function bankEndToEndWorkbookPath(): string
 {
-    $path = getenv('ACCOUNTING_WORKBOOK_FIXTURE') ?: 'C:/Users/HP/Downloads/Copy of preview.xlsx';
+    $path = getenv('ACCOUNTING_WORKBOOK_FIXTURE');
 
-    if (! is_file($path)) {
+    if (! is_string($path) || $path === '' || ! is_file($path)) {
         test()->markTestSkipped('Set ACCOUNTING_WORKBOOK_FIXTURE to Copy of preview.xlsx.');
     }
 

@@ -2,6 +2,9 @@
 
 namespace Webkul\Accounting\Data\Bank;
 
+use Brick\Math\BigDecimal;
+use Brick\Math\RoundingMode;
+
 final class NormalizedBankTransaction
 {
     public function __construct(
@@ -9,9 +12,9 @@ final class NormalizedBankTransaction
         public readonly ?string $valueDate,
         public readonly string $description,
         public readonly ?string $reference,
-        public readonly float $debit,
-        public readonly float $credit,
-        public readonly ?float $runningBalance,
+        public readonly string $debit,
+        public readonly string $credit,
+        public readonly ?string $runningBalance,
         public readonly int $sourceRow,
         public readonly array $rawRow,
     ) {}
@@ -24,9 +27,9 @@ final class NormalizedBankTransaction
             $this->valueDate,
             preg_replace('/\s+/', ' ', mb_strtolower(trim($this->description))),
             mb_strtoupper(trim((string) $this->reference)),
-            number_format($this->debit, 4, '.', ''),
-            number_format($this->credit, 4, '.', ''),
-            number_format((float) $this->runningBalance, 4, '.', ''),
+            BigDecimal::of($this->debit)->toScale(4, RoundingMode::HalfUp),
+            BigDecimal::of($this->credit)->toScale(4, RoundingMode::HalfUp),
+            BigDecimal::of($this->runningBalance ?? '0')->toScale(4, RoundingMode::HalfUp),
         ]));
     }
 }

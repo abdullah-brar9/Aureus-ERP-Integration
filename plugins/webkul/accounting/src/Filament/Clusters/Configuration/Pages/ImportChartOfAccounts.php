@@ -76,7 +76,7 @@ class ImportChartOfAccounts extends Page implements HasForms
         $this->form->fill([
             'company_id'      => Auth::user()?->default_company_id,
             'mode'            => 'structure_only',
-            'opening_date'    => now()->startOfMonth()->toDateString(),
+            'opening_date'    => now()->startOfMonth()->subDay()->toDateString(),
             'movement_date'   => now()->toDateString(),
             'adjustment_date' => now()->endOfMonth()->toDateString(),
         ]);
@@ -120,6 +120,7 @@ class ImportChartOfAccounts extends Page implements HasForms
                         ->required(),
                     DatePicker::make('opening_date')
                         ->label('Opening date')
+                        ->helperText('Must be before the movement date so Trial Balance opening uses entries strictly before the report period.')
                         ->visible(fn (Get $get) => $get('mode') === 'with_journals'),
                     DatePicker::make('movement_date')
                         ->label('Movement date')

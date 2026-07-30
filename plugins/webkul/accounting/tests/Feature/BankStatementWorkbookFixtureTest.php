@@ -15,18 +15,13 @@ use Webkul\Support\Models\Currency;
 
 function bankWorkflowWorkbookPath(): string
 {
-    $candidates = array_filter([
-        getenv('ACCOUNTING_WORKBOOK_FIXTURE') ?: null,
-        'C:/Users/HP/Downloads/Copy of preview.xlsx',
-    ]);
+    $path = getenv('ACCOUNTING_WORKBOOK_FIXTURE');
 
-    foreach ($candidates as $candidate) {
-        if (is_file($candidate)) {
-            return $candidate;
-        }
+    if (! is_string($path) || $path === '' || ! is_file($path)) {
+        test()->markTestSkipped('Set ACCOUNTING_WORKBOOK_FIXTURE to Copy of preview.xlsx.');
     }
 
-    test()->markTestSkipped('Set ACCOUNTING_WORKBOOK_FIXTURE to Copy of preview.xlsx.');
+    return $path;
 }
 
 it('preserves the exact chart headers, classifications, and source row order', function (): void {
@@ -79,22 +74,22 @@ it('parses and reconciles both workbook bank statements', function (): void {
 
     expect($hbl->sourceSheet)->toBe('HBL Operating Account')
         ->and($hbl->transactions)->toHaveCount(34)
-        ->and($hbl->openingBalance)->toBe(3250000.0)
-        ->and($hbl->totalDebits)->toBe(3437724.0)
-        ->and($hbl->totalCredits)->toBe(4185650.0)
-        ->and($hbl->closingBalance)->toBe(3997926.0)
+        ->and($hbl->openingBalance)->toBe('3250000.0000')
+        ->and($hbl->totalDebits)->toBe('3437724.0000')
+        ->and($hbl->totalCredits)->toBe('4185650.0000')
+        ->and($hbl->closingBalance)->toBe('3997926.0000')
         ->and($validator->validate($hbl))->toBe([])
         ->and($meezan->sourceSheet)->toBe('Meezan Payroll Account')
         ->and($meezan->transactions)->toHaveCount(25)
-        ->and($meezan->openingBalance)->toBe(480000.0)
-        ->and($meezan->totalDebits)->toBe(1875588.0)
-        ->and($meezan->totalCredits)->toBe(1454500.0)
-        ->and($meezan->closingBalance)->toBe(58912.0)
+        ->and($meezan->openingBalance)->toBe('480000.0000')
+        ->and($meezan->totalDebits)->toBe('1875588.0000')
+        ->and($meezan->totalCredits)->toBe('1454500.0000')
+        ->and($meezan->closingBalance)->toBe('58912.0000')
         ->and($validator->validate($meezan))->toBe([])
         ->and(count($hbl->transactions) + count($meezan->transactions))->toBe(59)
-        ->and($hbl->openingBalance + $meezan->openingBalance)->toBe(3730000.0)
-        ->and($hbl->closingBalance + $meezan->closingBalance)->toBe(4056838.0)
-        ->and(($hbl->closingBalance + $meezan->closingBalance) - ($hbl->openingBalance + $meezan->openingBalance))->toBe(326838.0);
+        ->and((float) $hbl->openingBalance + (float) $meezan->openingBalance)->toBe(3730000.0)
+        ->and((float) $hbl->closingBalance + (float) $meezan->closingBalance)->toBe(4056838.0)
+        ->and(((float) $hbl->closingBalance + (float) $meezan->closingBalance) - ((float) $hbl->openingBalance + (float) $meezan->openingBalance))->toBe(326838.0);
 });
 
 it('blocks duplicate transaction fingerprints and failed statement reconciliation', function (): void {
@@ -109,7 +104,7 @@ it('blocks duplicate transaction fingerprints and failed statement reconciliatio
         openingBalance: $original->openingBalance,
         totalDebits: $original->totalDebits,
         totalCredits: $original->totalCredits,
-        closingBalance: $original->closingBalance + 1,
+        closingBalance: (string) ((float) $original->closingBalance + 1),
         parser: $original->parser,
         sourceSheet: $original->sourceSheet,
         rawHeader: $original->rawHeader,

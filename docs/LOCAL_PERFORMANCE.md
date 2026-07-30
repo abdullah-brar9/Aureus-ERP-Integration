@@ -1,8 +1,8 @@
 # Aureus ERP Local Performance and Stability Audit
 
-Audit date: 2026-07-22 to 2026-07-23  
-Workspace: `C:\laragon\www\aureuserp-master`  
-Branch: `accounting-stage2`  
+Audit date: 2026-07-22 to 2026-07-23
+Workspace: `C:\laragon\www\aureuserp-master`
+Branch: `accounting-stage2`
 Baseline commit: `d72300d`
 
 ## Scope and safety
@@ -338,3 +338,37 @@ memory/CPU and requests become progressively slower.
   fully interactive authenticated browser walkthrough remain manual checks.
 - The in-app browser webview failed to attach during the final retry; direct HTTP
   and authenticated-kernel checks remained available and successful.
+
+---
+
+## Multi-Currency Verification Addendum (2026-07-28)
+
+The multi-currency implementation adds approved-rate indexes and a versioned
+lookup cache, bulk ISO upsert, paginated/searchable currency management, and
+asynchronous company-scoped account/currency selectors. Report cache keys now
+include original currency context. These changes reduce repeated lookup work and
+avoid preloading every account or currency.
+
+Verification on this machine:
+
+| Check | Result |
+|---|---:|
+| Accounting suite before the multi-currency expansion | 121 tests / 584 assertions / 213.75 s |
+| Accounting suite after the expansion | 128 tests / 627 assertions / 710.66 s |
+| Support feature suite | 97 tests / 700 assertions / 332.93 s |
+| Production Vite build | passed / 34.04 s |
+| Accounting route discovery | passed / 146 routes |
+
+The accounting runs are not an apples-to-apples performance comparison: the
+later suite contains additional migration, permission, ISO, rate, bank, FX, and
+report-mode coverage and ran under different warmed state. The longer duration
+means no performance improvement is claimed. The requested comparable timings
+for bank import, currency search, mapping, cold/warm rate lookup, 1,000-row
+preview, posting, GL, Trial Balance, and exports remain outstanding.
+
+The import service remains row-oriented even though ISO synchronization is a
+bulk upsert. Chunked/bulk import writes and a reproducible benchmark harness are
+the next performance work. Keep `APP_DEBUG=false`, Debugbar disabled, Composer's
+optimized autoloader, production assets, and Laragon OPcache in place for manual
+page measurements; do not change accounting caches without rechecking company
+switching and rate invalidation.

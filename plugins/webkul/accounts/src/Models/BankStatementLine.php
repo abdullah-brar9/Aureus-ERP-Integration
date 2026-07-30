@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Webkul\Accounting\Models\BankTransactionMapping;
+use Webkul\Accounting\Models\ExchangeRate;
 use Webkul\Support\Models\Company;
 use Webkul\Support\Models\Currency;
 
@@ -25,6 +26,14 @@ class BankStatementLine extends Model
             'value_date'             => 'date',
             'debit'                  => 'decimal:4',
             'credit'                 => 'decimal:4',
+            'original_debit'         => 'decimal:4',
+            'original_credit'        => 'decimal:4',
+            'original_signed_amount' => 'decimal:4',
+            'company_debit'          => 'decimal:4',
+            'company_credit'         => 'decimal:4',
+            'company_signed_amount'  => 'decimal:4',
+            'exchange_rate'          => 'decimal:15',
+            'rate_date'              => 'date',
             'running_balance'        => 'decimal:4',
             'amount'                 => 'decimal:4',
             'amount_currency'        => 'decimal:4',
@@ -53,6 +62,21 @@ class BankStatementLine extends Model
     public function currency(): BelongsTo
     {
         return $this->belongsTo(Currency::class);
+    }
+
+    public function originalCurrency(): BelongsTo
+    {
+        return $this->belongsTo(Currency::class, 'original_currency_id');
+    }
+
+    public function companyCurrency(): BelongsTo
+    {
+        return $this->belongsTo(Currency::class, 'company_currency_id');
+    }
+
+    public function exchangeRate(): BelongsTo
+    {
+        return $this->belongsTo(ExchangeRate::class, 'exchange_rate_id');
     }
 
     public function mapping(): HasOne
