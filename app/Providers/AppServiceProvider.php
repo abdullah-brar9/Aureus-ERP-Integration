@@ -29,25 +29,27 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        if (app()->environment('production')) {
+        if (config('app.force_https')) {
             URL::forceScheme('https');
         }
     }
 
     private function registerNativeMobileComponents(): void
     {
-        foreach ([
-            'native-bottom-nav'         => BottomNav::class,
-            'native-bottom-nav-item'    => BottomNavItem::class,
-            'native-fab'                => Fab::class,
-            'native-horizontal-divider' => HorizontalDivider::class,
-            'native-side-nav'           => SideNav::class,
-            'native-side-nav-group'     => SideNavGroup::class,
-            'native-side-nav-header'    => SideNavHeader::class,
-            'native-side-nav-item'      => SideNavItem::class,
-            'native-top-bar'            => TopBar::class,
-            'native-top-bar-action'     => TopBarAction::class,
-        ] as $alias => $componentClass) {
+        foreach (
+            [
+                'native-bottom-nav'         => BottomNav::class,
+                'native-bottom-nav-item'    => BottomNavItem::class,
+                'native-fab'                => Fab::class,
+                'native-horizontal-divider' => HorizontalDivider::class,
+                'native-side-nav'           => SideNav::class,
+                'native-side-nav-group'     => SideNavGroup::class,
+                'native-side-nav-header'    => SideNavHeader::class,
+                'native-side-nav-item'      => SideNavItem::class,
+                'native-top-bar'            => TopBar::class,
+                'native-top-bar-action'     => TopBarAction::class,
+            ] as $alias => $componentClass
+        ) {
             Blade::component($alias, $componentClass);
         }
     }

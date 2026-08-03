@@ -6,6 +6,7 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Schema;
+use Webkul\Accounting\Services\Currency\IsoCurrencySynchronizer;
 
 class CurrencySeeder extends Seeder
 {
@@ -14,10 +15,9 @@ class CurrencySeeder extends Seeder
      */
     public function run(): void
     {
-        if (
-            Schema::hasColumn('currencies', 'code')
-            && DB::table('currencies')->whereNotNull('code')->exists()
-        ) {
+        if (Schema::hasColumn('currencies', 'code')) {
+            app(IsoCurrencySynchronizer::class)->synchronize();
+
             return;
         }
 

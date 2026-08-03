@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\DB;
+use Webkul\PluginManager\FreshPluginStates;
 
 return new class extends Migration
 {
@@ -9,40 +10,19 @@ return new class extends Migration
     {
         $now = now();
 
-        $plugins = [
-            'accounting',
-            'accounts',
-            'barcode',
-            'blogs',
-            'contacts',
-            'employees',
-            'inventories',
-            'invoices',
-            'maintenance',
-            'manufacturing',
-            'payments',
-            'products',
-            'projects',
-            'purchases',
-            'recruitments',
-            'sales',
-            'time-off',
-            'timesheets',
-            'website',
-        ];
-
         DB::table('plugins')->insertOrIgnore(array_map(
-            fn (string $name, int $index): array => [
+            fn (string $name, array $state, int $index): array => [
                 'name'         => $name,
                 'author'       => 'Webkul',
-                'is_active'    => true,
-                'is_installed' => true,
+                'is_active'    => $state['is_active'],
+                'is_installed' => $state['is_installed'],
                 'sort'         => $index + 1,
                 'created_at'   => $now,
                 'updated_at'   => $now,
             ],
-            $plugins,
-            array_keys($plugins),
+            array_keys(FreshPluginStates::all()),
+            array_values(FreshPluginStates::all()),
+            range(0, count(FreshPluginStates::all()) - 1),
         ));
     }
 

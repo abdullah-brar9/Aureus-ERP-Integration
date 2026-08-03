@@ -32,7 +32,7 @@ class UOMSeeder extends Seeder
 
             $user = User::first();
 
-            DB::table('unit_of_measures')->insert([
+            $unitOfMeasures = [
                 [
                     'type'        => UOMType::REFERENCE,
                     'name'        => 'Units',
@@ -293,7 +293,21 @@ class UOMSeeder extends Seeder
                     'created_at'  => Carbon::now(),
                     'updated_at'  => Carbon::now(),
                 ],
-            ]);
+            ];
+
+            $unitOfMeasures = collect($unitOfMeasures)
+                ->values()
+                ->map(fn (array $unitOfMeasure, int $index): array => [
+                    'id' => $index + 1,
+                    ...$unitOfMeasure,
+                ])
+                ->all();
+
+            DB::table('unit_of_measures')->upsert(
+                $unitOfMeasures,
+                ['id'],
+                ['type', 'name', 'factor', 'rounding', 'category_id', 'creator_id', 'updated_at'],
+            );
         } catch (Throwable $e) {
             report($e);
         }

@@ -3,6 +3,7 @@
 namespace Webkul\PluginManager\Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Webkul\PluginManager\FreshPluginStates;
 use Webkul\PluginManager\Models\Plugin;
 
 class PluginSeeder extends Seeder
@@ -30,8 +31,7 @@ class PluginSeeder extends Seeder
             ]);
 
             if (! $plugin->exists) {
-                $plugin->is_active = true;
-                $plugin->is_installed = true;
+                $plugin->fill(FreshPluginStates::for($pluginName));
             }
 
             $plugin->save();
