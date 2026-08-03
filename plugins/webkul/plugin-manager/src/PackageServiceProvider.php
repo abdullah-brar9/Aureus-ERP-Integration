@@ -128,11 +128,7 @@ abstract class PackageServiceProvider extends BasePackageServiceProvider
                 ], "{$this->package->shortName()}-migrations");
 
                 if ($this->package->runsMigrations) {
-                    if ($this->package->isCore) {
-                        $this->loadMigrationsFrom($filePath);
-                    } elseif ($this->package->isInstalled()) {
-                        $this->loadMigrationsFrom($filePath);
-                    }
+                    $this->loadMigrationsFrom($filePath);
                 }
             }
 
@@ -151,11 +147,7 @@ abstract class PackageServiceProvider extends BasePackageServiceProvider
                 ], "{$this->package->shortName()}-settings");
 
                 if ($this->package->runsSettings) {
-                    if ($this->package->isCore) {
-                        $this->loadMigrationsFrom($filePath);
-                    } elseif ($this->package->isInstalled()) {
-                        $this->loadMigrationsFrom($filePath);
-                    }
+                    $this->loadMigrationsFrom($filePath);
                 }
             }
         }

@@ -9,6 +9,7 @@
 /storage/app/backups/
 /storage/app/runtime/
 /storage/app/public/*
+!/storage/app/public/.gitignore
 /storage/logs/*
 !/storage/logs/.gitignore
 /vendor

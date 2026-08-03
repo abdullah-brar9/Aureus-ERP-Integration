@@ -34,7 +34,6 @@ class SupportServiceProvider extends PackageServiceProvider
             ->hasTranslations()
             ->hasRoutes(['api', 'web'])
             ->hasMigrations([
-                '2024_11_05_105102_create_plugins_table',
                 '2024_11_05_105112_create_plugin_dependencies_table',
                 '2024_12_06_061927_create_currencies_table',
                 '2024_12_10_092651_create_countries_table',
@@ -46,7 +45,6 @@ class SupportServiceProvider extends PackageServiceProvider
                 '2024_12_12_115256_create_activity_types_table',
                 '2024_12_12_115728_create_activity_plan_templates_table',
                 '2024_12_17_082318_create_activity_type_suggestions_table',
-                '2025_01_03_061444_create_email_templates_table',
                 '2025_01_03_061445_create_email_logs_table',
                 '2025_01_03_105625_create_unit_of_measure_categories_table',
                 '2025_01_03_105627_create_unit_of_measures_table',
@@ -61,11 +59,13 @@ class SupportServiceProvider extends PackageServiceProvider
                 '2025_08_08_104814_alter_utm_campaigns_table',
                 '2025_10_10_080114_create_currency_rates_table',
                 '2025_11_14_102615_alter_currency_rates_table',
+                '2026_03_09_000001_add_unique_index_to_companies_name',
                 '2026_03_18_000001_alter_unit_of_measures_factor_precision',
                 '2026_04_02_000001_create_calendars_table',
                 '2026_04_29_065935_add_resource_columns_in_calendar_leaves_table',
                 '2026_05_01_065935_add_resource_columns_in_calendar_attendances_table',
                 '2026_07_10_000000_fix_unit_of_measures_factor_precision',
+                '2026_08_03_093616_create_email_templates_table',
             ])
             ->runsMigrations()
             ->hasSettings([

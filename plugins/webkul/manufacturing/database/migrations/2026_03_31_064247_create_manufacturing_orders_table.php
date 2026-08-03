@@ -65,9 +65,7 @@ return new class extends Migration
                 ->nullOnDelete();
 
             $table->foreignId('procurement_group_id')
-                ->nullable()
-                ->constrained('inventories_procurement_groups')
-                ->nullOnDelete();
+                ->nullable();
 
             $table->foreignId('bill_of_material_id')
                 ->nullable()

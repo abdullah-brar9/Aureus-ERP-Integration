@@ -69,6 +69,7 @@ class ManufacturingServiceProvider extends PackageServiceProvider
                 '2026_04_02_000002_alter_inventories_warehouses_table',
                 '2026_04_02_000003_alter_inventories_moves_table',
                 '2026_04_02_000004_alter_inventories_move_lines_table',
+                '2026_08_03_095313_add_procurement_group_foreign_key_to_manufacturing_orders_table',
             ])
             ->runsMigrations()
             ->hasSettings([

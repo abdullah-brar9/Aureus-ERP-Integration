@@ -11,7 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('manufacturing_work_orders', function (Blueprint $table) {
+        $calendarLeaveTable = Schema::hasTable('calendar_leaves') ? 'calendar_leaves' : 'employees_calendar_leaves';
+
+        Schema::create('manufacturing_work_orders', function (Blueprint $table) use ($calendarLeaveTable) {
             $table->id();
             $table->string('name');
             $table->integer('sort')->nullable();
@@ -46,7 +48,7 @@ return new class extends Migration
 
             $table->foreignId('calendar_leave_id')
                 ->nullable()
-                ->constrained('calendar_leaves')
+                ->constrained($calendarLeaveTable)
                 ->nullOnDelete();
 
             $table->foreignId('operation_id')
