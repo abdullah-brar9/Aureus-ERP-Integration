@@ -144,7 +144,20 @@ class BankStatementImportService
                 'is_completed'            => false,
             ]);
 
-            $fsTagIndex = array_search('FS Tag', $normalized->rawHeader, true);
+            $fsTagIndex = false;
+
+            foreach ($normalized->rawHeader as $headerRow) {
+                if (! is_array($headerRow)) {
+                    continue;
+                }
+
+                $index = array_search('FS Tag', $headerRow, true);
+
+                if ($index !== false) {
+                    $fsTagIndex = $index;
+                    break;
+                }
+            }
 
             foreach ($normalized->transactions as $sort => $transaction) {
                 $conversion = $conversions['transactions'][$sort];
