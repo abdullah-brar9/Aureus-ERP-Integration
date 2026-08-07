@@ -16,6 +16,7 @@ use Webkul\Accounting\Enums\BankReviewStatus;
 use Webkul\Accounting\Enums\ConversionStatus;
 use Webkul\Accounting\Exceptions\MissingExchangeRateException;
 use Webkul\Accounting\Models\BankTransactionMapping;
+use Webkul\Accounting\Models\FsTag;
 use Webkul\Accounting\Services\Currency\CompanyCurrencyService;
 use Webkul\Accounting\Services\Currency\ExchangeRateService;
 use Webkul\Support\Models\Company;
@@ -59,7 +60,8 @@ class BankStatementImportService
             ->whereDate('statement_end_date', $normalized->statementEndDate)
             ->where('file_hash', $fileHash)
             ->where('parser', $normalized->parser)
-            ->exists()) {
+            ->exists()
+        ) {
             throw new RuntimeException('This bank statement source, account, currency and period have already been imported for the company.');
         }
 
@@ -142,6 +144,8 @@ class BankStatementImportService
                 'is_completed'            => false,
             ]);
 
+            $fsTagIndex = array_search('FS Tag', $normalized->rawHeader, true);
+
             foreach ($normalized->transactions as $sort => $transaction) {
                 $conversion = $conversions['transactions'][$sort];
                 $fingerprint = $transaction->fingerprint($normalized->bankAccountNumber);
@@ -188,6 +192,20 @@ class BankStatementImportService
                     'is_reconciled'           => false,
                 ]);
 
+                $fsTagCode = $fsTagIndex !== false
+                    ? trim((string) ($transaction->rawRow[$fsTagIndex] ?? ''))
+                    : '';
+
+                $fsTag = null;
+
+                if ($fsTagCode !== '') {
+                    $fsTag = FsTag::query()
+                        ->where('company_id', $company->id)
+                        ->where('code', $fsTagCode)
+                        ->where('is_active', true)
+                        ->first();
+                }
+
                 BankTransactionMapping::query()->create([
                     'company_id'           => $company->id,
                     'statement_line_id'    => $line->id,
@@ -200,7 +218,14 @@ class BankStatementImportService
                     'rate_source'          => $conversion['rate_source'],
                     'rate_type'            => $conversion['rate_type'],
                     'conversion_status'    => $conversion['conversion_status'],
-                    'review_status'        => BankReviewStatus::Unmapped,
+
+                    'fs_tag_id'            => $fsTag?->id,
+                    'match_type'           => $fsTag ? 'fs_tag' : null,
+
+                    'review_status'        => $fsTagCode !== '' && ! $fsTag
+                        ? BankReviewStatus::NeedsReview
+                        : BankReviewStatus::Unmapped,
+
                     'posting_status'       => BankPostingStatus::NotPosted,
                 ]);
             }
@@ -266,7 +291,7 @@ class BankStatementImportService
                 $transactions[] = [
                     'company_debit'        => $companyDebit,
                     'company_credit'       => $companyCredit,
-                    'company_signed_amount'=> $companySigned,
+                    'company_signed_amount' => $companySigned,
                     'exchange_rate_id'     => $rate->recordId,
                     'exchange_rate'        => $rate->rate,
                     'rate_date'            => $rate->effectiveDate,
@@ -277,9 +302,14 @@ class BankStatementImportService
             } catch (MissingExchangeRateException) {
                 $complete = false;
                 $transactions[] = [
-                    'company_debit'     => null, 'company_credit' => null, 'company_signed_amount' => null,
-                    'exchange_rate_id'  => null, 'exchange_rate' => null, 'rate_date' => $date,
-                    'rate_source'       => null, 'rate_type' => 'transaction',
+                    'company_debit'     => null,
+                    'company_credit' => null,
+                    'company_signed_amount' => null,
+                    'exchange_rate_id'  => null,
+                    'exchange_rate' => null,
+                    'rate_date' => $date,
+                    'rate_source'       => null,
+                    'rate_type' => 'transaction',
                     'conversion_status' => ConversionStatus::MissingRate->value,
                 ];
             }
