@@ -70,12 +70,30 @@ final class ImportExecutionService
                         'canonical_id'   => $line->id,
                         'processed_at'   => now(),
                     ]);
-                    $tagCode = trim((string) (($sourceRow->transformed_values ?? [])['fs_tag'] ?? ''));
+                    $tagCode = trim((string) (
+                        ($sourceRow->transformed_values ?? [])['FS Tag']
+                        ?? ($sourceRow->transformed_values ?? [])['fs_tag']
+                        ?? ''
+                    ));
+
+                    $tag = null;
+
                     if ($tagCode !== '') {
-                        $tag = FsTag::query()->where('company_id', $lockedRun->company_id)->where('code', $tagCode)->where('is_active', true)->first();
-                        if ($tag) {
-                            $line->mapping?->update(['fs_tag_id' => $tag->id, 'match_type' => 'fs_tag']);
-                        }
+                        $tag = FsTag::query()
+                            ->where('company_id', $lockedRun->company_id)
+                            ->where('code', $tagCode)
+                            ->where('is_active', true)
+                            ->first();
+                    }
+
+                    if ($line->mapping) {
+                        $line->mapping->update([
+                            'fs_tag_id' => $tag?->id,
+                            'match_type' => $tag ? 'fs_tag' : null,
+                            'review_status' => $tagCode !== '' && ! $tag
+                                ? 'needs_review'
+                                : $line->mapping->review_status,
+                        ]);
                     }
                     $imported++;
                 }
@@ -126,9 +144,9 @@ final class ImportExecutionService
             throw new RuntimeException('The bank statement import has no passing rows.');
         }
 
-        $values = $rows->map(fn (ImportSourceRow $row): array => (array) $row->transformed_values);
+        $values = $rows->map(fn(ImportSourceRow $row): array => (array) $row->transformed_values);
         foreach (['currency', 'bank_account_number', 'journal_code', 'bank_gl_code'] as $field) {
-            if ($values->pluck($field)->filter(fn ($value): bool => $value !== null && $value !== '')->map(fn ($value): string => mb_strtoupper(trim((string) $value)))->unique()->count() !== 1) {
+            if ($values->pluck($field)->filter(fn($value): bool => $value !== null && $value !== '')->map(fn($value): string => mb_strtoupper(trim((string) $value)))->unique()->count() !== 1) {
                 throw new RuntimeException("All bank statement rows must use one {$field}.");
             }
         }
@@ -139,7 +157,7 @@ final class ImportExecutionService
         $journal = Journal::query()->where('company_id', $run->company_id)
             ->whereRaw('UPPER(code) = ?', [mb_strtoupper((string) $first['journal_code'])])->firstOrFail();
         $bankAccount = Account::query()->whereRaw('UPPER(code) = ?', [mb_strtoupper((string) $first['bank_gl_code'])])
-            ->whereHas('companies', fn ($query) => $query->where('companies.id', $run->company_id))->firstOrFail();
+            ->whereHas('companies', fn($query) => $query->where('companies.id', $run->company_id))->firstOrFail();
 
         $totalDebits = BigDecimal::zero();
         $totalCredits = BigDecimal::zero();
@@ -227,8 +245,8 @@ final class ImportExecutionService
             'mobile'       => $values['mobile'] ?? null,
             'tax_id'       => $values['tax_id'] ?? null,
             'is_active'    => $values['is_active'] ?? true,
-            'supplier_rank'=> $run->profile->entity_type === 'vendor' ? 1 : 0,
-            'customer_rank'=> $run->profile->entity_type === 'customer' ? 1 : 0,
+            'supplier_rank' => $run->profile->entity_type === 'vendor' ? 1 : 0,
+            'customer_rank' => $run->profile->entity_type === 'customer' ? 1 : 0,
         ]);
 
         if (! empty($values['payment_term'])) {
@@ -265,7 +283,7 @@ final class ImportExecutionService
             'work_phone'   => $values['work_phone'] ?? null,
             'mobile_phone' => $values['mobile_phone'] ?? null,
             'job_title'    => $values['job_title'] ?? null,
-            'department_id'=> $department?->id,
+            'department_id' => $department?->id,
             'is_active'    => $values['is_active'] ?? true,
         ]);
     }
@@ -322,10 +340,10 @@ final class ImportExecutionService
 
         $debitAccount = Account::query()->postable()->where('deprecated', false)
             ->whereRaw('UPPER(code) = ?', [mb_strtoupper((string) $values['debit_gl_code'])])
-            ->whereHas('companies', fn ($query) => $query->where('companies.id', $run->company_id))->firstOrFail();
+            ->whereHas('companies', fn($query) => $query->where('companies.id', $run->company_id))->firstOrFail();
         $creditAccount = Account::query()->postable()->where('deprecated', false)
             ->whereRaw('UPPER(code) = ?', [mb_strtoupper((string) $values['credit_gl_code'])])
-            ->whereHas('companies', fn ($query) => $query->where('companies.id', $run->company_id))->firstOrFail();
+            ->whereHas('companies', fn($query) => $query->where('companies.id', $run->company_id))->firstOrFail();
         if ($debitAccount->is($creditAccount)) {
             throw new RuntimeException('Document debit and credit GL accounts must be different.');
         }
@@ -338,27 +356,54 @@ final class ImportExecutionService
         }
         $companyAmount = app(ExchangeRateService::class)->convert($originalAmount, $rate);
         $common = [
-            'move_id'             => $move->id, 'journal_id' => $journal->id, 'company_id' => $run->company_id,
-            'company_currency_id' => $company->currency_id, 'currency_id' => $currency->id, 'original_currency_id' => $currency->id,
-            'partner_id'          => $partner?->id, 'date' => $values['date'], 'invoice_date' => $values['date'],
-            'date_maturity'       => $values['due_date'] ?? $values['date'], 'parent_state' => MoveState::DRAFT,
-            'reference'           => $values['reference'], 'name' => $values['description'] ?? $values['reference'],
+            'move_id'             => $move->id,
+            'journal_id' => $journal->id,
+            'company_id' => $run->company_id,
+            'company_currency_id' => $company->currency_id,
+            'currency_id' => $currency->id,
+            'original_currency_id' => $currency->id,
+            'partner_id'          => $partner?->id,
+            'date' => $values['date'],
+            'invoice_date' => $values['date'],
+            'date_maturity'       => $values['due_date'] ?? $values['date'],
+            'parent_state' => MoveState::DRAFT,
+            'reference'           => $values['reference'],
+            'name' => $values['description'] ?? $values['reference'],
             'display_type'        => DisplayType::PRODUCT,
-            'exchange_rate_id'    => $rate->recordId, 'exchange_rate' => $rate->rate, 'rate_date' => $rate->effectiveDate,
-            'rate_source'         => $rate->source, 'rate_type' => $rate->type, 'conversion_status' => 'complete', 'is_imported' => true,
+            'exchange_rate_id'    => $rate->recordId,
+            'exchange_rate' => $rate->rate,
+            'rate_date' => $rate->effectiveDate,
+            'rate_source'         => $rate->source,
+            'rate_type' => $rate->type,
+            'conversion_status' => 'complete',
+            'is_imported' => true,
         ];
         MoveLine::query()->create($common + [
-            'sort'            => 0, 'account_id' => $debitAccount->id,
-            'debit'           => $companyAmount, 'credit' => '0.0000', 'balance' => $companyAmount,
-            'original_debit'  => $originalAmount, 'original_credit' => '0.0000', 'original_signed_amount' => $originalAmount,
-            'company_debit'   => $companyAmount, 'company_credit' => '0.0000', 'company_signed_amount' => $companyAmount,
+            'sort'            => 0,
+            'account_id' => $debitAccount->id,
+            'debit'           => $companyAmount,
+            'credit' => '0.0000',
+            'balance' => $companyAmount,
+            'original_debit'  => $originalAmount,
+            'original_credit' => '0.0000',
+            'original_signed_amount' => $originalAmount,
+            'company_debit'   => $companyAmount,
+            'company_credit' => '0.0000',
+            'company_signed_amount' => $companyAmount,
             'amount_currency' => $originalAmount,
         ]);
         MoveLine::query()->create($common + [
-            'sort'            => 1, 'account_id' => $creditAccount->id,
-            'debit'           => '0.0000', 'credit' => $companyAmount, 'balance' => BigDecimal::of($companyAmount)->negated()->__toString(),
-            'original_debit'  => '0.0000', 'original_credit' => $originalAmount, 'original_signed_amount' => BigDecimal::of($originalAmount)->negated()->__toString(),
-            'company_debit'   => '0.0000', 'company_credit' => $companyAmount, 'company_signed_amount' => BigDecimal::of($companyAmount)->negated()->__toString(),
+            'sort'            => 1,
+            'account_id' => $creditAccount->id,
+            'debit'           => '0.0000',
+            'credit' => $companyAmount,
+            'balance' => BigDecimal::of($companyAmount)->negated()->__toString(),
+            'original_debit'  => '0.0000',
+            'original_credit' => $originalAmount,
+            'original_signed_amount' => BigDecimal::of($originalAmount)->negated()->__toString(),
+            'company_debit'   => '0.0000',
+            'company_credit' => $companyAmount,
+            'company_signed_amount' => BigDecimal::of($companyAmount)->negated()->__toString(),
             'amount_currency' => BigDecimal::of($originalAmount)->negated()->__toString(),
         ]);
 
