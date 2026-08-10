@@ -1,247 +1,985 @@
+# Aureus ERP — AGENTS.md
+
 <laravel-boost-guidelines>
+
 === foundation rules ===
 
 # Laravel Boost Guidelines
 
-The Laravel Boost guidelines are specifically curated by Laravel maintainers for this application. These guidelines should be followed closely to ensure the best experience when building Laravel applications.
+The Laravel Boost guidelines are specifically curated by Laravel maintainers for this application. These guidelines should be followed closely when building this Laravel application.
 
 ## Foundational Context
 
-This application is a Laravel application and its main Laravel ecosystems package & versions are below. You are an expert with them all. Ensure you abide by these specific packages & versions.
+This application is a Laravel application.
 
-- php - 8.3.21
-- filament/filament (FILAMENT) - v4
-- laravel/framework (LARAVEL) - v11
-- laravel/prompts (PROMPTS) - v0
-- laravel/sanctum (SANCTUM) - v4
-- livewire/livewire (LIVEWIRE) - v3
-- laravel/mcp (MCP) - v0
-- laravel/pint (PINT) - v1
-- laravel/sail (SAIL) - v1
-- pestphp/pest (PEST) - v4
-- phpunit/phpunit (PHPUNIT) - v12
-- tailwindcss (TAILWINDCSS) - v4
+IMPORTANT: Treat the actual repository and installed dependencies as the source of truth for package versions.
+
+Before making version-sensitive changes, verify versions using:
+
+- `composer.json`
+- `composer.lock`
+- `package.json`
+- `package-lock.json`
+- Laravel Boost application information when available
+
+Do not assume a Laravel, Filament, Livewire, PHP, Pest, PHPUnit, Tailwind, or other package version when the repository shows otherwise.
 
 ## Skills Activation
 
 This project has domain-specific skills available. You MUST activate the relevant skill whenever you work in that domain—don't wait until you're stuck.
 
-- `pest-testing` — Tests applications using the Pest 4 PHP framework. Activates when writing tests, creating unit or feature tests, adding assertions, testing Livewire components, browser testing, debugging test failures, working with datasets or mocking; or when the user mentions test, spec, TDD, expects, assertion, coverage, or needs to verify functionality works.
-- `tailwindcss-development` — Styles applications using Tailwind CSS v4 utilities. Activates when adding styles, restyling components, working with gradients, spacing, layout, flex, grid, responsive design, dark mode, colors, typography, or borders; or when the user mentions CSS, styling, classes, Tailwind, restyle, hero section, cards, buttons, or any visual/UI changes.
+- `pest-testing` — Tests applications using Pest. Activate when writing tests, creating unit or feature tests, adding assertions, testing Livewire components, browser testing, debugging test failures, working with datasets or mocking; or when the user mentions tests, specs, TDD, expects, assertions, coverage, or needs to verify functionality works.
+- `tailwindcss-development` — Styles applications using Tailwind CSS. Activate when adding styles, restyling components, working with gradients, spacing, layout, flex, grid, responsive design, dark mode, colors, typography, or borders; or when the user mentions CSS, styling, classes, Tailwind, restyling, cards, buttons, or other visual/UI changes.
 
 ## Conventions
 
-- You must follow all existing code conventions used in this application. When creating or editing a file, check sibling files for the correct structure, approach, and naming.
-- Use descriptive names for variables and methods. For example, `isRegisteredForDiscounts`, not `discount()`.
-- Check for existing components to reuse before writing a new one.
+- Follow all existing code conventions used in this application.
+- When creating or editing a file, check sibling files for the correct structure, approach, and naming.
+- Use descriptive names for variables and methods.
+- Check for existing components, services, models, actions, and abstractions before writing new ones.
+- Prefer reuse over duplication.
+- Do not create new top-level/base directories without approval.
+- Do not change application dependencies without approval.
 
 ## Verification Scripts
 
-- Do not create verification scripts or tinker when tests cover that functionality and prove they work. Unit and feature tests are more important.
+Do not create temporary verification scripts or use Tinker when automated tests already cover the functionality and prove that it works.
 
-## Application Structure & Architecture
-
-- Stick to existing directory structure; don't create new base folders without approval.
-- Do not change the application's dependencies without approval.
+Tests are the preferred verification mechanism.
 
 ## Frontend Bundling
 
-- If the user doesn't see a frontend change reflected in the UI, it could mean they need to run `npm run build`, `npm run dev`, or `composer run dev`. Ask them.
+If a frontend change is not reflected in the UI, consider whether the application needs:
+
+```bash
+npm run build
+```
+
+or:
+
+```bash
+npm run dev
+```
+
+or the repository's existing development command.
 
 ## Documentation Files
 
-- You must only create documentation files if explicitly requested by the user.
+Only create documentation files when explicitly requested by the user.
 
 ## Replies
 
-- Be concise in your explanations - focus on what's important rather than explaining obvious details.
+Keep explanations concise and implementation-focused.
+
+Focus on:
+
+- what changed
+- what was verified
+- what failed
+- what requires user action
+
+Do not explain obvious concepts unless asked.
 
 === boost rules ===
 
 # Laravel Boost
 
-- Laravel Boost is an MCP server that comes with powerful tools designed specifically for this application. Use them.
+Laravel Boost is available for application-aware inspection and Laravel ecosystem guidance.
+
+Use Boost whenever its tools are relevant.
+
+## Searching Documentation
+
+Use Boost's `search-docs` before making Laravel ecosystem implementation decisions when available.
+
+This is especially important for:
+
+- Laravel
+- Filament
+- Livewire
+- Pest
+- Tailwind CSS
+- Sanctum
+- Laravel MCP
+- other installed Laravel ecosystem packages
+
+Boost automatically uses the installed package versions.
+
+Use broad, simple, topic-focused queries.
+
+Examples:
+
+```text
+bulk table actions
+resource table testing
+eloquent relationships
+file uploads
+database transactions
+```
+
+Do not unnecessarily include package names in queries because Boost already knows the installed packages.
 
 ## Artisan
 
-- Use the `list-artisan-commands` tool when you need to call an Artisan command to double-check the available parameters.
+Use `list-artisan-commands` when an Artisan command or its available parameters are uncertain.
+
+When generating files through Artisan, use the appropriate:
+
+```bash
+php artisan make:...
+```
+
+command.
+
+Pass:
+
+```bash
+--no-interaction
+```
+
+where applicable.
 
 ## URLs
 
-- Whenever you share a project URL with the user, you should use the `get-absolute-url` tool to ensure you're using the correct scheme, domain/IP, and port.
+Whenever sharing an application URL, use Boost's `get-absolute-url` when available instead of guessing the scheme, host, IP, domain, or port.
 
 ## Tinker / Debugging
 
-- You should use the `tinker` tool when you need to execute PHP to debug code or query Eloquent models directly.
-- Use the `database-query` tool when you only need to read from the database.
-- Use the `database-schema` tool to inspect table structure before writing migrations or models.
+Use Boost's `tinker` when PHP/application execution is required for debugging.
 
-## Reading Browser Logs With the `browser-logs` Tool
+Use `database-query` when only read-only database inspection is required.
 
-- You can read browser logs, errors, and exceptions using the `browser-logs` tool from Boost.
-- Only recent browser logs will be useful - ignore old logs.
+Use `database-schema` before making assumptions about database tables, columns, indexes, or relationships.
 
-## Searching Documentation (Critically Important)
+## Browser Logs
 
-- Boost comes with a powerful `search-docs` tool you should use before trying other approaches when working with Laravel or Laravel ecosystem packages. This tool automatically passes a list of installed packages and their versions to the remote Boost API, so it returns only version-specific documentation for the user's circumstance. You should pass an array of packages to filter on if you know you need docs for particular packages.
-- Search the documentation before making code changes to ensure we are taking the correct approach.
-- Use multiple, broad, simple, topic-based queries at once. For example: `['rate limiting', 'routing rate limiting', 'routing']`. The most relevant results will be returned first.
-- Do not add package names to queries; package information is already shared. For example, use `test resource table`, not `filament 4 test resource table`.
+Use `browser-logs` for browser/runtime errors when available.
 
-### Available Search Syntax
-
-1. Simple Word Searches with auto-stemming - query=authentication - finds 'authenticate' and 'auth'.
-2. Multiple Words (AND Logic) - query=rate limit - finds knowledge containing both "rate" AND "limit".
-3. Quoted Phrases (Exact Position) - query="infinite scroll" - words must be adjacent and in that order.
-4. Mixed Queries - query=middleware "rate limit" - "middleware" AND exact phrase "rate limit".
-5. Multiple Queries - queries=["authentication", "middleware"] - ANY of these terms.
+Only recent logs should be considered relevant.
 
 === php rules ===
 
 # PHP
 
-- Always use curly braces for control structures, even for single-line bodies.
+Always use curly braces for control structures, including single-line bodies.
 
-## Constructors
+Use explicit return type declarations for methods and functions.
 
-- Use PHP 8 constructor property promotion in `__construct()`.
-    - `public function __construct(public GitHub $github) { }`
-- Do not allow empty `__construct()` methods with zero parameters unless the constructor is private.
+Use appropriate PHP type hints for parameters.
 
-## Type Declarations
+Example:
 
-- Always use explicit return type declarations for methods and functions.
-- Use appropriate PHP type hints for method parameters.
-
-<!-- Explicit Return Types and Method Params -->
 ```php
 protected function isAccessible(User $user, ?string $path = null): bool
 {
-    ...
+    //
 }
 ```
 
-## Enums
+Use constructor property promotion where appropriate.
 
-- Typically, keys in an Enum should be TitleCase. For example: `FavoritePerson`, `BestLake`, `Monthly`.
+Example:
 
-## Comments
+```php
+public function __construct(
+    protected ExchangeRateService $exchangeRates,
+) {}
+```
 
-- Prefer PHPDoc blocks over inline comments. Never use comments within the code itself unless the logic is exceptionally complex.
+Do not create public empty constructors.
 
-## PHPDoc Blocks
+Prefer PHPDoc blocks over unnecessary inline comments.
 
-- Add useful array shape type definitions when appropriate.
+Only use inline comments when logic is unusually complex and cannot be made clear through naming and structure.
+
+Add useful array-shape PHPDoc definitions where appropriate.
+
+Follow the repository's existing Enum conventions.
 
 === laravel/core rules ===
 
-# Do Things the Laravel Way
+# Laravel Application Rules
 
-- Use `php artisan make:` commands to create new files (i.e. migrations, controllers, models, etc.). You can list available Artisan commands using the `list-artisan-commands` tool.
-- If you're creating a generic PHP class, use `php artisan make:class`.
-- Pass `--no-interaction` to all Artisan commands to ensure they work without user input. You should also pass the correct `--options` to ensure correct behavior.
+Use Laravel-native approaches unless Aureus ERP already establishes another convention.
+
+Prefer:
+
+- Eloquent models
+- Eloquent relationships
+- policies and gates
+- service classes
+- Form Requests
+- named routes
+- queues for expensive operations
+- configuration files
+- events/listeners where appropriate
 
 ## Database
 
-- Always use proper Eloquent relationship methods with return type hints. Prefer relationship methods over raw queries or manual joins.
-- Use Eloquent models and relationships before suggesting raw database queries.
-- Avoid `DB::`; prefer `Model::query()`. Generate code that leverages Laravel's ORM capabilities rather than bypassing them.
-- Generate code that prevents N+1 query problems by using eager loading.
-- Use Laravel's query builder for very complex database operations.
+Prefer Eloquent models and relationships over raw SQL.
 
-### Model Creation
+Avoid `DB::` when Eloquent or an existing model abstraction provides the required functionality.
 
-- When creating new models, create useful factories and seeders for them too. Ask the user if they need any other things, using `list-artisan-commands` to check the available options to `php artisan make:model`.
+Laravel Query Builder may be used for genuinely complex operations or where existing application architecture already uses it appropriately.
 
-### APIs & Eloquent Resources
+Prevent N+1 query problems using eager loading.
 
-- For APIs, default to using Eloquent API Resources and API versioning unless existing API routes do not, then you should follow existing application convention.
+Before modifying the database:
+
+1. Inspect the existing schema.
+2. Inspect relevant models.
+3. Inspect existing migrations.
+4. Inspect relationships and foreign keys.
+5. Inspect multi-company implications.
+6. Inspect existing tests.
+
+Never assume a table or column does not exist.
+
+Preserve all existing column attributes when modifying columns.
+
+Respect foreign-key and deletion behavior.
+
+Do not introduce destructive migrations without explicitly identifying their consequences.
+
+## Model Creation
+
+When creating models, use the appropriate Artisan generator.
+
+Create useful factories and seeders where consistent with existing application conventions and required by the task.
 
 ## Controllers & Validation
 
-- Always create Form Request classes for validation rather than inline validation in controllers. Include both validation rules and custom error messages.
-- Check sibling Form Requests to see if the application uses array or string based validation rules.
+Use Form Request classes for validation rather than large inline controller validation blocks.
+
+Follow existing sibling Form Request conventions.
 
 ## Authentication & Authorization
 
-- Use Laravel's built-in authentication and authorization features (gates, policies, Sanctum, etc.).
+Use Laravel's authentication and authorization features.
+
+Never rely solely on frontend/UI visibility for authorization.
+
+Authorization must also be enforced server-side.
 
 ## URL Generation
 
-- When generating links to other pages, prefer named routes and the `route()` function.
+Prefer named routes and:
+
+```php
+route(...)
+```
+
+when generating internal application links.
 
 ## Queues
 
-- Use queued jobs for time-consuming operations with the `ShouldQueue` interface.
+Use queued jobs implementing `ShouldQueue` for time-consuming operations where appropriate.
 
 ## Configuration
 
-- Use environment variables only in configuration files - never use the `env()` function directly outside of config files. Always use `config('app.name')`, not `env('APP_NAME')`.
+Do not use:
 
-## Testing
+```php
+env(...)
+```
 
-- When creating models for tests, use the factories for the models. Check if the factory has custom states that can be used before manually setting up the model.
-- Faker: Use methods such as `$this->faker->word()` or `fake()->randomDigit()`. Follow existing conventions whether to use `$this->faker` or `fake()`.
-- When creating tests, make use of `php artisan make:test [options] {name}` to create a feature test, and pass `--unit` to create a unit test. Most tests should be feature tests.
+directly in application code.
 
-## Vite Error
+Use configuration values such as:
 
-- If you receive an "Illuminate\Foundation\ViteException: Unable to locate file in Vite manifest" error, you can run `npm run build` or ask the user to run `npm run dev` or `composer run dev`.
+```php
+config('app.name')
+```
 
-=== laravel/v11 rules ===
+Environment variables belong in configuration files.
 
-# Laravel 11
+=== application architecture rules ===
 
-- CRITICAL: ALWAYS use `search-docs` tool for version-specific Laravel documentation and updated code examples.
-- Laravel 11 brought a new streamlined file structure which this project now uses.
+# Aureus ERP Architecture
 
-## Laravel 11 Structure
+Aureus ERP is a modular ERP application.
 
-- In Laravel 11, middleware are no longer registered in `app/Http/Kernel.php`.
-- Middleware are configured declaratively in `bootstrap/app.php` using `Application::configure()->withMiddleware()`.
-- `bootstrap/app.php` is the file to register middleware, exceptions, and routing files.
-- `bootstrap/providers.php` contains application specific service providers.
-- No app\Console\Kernel.php - use `bootstrap/app.php` or `routes/console.php` for console configuration.
-- Commands auto-register - files in `app/Console/Commands/` are automatically available and do not require manual registration.
+Important areas include:
 
-## Database
+- Accounting
+- Accounts / Chart of Accounts
+- Banking
+- Bank Statement Imports
+- Transaction Mapping
+- FS Tags
+- Journal Entries
+- General Ledger
+- Financial Reporting
+- Multi-company accounting
+- Multi-currency accounting
+- Permissions
+- Plugin management
+- Filament administration
+- Supporting ERP modules
 
-- When modifying a column, the migration must include all of the attributes that were previously defined on the column. Otherwise, they will be dropped and lost.
-- Laravel 11 allows limiting eagerly loaded records natively, without external packages: `$query->latest()->limit(10);`.
+Always respect existing plugin/module boundaries.
 
-### Models
+Before creating new abstractions, determine whether equivalent functionality already exists elsewhere in the ERP.
 
-- Casts can and likely should be set in a `casts()` method on a model rather than the `$casts` property. Follow existing conventions from other models.
+=== multi-company rules ===
 
-## New Artisan Commands
+# Multi-Company Safety
 
-- List Artisan commands using Boost's MCP tool, if available. New commands available in Laravel 11:
-    - `php artisan make:enum`
-    - `php artisan make:class`
-    - `php artisan make:interface`
+Aureus ERP is multi-company.
 
-=== pint/core rules ===
+Any business or accounting change must be evaluated for company isolation.
 
-# Laravel Pint Code Formatter
+Determine whether records must be scoped through:
 
-- You must run `vendor/bin/pint --dirty --format agent` before finalizing changes to ensure your code matches the project's expected style.
-- Do not run `vendor/bin/pint --test --format agent`, simply run `vendor/bin/pint --format agent` to fix any formatting issues.
+- `company_id`
+- authenticated user's company
+- company relationships
+- explicit cross-company permissions
 
-=== pest/core rules ===
+Never allow one company's records to leak into another company's:
 
-## Pest
+- accounts
+- bank statements
+- transactions
+- transaction mappings
+- journals
+- reports
+- imports
+- configurations
+- operational data
 
-- This project uses Pest for testing. Create tests: `php artisan make:test --pest {name}`.
-- Run tests: `php artisan test --compact` or filter: `php artisan test --compact --filter=testName`.
-- Do NOT delete tests without approval.
-- CRITICAL: ALWAYS use `search-docs` tool for version-specific Pest documentation and updated code examples.
-- IMPORTANT: Activate `pest-testing` every time you're working with a Pest or testing-related task.
+Never remove company scoping simply to make a query work.
 
-=== tailwindcss/core rules ===
+=== accounting rules ===
+
+# Accounting Integrity
+
+Accounting changes require additional scrutiny.
+
+Before modifying accounting functionality, inspect affected:
+
+- accounts
+- Chart of Accounts
+- bank statements
+- bank statement lines
+- transaction mappings
+- FS Tags
+- journal entries
+- journal lines
+- posting logic
+- reconciliation
+- exchange rates
+- currencies
+- tax treatments
+- cash-flow categories
+- reports
+- company boundaries
+
+Accounting workflows must preserve:
+
+- balanced journal entries
+- debit/credit integrity
+- auditability
+- company isolation
+- currency integrity
+- source traceability
+- posting status
+- reconciliation integrity
+
+Do not silently modify posted accounting records unless the existing architecture explicitly supports the operation.
+
+=== bank import rules ===
+
+# Bank Import & Transaction Mapping
+
+When changing bank imports, trace the complete workflow:
+
+```text
+Source File
+    ↓
+Parser
+    ↓
+Normalized Transaction
+    ↓
+Bank Statement
+    ↓
+Bank Statement Line
+    ↓
+Transaction Mapping
+    ↓
+Review / Approval
+    ↓
+Draft Journal
+    ↓
+Posting
+    ↓
+General Ledger
+    ↓
+Financial Reports
+```
+
+Do not fix an import problem only at the UI layer when the underlying imported data is incorrect.
+
+Bank imports must preserve original source information required for auditability.
+
+For CSV/Excel supplied fields, distinguish between:
+
+- source-provided values
+- system-derived values
+- FS Tag-derived values
+- rule-derived values
+- manually reviewed values
+
+Preserve provenance where the application supports it.
+
+Invalid or unresolved source values should be surfaced for review rather than silently discarded.
+
+=== fs tag rules ===
+
+# FS Tags
+
+FS Tags are part of the accounting transaction mapping workflow.
+
+When changing FS Tag behavior, inspect:
+
+- `accounting_fs_tags`
+- FS Tag models
+- FS Tag services
+- bank statement imports
+- transaction mappings
+- matching services
+- journal generation
+- reporting
+
+FS Tag matching must respect:
+
+- company boundaries
+- active/inactive status
+- configured FS Tag code
+- configured account relationships
+
+Do not assume FS Tag names and FS Tag codes are interchangeable.
+
+Where an import supplies an FS Tag code, match against the configured FS Tag code according to the required workflow.
+
+=== financial reporting rules ===
+
+# Financial Reporting
+
+Financial reports must derive from authoritative accounting data.
+
+Avoid duplicating accounting truth into report-specific storage unless existing architecture explicitly requires snapshots.
+
+When modifying reporting, inspect effects on:
+
+- General Ledger
+- Trial Balance
+- Profit & Loss Statement
+- Balance Sheet
+- Cash Flow Statement
+- reconciliation reports
+- company-level reporting
+- consolidated reporting where applicable
+
+Report totals must reconcile to their underlying journal and ledger data.
+
+=== filament rules ===
+
+# Filament
+
+Use the Filament version actually installed in the repository.
+
+Before making version-sensitive Filament changes, consult Boost's version-specific documentation.
+
+Inspect sibling Filament resources before introducing:
+
+- table actions
+- bulk actions
+- forms
+- filters
+- notifications
+- relation managers
+- widgets
+- custom pages
+
+Authorization must remain enforced server-side.
+
+For bulk accounting operations such as:
+
+- approval
+- posting
+- deletion
+- reconciliation
+
+the underlying service must validate each selected record.
+
+Do not rely solely on Filament action visibility.
+
+=== testing rules ===
+
+# Testing
+
+Use the testing stack actually installed in the repository.
+
+When working with Pest or testing:
+
+1. Activate `pest-testing`.
+2. Search version-specific documentation through Boost.
+3. Inspect existing tests for conventions.
+4. Prefer feature tests for application behavior.
+
+Use factories where available.
+
+Do not delete tests without explicit approval.
+
+When fixing bugs, add or update regression tests whenever practical.
+
+Run the narrowest relevant tests first.
+
+Example:
+
+```bash
+php artisan test --compact --filter=RelevantTest
+```
+
+Then run broader relevant suites when appropriate.
+
+Tests should verify behavior rather than implementation details.
+
+=== pint rules ===
+
+# Laravel Pint
+
+Before finalizing PHP changes, run Pint on changed files.
+
+Use the project's configured Pint command.
+
+Prefer:
+
+```bash
+vendor/bin/pint --dirty
+```
+
+If the installed project configuration supports a specific agent formatting mode, follow that repository convention.
+
+Avoid unrelated repository-wide formatting changes.
+
+=== tailwind rules ===
 
 # Tailwind CSS
 
-- Always use existing Tailwind conventions; check project patterns before adding new ones.
-- IMPORTANT: Always use `search-docs` tool for version-specific Tailwind CSS documentation and updated code examples. Never rely on training data.
-- IMPORTANT: Activate `tailwindcss-development` every time you're working with a Tailwind CSS or styling-related task.
+When working on Tailwind or UI styling:
+
+1. Activate `tailwindcss-development`.
+2. Search version-specific documentation through Boost.
+3. Follow existing project Tailwind conventions.
+4. Reuse existing components and styling patterns.
+
+Do not assume syntax from another Tailwind major version.
+
 </laravel-boost-guidelines>
+
+---
+
+# Codebase Topology & Graphify Context
+
+This repository contains a Graphify code knowledge graph under:
+
+```text
+graphify-out/
+```
+
+Graphify is used to understand structural relationships across the Aureus ERP codebase.
+
+Laravel Boost and Graphify serve different purposes:
+
+```text
+Graphify
+    ↓
+Repository topology
+Cross-file relationships
+Dependency tracing
+Architectural relationships
+
+Laravel Boost
+    ↓
+Laravel runtime knowledge
+Database/schema inspection
+Installed package versions
+Version-specific documentation
+Application debugging
+```
+
+Use both where appropriate.
+
+---
+
+# Graphify
+
+When:
+
+```text
+graphify-out/graph.json
+```
+
+exists, consult Graphify before answering substantial codebase questions or making architectural/cross-module changes.
+
+Prefer focused Graphify queries over reading the entire graph or manually grepping the repository.
+
+## Codebase Questions
+
+Use:
+
+```bash
+graphify query "<question>"
+```
+
+for codebase questions.
+
+Examples:
+
+```bash
+graphify query "How are bank statement imports connected to transaction mappings?"
+```
+
+```bash
+graphify query "What services are involved in journal posting?"
+```
+
+```bash
+graphify query "How do FS Tags affect bank transaction mappings?"
+```
+
+## Relationship Tracing
+
+Use:
+
+```bash
+graphify path "<A>" "<B>"
+```
+
+when determining relationships between components.
+
+Example:
+
+```bash
+graphify path "BankStatementImportService" "BankTransactionMapping"
+```
+
+## Concept Explanation
+
+Use:
+
+```bash
+graphify explain "<concept>"
+```
+
+for focused architectural concepts.
+
+Example:
+
+```bash
+graphify explain "transaction mapping"
+```
+
+## Wiki
+
+If:
+
+```text
+graphify-out/wiki/index.md
+```
+
+exists, use it for broad repository navigation.
+
+## Graph Report
+
+Use:
+
+```text
+graphify-out/GRAPH_REPORT.md
+```
+
+for:
+
+- broad architecture review
+- module topology
+- community structure
+- cross-module investigation
+- cases where query/path/explain do not provide enough context
+
+Do NOT read the entire `GRAPH_REPORT.md` for every small task.
+
+---
+
+# `/graphify` Behavior
+
+When the user explicitly types:
+
+```text
+/graphify
+```
+
+use the installed Graphify skill/instructions before doing anything else.
+
+Establish relevant Graphify context before answering or modifying code.
+
+---
+
+# Dirty Graphify Files
+
+Changes inside:
+
+```text
+graphify-out/
+```
+
+are expected after Graphify runs.
+
+Dirty Graphify output is NOT a reason to skip Graphify.
+
+Only skip Graphify when:
+
+- the task specifically concerns stale/incorrect Graphify output, or
+- the user explicitly says not to use Graphify.
+
+Do not accidentally commit generated Graphify output unless repository policy or the user explicitly requires it.
+
+---
+
+# Graphify Update Policy
+
+The Aureus ERP repository currently uses a code-only Graphify index.
+
+After meaningful source-code changes, update Graphify using:
+
+```bash
+graphify . --update --code-only
+```
+
+Do NOT use an update command that triggers semantic document/image extraction unless explicitly requested.
+
+The code-only update should not require an external LLM API key.
+
+After significant architectural changes, re-query Graphify to verify the resulting dependency structure.
+
+---
+
+# Graphify Workflow for Aureus ERP
+
+Before architectural or cross-module changes:
+
+1. Query Graphify.
+2. Identify affected modules.
+3. Identify affected models.
+4. Identify affected services.
+5. Identify affected database tables and migrations.
+6. Identify affected Filament/Livewire components.
+7. Identify affected permissions.
+8. Identify affected tests.
+9. Trace upstream callers.
+10. Trace downstream consumers.
+11. Check company isolation.
+12. Check accounting consequences.
+13. Check reporting consequences.
+14. Implement using existing abstractions.
+15. Run relevant tests.
+16. Run Pint.
+17. Update Graphify.
+18. Re-query affected components when appropriate.
+
+For accounting work, pay particular attention to:
+
+- accounting
+- accounts
+- support
+- plugin manager
+- companies
+- permissions
+- bank statement imports
+- transaction mapping
+- FS Tags
+- reconciliation
+- journal generation
+- journal posting
+- multi-currency
+- financial reporting
+
+---
+
+# Source-of-Truth Priority
+
+When information conflicts, use this priority:
+
+1. Actual current repository source code
+2. Actual current database/schema/runtime state
+3. `composer.lock` and installed dependency state
+4. Version-specific Laravel Boost information/documentation
+5. Existing automated tests
+6. Focused Graphify `query`, `path`, or `explain` results
+7. `graphify-out/GRAPH_REPORT.md`
+8. General instructions in this file
+
+Never force the application to conform to an instruction that is demonstrably stale relative to the actual repository.
+
+If Graphify and the current source code disagree:
+
+1. Treat current source code as authoritative.
+2. Determine whether Graphify is stale.
+3. Update Graphify after the code state is understood.
+
+---
+
+# Change Discipline
+
+Before editing code:
+
+1. Understand the existing workflow.
+2. Query Graphify when appropriate.
+3. Inspect relevant source files.
+4. Inspect sibling implementations.
+5. Inspect the database/schema when relevant.
+6. Identify downstream effects.
+7. Inspect relevant tests.
+8. Consult Boost documentation for version-sensitive framework behavior.
+
+During implementation:
+
+- preserve existing architecture
+- preserve plugin boundaries
+- preserve authorization
+- preserve company isolation
+- preserve accounting integrity
+- preserve auditability
+- avoid unrelated refactoring
+- reuse existing abstractions
+- do not introduce unnecessary dependencies
+
+After implementation:
+
+1. Run relevant tests.
+2. Run Pint on changed PHP.
+3. Update Graphify when source relationships changed.
+4. Re-query affected architecture when appropriate.
+5. Inspect the final Git diff.
+6. Report failures rather than hiding them.
+
+Never claim functionality was verified unless it was actually verified.
+
+---
+
+# Accounting Change Checklist
+
+For any meaningful accounting change, determine whether it affects:
+
+- Chart of Accounts
+- bank statements
+- bank statement lines
+- transaction mappings
+- FS Tags
+- counterparties
+- cash-flow categories
+- tax treatment
+- offset GL accounts
+- journal generation
+- journal posting
+- General Ledger
+- Trial Balance
+- Profit & Loss
+- Balance Sheet
+- Cash Flow Statement
+- reconciliation
+- currencies
+- exchange rates
+- company isolation
+- permissions
+- auditability
+
+Do not consider an accounting feature complete until its downstream accounting/reporting impact has been evaluated.
+
+---
+
+# Bulk Operations Safety
+
+Bulk operations involving accounting records require the same validation as individual operations.
+
+For operations such as:
+
+- bulk approval
+- bulk posting
+- bulk deletion
+- bulk reconciliation
+- bulk journal generation
+
+validate each selected record individually through the appropriate service/domain layer.
+
+A bulk action must not bypass:
+
+- authorization
+- company scope
+- posting status rules
+- review status rules
+- reconciliation rules
+- accounting integrity checks
+
+If one selected record cannot safely be processed, handle the failure explicitly rather than silently corrupting or skipping accounting state.
+
+---
+
+# Import Deletion Safety
+
+Deleting an imported bank statement or other accounting import must consider all dependent records.
+
+Before implementing or executing import deletion, inspect dependencies including:
+
+```text
+Import
+  ↓
+Bank Statement
+  ↓
+Bank Statement Lines
+  ↓
+Transaction Mappings
+  ↓
+Transfer Matches / Reconciliation
+  ↓
+Draft or Posted Journals
+  ↓
+Ledger / Reports
+```
+
+Never delete an import in a way that silently removes or corrupts posted accounting history.
+
+If posted downstream records exist, deletion should be blocked or handled through the application's explicit accounting reversal/correction workflow.
+
+---
+
+# Final Verification
+
+For significant changes, verification should include the narrowest relevant combination of:
+
+- automated tests
+- database/schema inspection
+- application behavior
+- accounting reconciliation
+- authorization behavior
+- multi-company isolation
+- final Git diff
+- Graphify dependency review
+
+Do not substitute manual assumptions for automated tests where appropriate tests can be written.
+
+---
+
+# Response Style
+
+Keep responses concise.
+
+When reporting completed development work, clearly distinguish:
+
+- changed
+- verified
+- failed
+- remaining work
+
+Do not generate unnecessary documentation, changelogs, architecture reports, verification reports, or other files unless explicitly requested.
