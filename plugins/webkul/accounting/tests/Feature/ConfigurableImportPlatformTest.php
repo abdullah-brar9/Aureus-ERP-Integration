@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Webkul\Account\Enums\AccountType;
 use Webkul\Account\Enums\JournalType;
 use Webkul\Account\Enums\MoveState;
+use Webkul\Account\Facades\Account as AccountFacade;
 use Webkul\Account\Models\Account;
 use Webkul\Account\Models\BankStatement;
 use Webkul\Account\Models\Journal;
@@ -11,9 +12,11 @@ use Webkul\Account\Models\Move;
 use Webkul\Account\Models\Partner;
 use Webkul\Accounting\Models\BusinessRule;
 use Webkul\Accounting\Models\ConfigurationAudit;
+use Webkul\Accounting\Models\FsTag;
 use Webkul\Accounting\Models\ImportProfile;
 use Webkul\Accounting\Models\ImportRun;
 use Webkul\Accounting\Services\Bank\BankJournalCreationService;
+use Webkul\Accounting\Services\Bank\BankMappingService;
 use Webkul\Accounting\Services\FsTagService;
 use Webkul\Accounting\Services\Import\ConditionalRuleEngine;
 use Webkul\Accounting\Services\Import\ImportExecutionService;
@@ -189,7 +192,7 @@ it('creates balanced draft document lines through explicit company GL mappings',
     $fixture = configurableImportFixture();
     $partner = Partner::query()->create([
         'company_id' => $fixture['company']->id, 'account_type' => 'company', 'sub_type' => 'customer',
-        'reference'  => 'CUST-'.$fixture['company']->id, 'name' => 'Mapped Customer',
+        'reference'  => 'CUST-'.$fixture['company']->id, 'name' => 'Mapped Customer', 'email' => 'customer@example.test',
     ]);
     $journal = Journal::factory()->create([
         'company_id' => $fixture['company']->id, 'currency_id' => $fixture['currency']->id,
@@ -197,7 +200,7 @@ it('creates balanced draft document lines through explicit company GL mappings',
     ]);
     $debit = Account::factory()->create([
         'code'        => 'AR-'.$fixture['company']->id, 'name' => 'Receivable', 'account_type' => AccountType::ASSET_RECEIVABLE,
-        'currency_id' => $fixture['currency']->id, 'is_group' => false, 'deprecated' => false,
+        'currency_id' => $fixture['currency']->id, 'is_group' => false, 'deprecated' => false, 'reconcile' => true,
     ]);
     $credit = Account::factory()->create([
         'code'        => 'REV-'.$fixture['company']->id, 'name' => 'Revenue', 'account_type' => AccountType::INCOME,
@@ -211,15 +214,24 @@ it('creates balanced draft document lines through explicit company GL mappings',
         'entity_type' => 'invoice', 'file_type' => 'csv', 'header_row' => 1, 'data_start_row' => 2,
         'delimiter'   => ',', 'encoding' => 'UTF-8', 'version' => 1, 'is_active' => true, 'activated_at' => now(),
     ]);
-    $fields = ['reference', 'partner_reference', 'date', 'currency', 'amount_total', 'journal_code', 'debit_gl_code', 'credit_gl_code'];
+    $fields = [
+        'reference', 'partner_reference', 'customer_name', 'customer_email', 'billing_address', 'date', 'payment_term',
+        'due_date', 'location', 'booking_id', 'consolidated_number', 'drop_off', 'product_service', 'description',
+        'quantity', 'rate', 'tax_percent', 'currency', 'amount_total', 'journal_code', 'debit_gl_code', 'credit_gl_code',
+    ];
     foreach ($fields as $position => $field) {
         $profile->mappings()->create([
-            'position'        => $position + 1, 'source_header' => $field, 'target_field' => $field, 'is_required' => true,
-            'transformations' => $field === 'amount_total' ? [['type' => 'decimal', 'scale' => 4]] : [['type' => 'trim']],
+            'position'        => $position + 1, 'source_header' => $field, 'target_field' => $field,
+            'is_required'     => in_array($field, ['reference', 'date', 'currency', 'amount_total', 'journal_code', 'debit_gl_code', 'credit_gl_code'], true),
+            'transformations' => match (true) {
+                in_array($field, ['date', 'due_date'], true)                                => [['type' => 'date']],
+                in_array($field, ['quantity', 'rate', 'tax_percent', 'amount_total'], true) => [['type' => 'decimal', 'scale' => 4]],
+                default                                                                     => [['type' => 'trim']],
+            },
         ]);
     }
     $path = tempnam(sys_get_temp_dir(), 'aureus-document-profile-');
-    file_put_contents($path, implode(',', $fields)."\nINV-MAPPED-1,{$partner->reference},2026-07-28,PKR,1234.56,{$journal->code},{$debit->code},{$credit->code}\n");
+    file_put_contents($path, implode(',', $fields)."\nINV-MAPPED-1,{$partner->reference},Mapped Customer,customer@example.test,32 Example Road,2026-07-28,,2026-08-27,Karachi,BKG-1001,CON-2001,Port Qasim,Freight service,Freight delivery,1,1234.56,0,PKR,1234.56,{$journal->code},{$debit->code},{$credit->code}\n");
 
     try {
         $run = app(ImportPreviewService::class)->preview($profile, $path, 'mapped-invoices.csv', $fixture['user']->id);
@@ -232,7 +244,22 @@ it('creates balanced draft document lines through explicit company GL mappings',
             ->and($move->lines)->toHaveCount(2)
             ->and($move->lines->sum(fn ($line) => (float) $line->debit))->toBe(1234.56)
             ->and($move->lines->sum(fn ($line) => (float) $line->credit))->toBe(1234.56)
-            ->and($move->lines->pluck('account_id'))->toContain($debit->id, $credit->id);
+            ->and($move->lines->pluck('account_id'))->toContain($debit->id, $credit->id)
+            ->and($move->invoice_source_email)->toBe('customer@example.test')
+            ->and($move->billing_address)->toBe('32 Example Road')
+            ->and($move->incoterm_location)->toBe('Karachi')
+            ->and($move->booking_id)->toBe('BKG-1001')
+            ->and($move->consolidated_number)->toBe('CON-2001')
+            ->and($move->drop_off)->toBe('Port Qasim')
+            ->and($move->invoiceLines->first()?->source_product_service)->toBe('Freight service')
+            ->and((float) $move->invoiceLines->first()?->quantity)->toBe(1.0)
+            ->and((float) $move->invoiceLines->first()?->price_unit)->toBe(1234.56)
+            ->and((float) $move->invoiceLines->first()?->source_tax_percent)->toBe(0.0);
+
+        $posted = AccountFacade::confirmMove($move->fresh());
+        expect($posted->state)->toBe(MoveState::POSTED)
+            ->and((float) $posted->amount_residual)->toBe(1234.56)
+            ->and($posted->paymentTermLines->first()?->account_id)->toBe($debit->id);
     } finally {
         @unlink($path);
     }
@@ -263,6 +290,50 @@ it('creates company-scoped FS Tags with an existing or automatically-created can
         ->and(fn () => app(FsTagService::class)->create($fixture['company'], [
             'name' => 'Other tag', 'account_id' => Account::factory()->create(['account_type' => AccountType::EXPENSE])->id,
         ]))->toThrow(RuntimeException::class, 'company');
+});
+
+it('imports an FS Tag Registry row without creating or overwriting GL accounts', function (): void {
+    $fixture = configurableImportFixture();
+    $account = Account::factory()->create([
+        'code'        => 'TAG-GL-'.$fixture['company']->id,
+        'name'        => 'Imported tag GL',
+        'account_type'=> AccountType::EXPENSE,
+        'currency_id' => $fixture['currency']->id,
+        'is_group'    => false,
+        'deprecated'  => false,
+    ]);
+    $account->companies()->attach($fixture['company']->id);
+    $profile = ImportProfile::query()->create([
+        'company_id'  => $fixture['company']->id, 'owner_id' => $fixture['user']->id, 'name' => 'FS Tag Registry',
+        'entity_type' => 'fs_tag', 'file_type' => 'csv', 'header_row' => 1, 'data_start_row' => 2,
+        'delimiter'   => ',', 'encoding' => 'UTF-8', 'version' => 1, 'is_active' => true, 'activated_at' => now(),
+    ]);
+    foreach (['code', 'name', 'gl_code', 'cash_flow_category', 'tax_treatment', 'is_active'] as $position => $field) {
+        $profile->mappings()->create([
+            'position'        => $position + 1, 'source_header' => $field, 'target_field' => $field,
+            'transformations' => $field === 'is_active' ? [['type' => 'boolean']] : [['type' => 'trim']],
+            'is_required'     => in_array($field, ['code', 'name'], true),
+        ]);
+    }
+
+    $path = tempnam(sys_get_temp_dir(), 'aureus-fs-tag-');
+    file_put_contents($path, "code,name,gl_code,cash_flow_category,tax_treatment,is_active\nfs-import-1,Imported Fees,{$account->code},Operating,Exempt,true\n");
+
+    try {
+        $run = app(ImportPreviewService::class)->preview($profile, $path, 'fs-tags.csv', $fixture['user']->id);
+        $completed = app(ImportExecutionService::class)->confirm($run, $fixture['user']->id);
+        $tag = FsTag::query()->where('company_id', $fixture['company']->id)->where('code', 'FS-IMPORT-1')->firstOrFail();
+
+        expect($run->failed_rows)->toBe(0)
+            ->and($completed->imported_rows)->toBe(1)
+            ->and($tag->account_id)->toBe($account->id)
+            ->and($tag->cash_flow_category)->toBe('Operating')
+            ->and($tag->tax_treatment)->toBe('Exempt')
+            ->and($tag->is_active)->toBeTrue()
+            ->and(Account::query()->where('code', $account->code)->count())->toBe(1);
+    } finally {
+        @unlink($path);
+    }
 });
 
 it('creates a currency-compatible bank journal inline and rejects duplicate company codes', function (): void {
@@ -300,12 +371,17 @@ it('imports configured bank rows through the canonical currency and reconciliati
         'currency_id' => $fixture['currency']->id, 'is_group' => false, 'deprecated' => false,
     ]);
     $offset->companies()->attach($fixture['company']->id);
+    $tagOffset = Account::factory()->create([
+        'code'        => 'CFG-TAG-'.$fixture['company']->id, 'name' => 'Tag fallback', 'account_type' => AccountType::EXPENSE,
+        'currency_id' => $fixture['currency']->id, 'is_group' => false, 'deprecated' => false,
+    ]);
+    $tagOffset->companies()->attach($fixture['company']->id);
     $journal = app(BankJournalCreationService::class)->create($fixture['company'], [
         'currency_id' => $fixture['currency']->id, 'default_account_id' => $bank->id,
         'name'        => 'Configured Bank', 'code' => 'CB'.$fixture['company']->id,
     ]);
     $tag = app(FsTagService::class)->create($fixture['company'], [
-        'code'               => 'FS-BANK-'.$fixture['company']->id, 'name' => 'Bank Charges', 'account_id' => $offset->id,
+        'code'               => 'FS-BANK-'.$fixture['company']->id, 'name' => 'Bank Charges', 'account_id' => $tagOffset->id,
         'cash_flow_category' => 'Operating', 'is_active' => true,
     ]);
 
@@ -317,6 +393,7 @@ it('imports configured bank rows through the canonical currency and reconciliati
     $headers = [
         'date', 'currency', 'bank_account_number', 'description', 'journal_code', 'bank_gl_code',
         'bank_name', 'account_title', 'reference', 'debit', 'credit', 'opening_balance', 'closing_balance', 'balance', 'fs_tag',
+        'offset_gl_code', 'transaction_type', 'counterparty', 'cash_flow_category', 'tax_treatment', 'supporting_document',
     ];
     foreach ($headers as $position => $field) {
         $transformations = in_array($field, ['debit', 'credit', 'opening_balance', 'closing_balance', 'balance'], true)
@@ -330,7 +407,7 @@ it('imports configured bank rows through the canonical currency and reconciliati
     }
 
     $path = tempnam(sys_get_temp_dir(), 'aureus-bank-profile-');
-    file_put_contents($path, implode(',', $headers)."\n2026-07-28,PKR,001122,Monthly bank fee,{$journal->code},{$bank->code},Test Bank,Main Account,FEE-1,100,0,1000,900,900,{$tag->code}\n");
+    file_put_contents($path, implode(',', $headers)."\n2026-07-28,PKR,001122,Monthly bank fee,{$journal->code},{$bank->code},Test Bank,Main Account,FEE-1,100,0,1000,900,900,{$tag->code},{$offset->code},Bank charge,Test Bank,Operating,Exempt,FEE-DOC-1\n");
 
     try {
         $run = app(ImportPreviewService::class)->preview($profile, $path, 'configured-bank.csv', $fixture['user']->id);
@@ -346,7 +423,18 @@ it('imports configured bank rows through the canonical currency and reconciliati
             ->and($statement->closing_balance)->toBe('900.0000')
             ->and($line->original_debit)->toBe('100.0000')
             ->and($line->mapping->fs_tag_id)->toBe($tag->id)
-            ->and($line->mapping->offset_account_id)->toBeNull();
+            ->and($line->mapping->offset_account_id)->toBe($offset->id)
+            ->and($line->mapping->transaction_type)->toBe('Bank charge')
+            ->and($line->mapping->counterparty)->toBe('Test Bank')
+            ->and($line->mapping->cash_flow_category)->toBe('Operating')
+            ->and($line->mapping->tax_treatment)->toBe('Exempt')
+            ->and($line->mapping->supporting_document)->toBe('FEE-DOC-1')
+            ->and($line->mapping->match_type)->toBe('source_gl')
+            ->and($line->mapping->review_status->value)->toBe('suggested');
+
+        $approved = app(BankMappingService::class)->approve($line->mapping, $fixture['user'], false);
+        expect($approved->offset_account_id)->toBe($offset->id)
+            ->and($approved->match_type)->toBe('source_gl');
     } finally {
         @unlink($path);
     }

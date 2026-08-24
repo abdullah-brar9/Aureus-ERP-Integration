@@ -7,6 +7,7 @@ use Brick\Math\RoundingMode;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
+use PhpOffice\PhpSpreadsheet\Shared\Date as SpreadsheetDate;
 
 final class ImportTransformationEngine
 {
@@ -55,10 +56,14 @@ final class ImportTransformationEngine
             return null;
         }
 
-        $format = $step['format'] ?? null;
-        $date = $format
-            ? CarbonImmutable::createFromFormat((string) $format, (string) $value)
-            : CarbonImmutable::parse((string) $value);
+        if (is_numeric($value)) {
+            $date = CarbonImmutable::instance(SpreadsheetDate::excelToDateTimeObject((float) $value));
+        } else {
+            $format = $step['format'] ?? null;
+            $date = $format
+                ? CarbonImmutable::createFromFormat((string) $format, (string) $value)
+                : CarbonImmutable::parse((string) $value);
+        }
 
         return $date->format((string) ($step['output'] ?? 'Y-m-d'));
     }

@@ -13,6 +13,7 @@ use Webkul\Accounting\Filament\Widgets\JournalChartWidget;
 use Webkul\Accounting\Livewire\InvoiceSummary;
 use Webkul\Accounting\Repositories\LedgerBalanceRepository;
 use Webkul\Accounting\Services\Bank\BankStatementParserRegistry;
+use Webkul\Accounting\Services\Bank\CommonWorkbookBankStatementParser;
 use Webkul\Accounting\Services\Bank\HblBankStatementParser;
 use Webkul\Accounting\Services\Bank\MeezanBankStatementParser;
 use Webkul\Accounting\Services\MeasureResolverRegistry;
@@ -54,6 +55,10 @@ class AccountingServiceProvider extends PackageServiceProvider
                 '2026_07_27_082400_allow_multiple_bank_sheets_per_workbook',
                 '2026_07_28_000001_implement_multi_currency_accounting',
                 '2026_07_28_000002_implement_configurable_import_platform',
+                '2026_08_25_000001_add_import_failure_and_duplicate_controls',
+                '2026_08_25_000002_add_invoice_import_reference_fields',
+                '2026_08_25_000003_add_fs_tags_to_journal_lines',
+                '2026_08_25_000004_link_bank_mappings_to_obligations',
             ])
             ->runsMigrations()
             ->hasSeeders([
@@ -86,6 +91,7 @@ class AccountingServiceProvider extends PackageServiceProvider
 
         $this->app->singleton(BankStatementParserRegistry::class, function (): BankStatementParserRegistry {
             $registry = new BankStatementParserRegistry;
+            $registry->register(new CommonWorkbookBankStatementParser);
             $registry->register(new HblBankStatementParser);
             $registry->register(new MeezanBankStatementParser);
 

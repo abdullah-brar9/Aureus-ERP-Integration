@@ -36,18 +36,39 @@ class AccountingReconciliationService
             'Trial Balance / Journal Entries',
         );
 
-        foreach (DB::table('accounts_bank_statements')->where('company_id', $companyId)->whereBetween('statement_end_date', [$dateFrom, $dateTo])->get() as $statement) {
+        $latestStatements = DB::table('accounts_bank_statements')
+            ->where('company_id', $companyId)
+            ->whereDate('statement_end_date', '<=', $dateTo)
+            ->orderByDesc('statement_end_date')
+            ->orderByDesc('id')
+            ->get()
+            ->unique(fn ($statement): string => implode(':', [
+                $statement->bank_gl_account_id,
+                $statement->bank_account_number,
+                $statement->currency_id,
+            ]));
+
+        foreach ($latestStatements->groupBy('bank_gl_account_id') as $bankGlAccountId => $statements) {
+            if (! $statements->contains(fn ($statement): bool => $statement->statement_end_date >= $dateFrom)) {
+                continue;
+            }
+
             $actual = (float) DB::table('accounts_account_move_lines as lines')
                 ->join('accounts_account_moves as moves', 'moves.id', '=', 'lines.move_id')
                 ->where('moves.company_id', $companyId)
                 ->where('moves.state', MoveState::POSTED->value)
-                ->whereDate('moves.date', '<=', $statement->statement_end_date)
-                ->where('lines.account_id', $statement->bank_gl_account_id)
+                ->whereDate('moves.date', '<=', $dateTo)
+                ->where('lines.account_id', $bankGlAccountId)
                 ->sum('lines.balance');
+
+            $expected = (float) $statements->sum(function ($statement): float {
+                return (float) ($statement->company_closing_balance ?? $statement->closing_balance);
+            });
+            $sourceNames = $statements->pluck('bank_name')->filter()->unique()->implode(', ');
             $checks[] = $this->check(
-                "{$statement->bank_name} bank ledger equals statement closing",
+                "Bank GL {$bankGlAccountId} ledger equals aggregate latest statement closings ({$sourceNames})",
                 $actual,
-                (float) $statement->closing_balance,
+                $expected,
                 $tolerance,
                 'Bank Statements / Transaction Mapping',
             );

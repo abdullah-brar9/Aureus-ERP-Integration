@@ -67,6 +67,15 @@ class ImportProfileResource extends Resource
                 TextInput::make('data_start_row')->numeric()->minValue(1)->default(2)->required(),
                 TextInput::make('skip_rows')->numeric()->minValue(0)->default(0)->required(),
                 Select::make('blank_row_rule')->options(['skip' => 'Skip blank rows', 'stop' => 'Stop at first blank row'])->default('skip')->required(),
+                Select::make('failure_policy')
+                    ->options([
+                        'flag_review'  => 'Flag failed rows for review and import valid rows',
+                        'reject_rows'  => 'Reject failed rows and import valid rows',
+                        'reject_file'  => 'Reject the entire file when any row fails',
+                        'warn_continue'=> 'Continue past configured non-critical warnings',
+                    ])
+                    ->default('reject_file')
+                    ->required(),
                 TextInput::make('delimiter')->default(',')->maxLength(5)->visible(fn ($get): bool => $get('file_type') === 'csv'),
                 TextInput::make('encoding')->default('UTF-8')->visible(fn ($get): bool => $get('file_type') === 'csv'),
                 TextInput::make('version')->numeric()->default(1)->disabled()->dehydrated(),

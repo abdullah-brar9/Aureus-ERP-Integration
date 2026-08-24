@@ -69,11 +69,13 @@ class BankMappingService
                 throw new \RuntimeException('The selected FS Tag must be active, company-owned and linked to a GL account.');
             }
 
-            $mapping->offset_account_id = $mapping->fsTag->account_id;
-            $mapping->setRelation('offsetAccount', $mapping->fsTag->account);
+            if ($mapping->offset_account_id === null) {
+                $mapping->offset_account_id = $mapping->fsTag->account_id;
+                $mapping->setRelation('offsetAccount', $mapping->fsTag->account);
+                $mapping->match_type ??= 'fs_tag';
+            }
             $mapping->cash_flow_category ??= $mapping->fsTag->cash_flow_category;
             $mapping->tax_treatment ??= $mapping->fsTag->tax_treatment;
-            $mapping->match_type ??= 'fs_tag';
         }
 
         if (! $mapping->bankGlAccount || ! $mapping->offsetAccount) {

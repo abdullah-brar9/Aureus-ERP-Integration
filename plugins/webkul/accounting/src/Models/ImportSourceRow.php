@@ -31,4 +31,9 @@ class ImportSourceRow extends Model
     {
         return $this->belongsTo(Company::class);
     }
+
+    public function duplicateOf(): BelongsTo
+    {
+        return $this->belongsTo(self::class, 'duplicate_of_source_row_id');
+    }
 }

@@ -90,6 +90,11 @@ class JournalItemResource extends Resource
                     ->searchable()
                     ->sortable()
                     ->toggleable(),
+                TextColumn::make('fsTag.code')
+                    ->label('FS Tag')
+                    ->placeholder('-')
+                    ->searchable()
+                    ->toggleable(),
                 TextColumn::make('journal.name')
                     ->placeholder('-')
                     ->label(__('accounting::filament/clusters/accounting/resources/journal-item.table.columns.journal'))
@@ -297,7 +302,7 @@ class JournalItemResource extends Resource
                     ->exporter(JournalItemExporter::class),
             ])
             ->modifyQueryUsing(function (Builder $query) {
-                $query->with(['currency', 'account', 'partner', 'journal', 'company', 'move']);
+                $query->with(['currency', 'account', 'partner', 'journal', 'company', 'move', 'fsTag']);
             })
             ->defaultSort('date', 'desc');
     }

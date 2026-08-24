@@ -25,7 +25,9 @@ class SourceRowsRelationManager extends RelationManager
                 TextColumn::make('processed_at')->dateTime()->placeholder('Not processed'),
             ])
             ->filters([
-                SelectFilter::make('status')->options(['pass' => 'Pass', 'warning' => 'Warning', 'error' => 'Error']),
+                SelectFilter::make('status')->options([
+                    'pass' => 'Pass', 'warning' => 'Warning', 'error' => 'Error', 'duplicate' => 'Duplicate',
+                ]),
             ])
             ->defaultSort('source_row_number');
     }

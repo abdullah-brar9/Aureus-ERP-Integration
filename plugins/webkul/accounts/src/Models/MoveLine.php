@@ -50,6 +50,7 @@ class MoveLine extends Model implements Sortable
         'statement_id',
         'statement_line_id',
         'product_id',
+        'source_product_service',
         'uom_id',
         'creator_id',
         'move_name',
@@ -86,6 +87,7 @@ class MoveLine extends Model implements Sortable
         'price_unit',
         'price_subtotal',
         'price_total',
+        'source_tax_percent',
         'discount',
         'discount_amount_currency',
         'discount_balance',
@@ -112,6 +114,7 @@ class MoveLine extends Model implements Sortable
         'company_signed_amount' => 'decimal:4',
         'exchange_rate'         => 'decimal:15',
         'rate_date'             => 'date',
+        'source_tax_percent'    => 'decimal:4',
     ];
 
     public $sortable = [
@@ -436,7 +439,11 @@ class MoveLine extends Model implements Sortable
 
                 $account = $this->move->partner?->{$propertyField}
                     ?? (method_exists($this->move->company, 'partner') ? $this->move->company->partner?->{$propertyField} : null)
-                    ?? Account::where('account_type', $accountType)->where('deprecated', false)->first();
+                    ?? Account::query()
+                        ->where('account_type', $accountType)
+                        ->where('deprecated', false)
+                        ->whereHas('companies', fn ($query) => $query->where('companies.id', $this->move->company_id))
+                        ->first();
 
                 if ($this->move->fiscalPosition && $account) {
                     $account = $this->move->fiscalPosition->mapAccount($account);

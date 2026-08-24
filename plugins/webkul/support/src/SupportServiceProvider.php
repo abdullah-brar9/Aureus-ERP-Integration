@@ -66,6 +66,7 @@ class SupportServiceProvider extends PackageServiceProvider
                 '2026_05_01_065935_add_resource_columns_in_calendar_attendances_table',
                 '2026_07_10_000000_fix_unit_of_measures_factor_precision',
                 '2026_08_03_093616_create_email_templates_table',
+                '2026_08_25_000001_create_approval_workflow_tables',
             ])
             ->runsMigrations()
             ->hasSettings([

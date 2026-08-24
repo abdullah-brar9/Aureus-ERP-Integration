@@ -54,6 +54,7 @@ class BankTransferMatchingService
                     && BigDecimal::of((string) $credit->company_credit)
                         ->minus((string) $debit->company_debit)->abs()->isLessThanOrEqualTo('0.01')
                     && Carbon::parse($credit->transaction_date)->diffInDays(Carbon::parse($debit->transaction_date)) <= $maximumDateDistance
+                    && $this->referencesPermitMatch($debit, $credit)
                     && $this->looksLikeTransfer((string) $debit->description, (string) $credit->description);
             });
 
@@ -113,6 +114,8 @@ class BankTransferMatchingService
 
     public function approve(BankTransferMatch $match, User $reviewer): BankTransferMatch
     {
+        $match->loadMissing(['outgoingLine.mapping', 'incomingLine.mapping']);
+
         if ((int) $match->outgoing_currency_id !== (int) $match->incoming_currency_id) {
             throw new \RuntimeException('Cross-currency transfers require explicit conversion, FX difference and bank-charge handling.');
         }
@@ -120,11 +123,31 @@ class BankTransferMatchingService
             throw new \RuntimeException('A transfer cannot be approved until its company-currency conversion is complete.');
         }
 
-        $match->update([
-            'status'      => 'approved',
-            'reviewer_id' => $reviewer->id,
-            'reviewed_at' => now(),
-        ]);
+        DB::transaction(function () use ($match, $reviewer): void {
+            $reviewedAt = now();
+            $match->update([
+                'status'      => 'approved',
+                'reviewer_id' => $reviewer->id,
+                'reviewed_at' => $reviewedAt,
+            ]);
+
+            $outgoingMapping = $match->outgoingLine?->mapping;
+            $incomingMapping = $match->incomingLine?->mapping;
+
+            if ($outgoingMapping
+                && $incomingMapping
+                && (int) $outgoingMapping->bank_gl_account_id === (int) $incomingMapping->bank_gl_account_id) {
+                foreach ([$outgoingMapping, $incomingMapping] as $mapping) {
+                    $mapping->update([
+                        'review_status'  => BankReviewStatus::MatchedTransfer,
+                        'posting_status' => BankPostingStatus::MatchedDoNotPost,
+                        'reviewer_id'    => $reviewer->id,
+                        'reviewed_at'    => $reviewedAt,
+                        'posted_at'      => $reviewedAt,
+                    ]);
+                }
+            }
+        });
 
         return $match->fresh();
     }
@@ -139,5 +162,19 @@ class BankTransferMatchingService
         similar_text(mb_strtolower($outgoing), mb_strtolower($incoming), $similarity);
 
         return $similarity >= 30;
+    }
+
+    protected function referencesPermitMatch(BankStatementLine $outgoing, BankStatementLine $incoming): bool
+    {
+        $outgoingReference = mb_strtoupper(trim((string) $outgoing->reference));
+        $incomingReference = mb_strtoupper(trim((string) $incoming->reference));
+        $hasExplicitTransferReference = str_starts_with($outgoingReference, 'TRF-')
+            || str_starts_with($incomingReference, 'TRF-');
+
+        if ($hasExplicitTransferReference) {
+            return $outgoingReference !== '' && $outgoingReference === $incomingReference;
+        }
+
+        return true;
     }
 }

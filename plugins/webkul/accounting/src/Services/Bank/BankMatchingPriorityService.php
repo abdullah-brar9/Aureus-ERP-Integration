@@ -32,34 +32,87 @@ final class BankMatchingPriorityService
 
         foreach ($mappings as $mapping) {
             $reference = trim((string) ($mapping->statementLine?->reference ?: $mapping->statementLine?->payment_reference));
-            if ($reference === '') {
+            $description = trim((string) $mapping->statementLine?->description);
+            if ($reference === '' && $description === '') {
                 continue;
             }
 
-            $move = Move::query()
+            $moves = Move::query()
                 ->where('company_id', $companyId)
                 ->where('state', 'posted')
                 ->where('amount_residual', '>', 0)
-                ->where(fn ($query) => $query->where('reference', $reference)->orWhere('payment_reference', $reference)->orWhere('name', $reference))
+                ->where('currency_id', $mapping->statementLine?->original_currency_id)
+                ->where(function ($query) use ($reference, $description): void {
+                    if ($reference !== '') {
+                        $query->where('reference', $reference)
+                            ->orWhere('payment_reference', $reference)
+                            ->orWhere('name', $reference)
+                            ->orWhere('booking_id', $reference)
+                            ->orWhere('consolidated_number', $reference);
+                    }
+
+                    if ($description !== '') {
+                        foreach (['reference', 'payment_reference', 'name', 'booking_id', 'consolidated_number'] as $column) {
+                            $query->orWhere(function ($candidate) use ($column, $description): void {
+                                $candidate->whereNotNull($column)
+                                    ->whereRaw("CHAR_LENGTH({$column}) >= 4")
+                                    ->whereRaw("? LIKE CONCAT('%', {$column}, '%')", [$description]);
+                            });
+                        }
+                    }
+                })
                 ->with(['lines.account'])
-                ->first();
-            if ($move && $this->amountMatches($mapping, (string) $move->amount_residual)) {
-                $accountId = $move->lines->first(fn ($line) => in_array($line->account?->account_type?->value, ['asset_receivable', 'liability_payable'], true))?->account_id;
+                ->get()
+                ->filter(fn (Move $move): bool => $this->amountFitsOpenBalance($mapping, (string) $move->amount_residual))
+                ->values();
+            if ($moves->count() > 1) {
                 $mapping->update([
-                    'offset_account_id' => $accountId,
-                    'match_type'        => 'obligation', 'matched_reference' => $reference,
+                    'review_status'          => BankReviewStatus::NeedsReview,
+                    'confidence'             => 0,
+                    'suggestion_explanation' => 'Multiple open documents match the bank identifiers and amount; select the intended obligation manually.',
+                ]);
+
+                continue;
+            }
+
+            $move = $moves->first();
+            if ($move) {
+                $accountId = $move->lines->first(fn ($line) => in_array($line->account?->account_type?->value, ['asset_receivable', 'liability_payable'], true))?->account_id;
+                $matchedReference = collect([
+                    $move->reference,
+                    $move->payment_reference,
+                    $move->name,
+                    $move->booking_id,
+                    $move->consolidated_number,
+                ])->filter()->first(fn (string $identifier): bool => $identifier === $reference || str_contains($description, $identifier));
+                $mapping->update([
+                    'offset_account_id' => $accountId, 'matched_move_id' => $move->id,
+                    'match_type'        => 'obligation', 'matched_reference' => $matchedReference ?: $reference,
                     'transaction_type'  => 'Open document settlement', 'review_status' => BankReviewStatus::Suggested,
-                    'confidence'        => 1, 'suggestion_explanation' => "Exact open-document reference {$reference} and amount matched.",
+                    'confidence'        => 1, 'suggestion_explanation' => 'A unique open document matched by invoice, booking or consolidated reference and compatible amount.',
                 ]);
                 $obligations++;
 
                 continue;
             }
 
-            $payment = Payment::query()
+            $paymentQuery = Payment::query()
                 ->where('company_id', $companyId)
-                ->where(fn ($query) => $query->where('payment_reference', $reference)->orWhere('name', $reference)->orWhere('memo', $reference))
-                ->first();
+                ->where(fn ($query) => $query->where('payment_reference', $reference)->orWhere('name', $reference)->orWhere('memo', $reference));
+            $paymentMatches = $reference === ''
+                ? collect()
+                : $paymentQuery->get()->filter(fn (Payment $payment): bool => $this->amountMatches($mapping, (string) $payment->amount))->values();
+            if ($paymentMatches->count() > 1) {
+                $mapping->update([
+                    'review_status'          => BankReviewStatus::NeedsReview,
+                    'confidence'             => 0,
+                    'suggestion_explanation' => 'Multiple registered payments match this bank reference and amount.',
+                ]);
+
+                continue;
+            }
+
+            $payment = $paymentMatches->first();
             if ($payment && $this->amountMatches($mapping, (string) $payment->amount)) {
                 $mapping->update([
                     'offset_account_id' => $payment->destination_account_id ?: $payment->outstanding_account_id,
@@ -86,5 +139,16 @@ final class BankMatchingPriorityService
         );
 
         return $actual->minus($expected)->abs()->isLessThanOrEqualTo('0.01');
+    }
+
+    private function amountFitsOpenBalance(BankTransactionMapping $mapping, string $openBalance): bool
+    {
+        $actual = BigDecimal::max(
+            (string) ($mapping->statementLine?->original_debit ?? '0'),
+            (string) ($mapping->statementLine?->original_credit ?? '0'),
+        );
+
+        return $actual->isPositive()
+            && $actual->minus($openBalance)->isLessThanOrEqualTo('0.01');
     }
 }

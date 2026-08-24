@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 use RuntimeException;
 use Webkul\Account\Enums\MoveState;
 use Webkul\Account\Enums\MoveType;
+use Webkul\Account\Facades\Account as AccountFacade;
 use Webkul\Account\Models\Move;
 use Webkul\Accounting\Enums\BankImportStatus;
 use Webkul\Accounting\Enums\BankPostingStatus;
@@ -21,7 +22,7 @@ class BankJournalService
     {
         return DB::transaction(function () use ($mapping): Move {
             $mapping = BankTransactionMapping::query()
-                ->with(['statementLine.statement', 'transferMatch.outgoingLine.mapping', 'transferMatch.incomingLine.mapping'])
+                ->with(['statementLine.statement', 'matchedMove', 'transferMatch.outgoingLine.mapping', 'transferMatch.incomingLine.mapping'])
                 ->lockForUpdate()
                 ->findOrFail($mapping->id);
 
@@ -58,6 +59,9 @@ class BankJournalService
             $moveId = DB::table('accounts_account_moves')->insertGetId([
                 'journal_id'             => $statement->journal_id,
                 'company_id'             => $mapping->company_id,
+                'creator_id'             => $mapping->reviewer_id,
+                'partner_id'             => $mapping->matchedMove?->partner_id,
+                'commercial_partner_id'  => $mapping->matchedMove?->commercial_partner_id,
                 'currency_id'            => $statement->currency_id,
                 'original_currency_id'   => $line->original_currency_id,
                 'company_currency_id'    => $line->company_currency_id,
@@ -90,6 +94,7 @@ class BankJournalService
                 statementLineId: $line->id,
                 journalId: $statement->journal_id,
                 companyId: $mapping->company_id,
+                partnerId: $mapping->matchedMove?->partner_id,
                 originalCurrencyId: (int) $line->original_currency_id,
                 companyCurrencyId: (int) $line->company_currency_id,
                 date: (string) $line->transaction_date?->toDateString(),
@@ -166,6 +171,8 @@ class BankJournalService
                 ]);
             }
 
+            $this->reconcileMatchedObligation($mapping, $move);
+
             $this->refreshStatementCompletion($mapping->statementLine->statement);
 
             return $move->fresh('lines');
@@ -218,6 +225,7 @@ class BankJournalService
         int $statementLineId,
         int $journalId,
         int $companyId,
+        ?int $partnerId,
         int $originalCurrencyId,
         int $companyCurrencyId,
         string $date,
@@ -236,33 +244,40 @@ class BankJournalService
         $now = now();
         DB::table('accounts_account_move_lines')->insert([
             [
-                'move_id'             => $moveId, 'statement_id' => $statementId, 'statement_line_id' => $statementLineId,
-                'journal_id'          => $journalId, 'account_id' => $debitAccountId, 'company_id' => $companyId,
-                'company_currency_id' => $companyCurrencyId, 'currency_id' => $originalCurrencyId,
-                'original_currency_id'=> $originalCurrencyId, 'date' => $date,
-                'debit'               => $companyAmount, 'credit' => 0, 'balance' => $companyAmount,
-                'original_debit'      => $originalAmount, 'original_credit' => 0, 'original_signed_amount' => $originalAmount,
-                'company_debit'       => $companyAmount, 'company_credit' => 0, 'company_signed_amount' => $companyAmount,
-                'amount_currency'     => $originalAmount, 'exchange_rate_id' => $exchangeRateId, 'exchange_rate' => $exchangeRate,
-                'rate_date'           => $rateDate, 'rate_source' => $rateSource, 'rate_type' => $rateType,
-                'conversion_status'   => ConversionStatus::Complete->value, 'parent_state' => MoveState::DRAFT->value,
-                'name'                => $description, 'reference' => $reference, 'sort' => 0, 'created_at' => $now, 'updated_at' => $now,
+                'move_id'                  => $moveId, 'statement_id' => $statementId, 'statement_line_id' => $statementLineId,
+                'journal_id'               => $journalId, 'account_id' => $debitAccountId, 'company_id' => $companyId,
+                'partner_id'               => $partnerId,
+                'company_currency_id'      => $companyCurrencyId, 'currency_id' => $originalCurrencyId,
+                'original_currency_id'     => $originalCurrencyId, 'date' => $date,
+                'debit'                    => $companyAmount, 'credit' => 0, 'balance' => $companyAmount,
+                'original_debit'           => $originalAmount, 'original_credit' => 0, 'original_signed_amount' => $originalAmount,
+                'company_debit'            => $companyAmount, 'company_credit' => 0, 'company_signed_amount' => $companyAmount,
+                'amount_currency'          => $originalAmount, 'amount_residual' => $companyAmount,
+                'amount_residual_currency' => $originalAmount, 'reconciled' => false,
+                'exchange_rate_id'         => $exchangeRateId, 'exchange_rate' => $exchangeRate,
+                'rate_date'                => $rateDate, 'rate_source' => $rateSource, 'rate_type' => $rateType,
+                'conversion_status'        => ConversionStatus::Complete->value, 'parent_state' => MoveState::DRAFT->value,
+                'name'                     => $description, 'reference' => $reference, 'sort' => 0, 'created_at' => $now, 'updated_at' => $now,
             ],
             [
-                'move_id'                => $moveId, 'statement_id' => $statementId, 'statement_line_id' => $statementLineId,
-                'journal_id'             => $journalId, 'account_id' => $creditAccountId, 'company_id' => $companyId,
-                'company_currency_id'    => $companyCurrencyId, 'currency_id' => $originalCurrencyId,
-                'original_currency_id'   => $originalCurrencyId, 'date' => $date,
-                'debit'                  => 0, 'credit' => $companyAmount, 'balance' => BigDecimal::of($companyAmount)->negated()->__toString(),
-                'original_debit'         => 0, 'original_credit' => $originalAmount,
-                'original_signed_amount' => BigDecimal::of($originalAmount)->negated()->__toString(),
-                'company_debit'          => 0, 'company_credit' => $companyAmount,
-                'company_signed_amount'  => BigDecimal::of($companyAmount)->negated()->__toString(),
-                'amount_currency'        => BigDecimal::of($originalAmount)->negated()->__toString(),
-                'exchange_rate_id'       => $exchangeRateId, 'exchange_rate' => $exchangeRate,
-                'rate_date'              => $rateDate, 'rate_source' => $rateSource, 'rate_type' => $rateType,
-                'conversion_status'      => ConversionStatus::Complete->value, 'parent_state' => MoveState::DRAFT->value,
-                'name'                   => $description, 'reference' => $reference, 'sort' => 1, 'created_at' => $now, 'updated_at' => $now,
+                'move_id'                  => $moveId, 'statement_id' => $statementId, 'statement_line_id' => $statementLineId,
+                'journal_id'               => $journalId, 'account_id' => $creditAccountId, 'company_id' => $companyId,
+                'partner_id'               => $partnerId,
+                'company_currency_id'      => $companyCurrencyId, 'currency_id' => $originalCurrencyId,
+                'original_currency_id'     => $originalCurrencyId, 'date' => $date,
+                'debit'                    => 0, 'credit' => $companyAmount, 'balance' => BigDecimal::of($companyAmount)->negated()->__toString(),
+                'original_debit'           => 0, 'original_credit' => $originalAmount,
+                'original_signed_amount'   => BigDecimal::of($originalAmount)->negated()->__toString(),
+                'company_debit'            => 0, 'company_credit' => $companyAmount,
+                'company_signed_amount'    => BigDecimal::of($companyAmount)->negated()->__toString(),
+                'amount_currency'          => BigDecimal::of($originalAmount)->negated()->__toString(),
+                'amount_residual'          => BigDecimal::of($companyAmount)->negated()->__toString(),
+                'amount_residual_currency' => BigDecimal::of($originalAmount)->negated()->__toString(),
+                'reconciled'               => false,
+                'exchange_rate_id'         => $exchangeRateId, 'exchange_rate' => $exchangeRate,
+                'rate_date'                => $rateDate, 'rate_source' => $rateSource, 'rate_type' => $rateType,
+                'conversion_status'        => ConversionStatus::Complete->value, 'parent_state' => MoveState::DRAFT->value,
+                'name'                     => $description, 'reference' => $reference, 'sort' => 1, 'created_at' => $now, 'updated_at' => $now,
             ],
         ]);
     }
@@ -282,5 +297,32 @@ class BankJournalService
             'is_completed'  => ! $incomplete,
             'import_status' => $incomplete ? BankImportStatus::Validated->value : BankImportStatus::Posted->value,
         ]);
+    }
+
+    protected function reconcileMatchedObligation(BankTransactionMapping $mapping, Move $bankMove): void
+    {
+        if ($mapping->match_type !== 'obligation' || ! $mapping->matched_move_id) {
+            return;
+        }
+
+        $bankMove->refresh()->load('lines.account');
+        $obligation = Move::query()
+            ->where('company_id', $mapping->company_id)
+            ->where('state', MoveState::POSTED)
+            ->with('paymentTermLines.account')
+            ->findOrFail($mapping->matched_move_id);
+        $obligationLine = $obligation->paymentTermLines
+            ->first(fn ($line): bool => ! $line->reconciled && (int) $line->account_id === (int) $mapping->offset_account_id);
+        $bankLine = $bankMove->lines
+            ->first(fn ($line): bool => (int) $line->account_id === (int) $mapping->offset_account_id);
+
+        if (! $obligationLine || ! $bankLine) {
+            throw new RuntimeException('The matched obligation no longer has a compatible open receivable/payable line.');
+        }
+
+        AccountFacade::reconcile($obligationLine->newCollection([$obligationLine, $bankLine]));
+        $obligation->refresh();
+        $obligation->computePaymentState();
+        $obligation->save();
     }
 }

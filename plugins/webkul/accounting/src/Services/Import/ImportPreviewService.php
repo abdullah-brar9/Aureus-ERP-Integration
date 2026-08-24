@@ -10,13 +10,18 @@ use Illuminate\Support\Str;
 use Throwable;
 use Webkul\Account\Enums\AccountType;
 use Webkul\Account\Enums\JournalType;
+use Webkul\Account\Enums\TypeTaxUse;
 use Webkul\Account\Models\Account;
 use Webkul\Account\Models\Journal;
 use Webkul\Account\Models\Partner;
+use Webkul\Account\Models\PaymentTerm;
+use Webkul\Account\Models\Tax;
 use Webkul\Accounting\Models\BusinessRule;
+use Webkul\Accounting\Models\FsTag;
 use Webkul\Accounting\Models\ImportProfile;
 use Webkul\Accounting\Models\ImportProfileMapping;
 use Webkul\Accounting\Models\ImportRun;
+use Webkul\Accounting\Models\ImportSourceRow;
 use Webkul\Support\Models\Currency;
 
 final class ImportPreviewService
@@ -61,35 +66,87 @@ final class ImportPreviewService
                 'profile_version'   => $profile->version,
             ]);
 
-            $counts = ['pass' => 0, 'warning' => 0, 'error' => 0];
+            $preparedRows = [];
             foreach ($file['rows'] as $source) {
                 [$values, $messages] = $this->mapAndValidate($profile, $file['headers'], $source['values'], $effectiveRules);
                 $status = collect($messages)->contains(fn (array $message): bool => $message['severity'] === 'error')
                     ? 'error'
                     : (collect($messages)->contains(fn (array $message): bool => $message['severity'] === 'warning') ? 'warning' : 'pass');
+
+                $preparedRows[] = [
+                    'source'      => $source,
+                    'values'      => $values,
+                    'messages'    => $messages,
+                    'status'      => $status,
+                    'fingerprint' => $this->fingerprint($profile->entity_type, $values),
+                ];
+            }
+
+            $fingerprints = collect($preparedRows)->pluck('fingerprint')->filter()->unique()->values();
+            $existingByFingerprint = $fingerprints->isEmpty()
+                ? collect()
+                : ImportSourceRow::query()
+                    ->where('company_id', $profile->company_id)
+                    ->whereNotNull('canonical_id')
+                    ->whereIn('fingerprint', $fingerprints)
+                    ->whereHas('run.profile', fn ($query) => $query->where('entity_type', $profile->entity_type))
+                    ->orderBy('id')
+                    ->get()
+                    ->keyBy('fingerprint');
+            $counts = ['pass' => 0, 'warning' => 0, 'error' => 0, 'duplicate' => 0];
+            $seenInRun = [];
+
+            foreach ($preparedRows as $prepared) {
+                $source = $prepared['source'];
+                $status = $prepared['status'];
+                $messages = $prepared['messages'];
+                $fingerprint = $prepared['fingerprint'];
+                $duplicateOf = $fingerprint === null ? null : ($existingByFingerprint[$fingerprint] ?? $seenInRun[$fingerprint] ?? null);
+
+                if ($status !== 'error' && $duplicateOf !== null) {
+                    $status = 'duplicate';
+                    $messages[] = [
+                        'severity' => 'warning',
+                        'message'  => 'This row matches a previously imported or earlier row and will not be imported again.',
+                    ];
+                }
+
                 $counts[$status]++;
 
-                $run->sourceRows()->create([
-                    'company_id'         => $profile->company_id,
-                    'source_row_number'  => $source['row_number'],
-                    'status'             => $status,
-                    'raw_values'         => array_combine($file['headers'], array_pad($source['values'], count($file['headers']), null)),
-                    'transformed_values' => $values,
-                    'messages'           => $messages,
+                $created = $run->sourceRows()->create([
+                    'company_id'                 => $profile->company_id,
+                    'source_row_number'          => $source['row_number'],
+                    'status'                     => $status,
+                    'fingerprint'                => $fingerprint,
+                    'duplicate_of_source_row_id' => $duplicateOf?->id,
+                    'raw_values'                 => array_combine($file['headers'], array_pad($source['values'], count($file['headers']), null)),
+                    'transformed_values'         => $prepared['values'],
+                    'messages'                   => $messages,
                 ]);
+
+                if ($fingerprint !== null && ! isset($seenInRun[$fingerprint])) {
+                    $seenInRun[$fingerprint] = $created;
+                }
             }
 
             $run->update([
-                'total_rows'   => count($file['rows']),
-                'passed_rows'  => $counts['pass'],
-                'warning_rows' => $counts['warning'],
-                'failed_rows'  => $counts['error'],
-                'summary'      => [
-                    'headers'         => $file['headers'],
-                    'profile_name'    => $profile->name,
-                    'entity_type'     => $profile->entity_type,
-                    'profile_version' => $profile->version,
-                    'staged_path'     => $path,
+                'total_rows'     => count($file['rows']),
+                'passed_rows'    => $counts['pass'],
+                'warning_rows'   => $counts['warning'],
+                'failed_rows'    => $counts['error'],
+                'duplicate_rows' => $counts['duplicate'],
+                'summary'        => [
+                    'headers'            => $file['headers'],
+                    'profile_name'       => $profile->name,
+                    'entity_type'        => $profile->entity_type,
+                    'profile_version'    => $profile->version,
+                    'staged_path'        => $path,
+                    'failure_policy'     => $profile->failure_policy,
+                    'failure_categories' => collect($preparedRows)
+                        ->flatMap(fn (array $prepared): array => $prepared['messages'])
+                        ->filter(fn (array $message): bool => $message['severity'] === 'error')
+                        ->countBy(fn (array $message): string => (string) ($message['field'] ?? 'other'))
+                        ->all(),
                 ],
             ]);
 
@@ -177,13 +234,36 @@ final class ImportPreviewService
             $messages[] = ['severity' => 'error', 'field' => 'currency', 'message' => 'The currency code does not exist.'];
         }
 
-        if (in_array($profile->entity_type, ['invoice', 'bill', 'claim'], true) && ! empty($values['partner_reference'])) {
-            $exists = Partner::query()
-                ->where('company_id', $profile->company_id)
-                ->where('reference', $values['partner_reference'])
-                ->exists();
-            if (! $exists) {
-                $messages[] = ['severity' => 'error', 'field' => 'partner_reference', 'message' => 'The party reference does not exist in this company.'];
+        if (in_array($profile->entity_type, ['invoice', 'bill', 'claim'], true)) {
+            $partnerQuery = Partner::query()->where('company_id', $profile->company_id);
+            if (filled($values['partner_reference'] ?? null)) {
+                $partnerQuery->where('reference', trim((string) $values['partner_reference']));
+            } else {
+                if (filled($values['customer_name'] ?? null)) {
+                    $partnerQuery->whereRaw('LOWER(name) = ?', [mb_strtolower(trim((string) $values['customer_name']))]);
+                }
+                if (filled($values['customer_email'] ?? null)) {
+                    $partnerQuery->whereRaw('LOWER(email) = ?', [mb_strtolower(trim((string) $values['customer_email']))]);
+                }
+            }
+
+            if (! filled($values['partner_reference'] ?? null)
+                && ! filled($values['customer_name'] ?? null)
+                && ! filled($values['customer_email'] ?? null)) {
+                $messages[] = ['severity' => 'error', 'field' => 'partner_reference', 'message' => 'A party reference, name or email is required.'];
+            } else {
+                $partnerCount = $partnerQuery->count();
+                if ($partnerCount === 0) {
+                    $messages[] = [
+                        'severity' => 'error',
+                        'field'    => 'partner_reference',
+                        'message'  => filled($values['partner_reference'] ?? null)
+                            ? 'The party reference does not exist in this company.'
+                            : 'The party does not exist in this company.',
+                    ];
+                } elseif ($partnerCount > 1) {
+                    $messages[] = ['severity' => 'error', 'field' => 'partner_reference', 'message' => 'The party identity is ambiguous in this company.'];
+                }
             }
         }
 
@@ -204,6 +284,29 @@ final class ImportPreviewService
                     $messages[] = ['severity' => 'error', 'field' => $field, 'message' => 'The GL code is not an active postable account in this company.'];
                 }
             }
+
+            if (! empty($values['payment_term']) && ! PaymentTerm::query()
+                ->where('company_id', $profile->company_id)
+                ->whereRaw('LOWER(name) = ?', [mb_strtolower(trim((string) $values['payment_term']))])
+                ->exists()) {
+                $messages[] = ['severity' => 'error', 'field' => 'payment_term', 'message' => 'The payment term does not exist in this company.'];
+            }
+
+            try {
+                $taxPercent = BigDecimal::of((string) ($values['tax_percent'] ?? '0'));
+                if ($taxPercent->isNegative() || $taxPercent->isGreaterThan('100')) {
+                    $messages[] = ['severity' => 'error', 'field' => 'tax_percent', 'message' => 'Tax percentage must be between 0 and 100.'];
+                } elseif ($taxPercent->isPositive() && ! Tax::query()
+                    ->where('company_id', $profile->company_id)
+                    ->where('is_active', true)
+                    ->where('amount', $taxPercent->__toString())
+                    ->where('type_tax_use', $profile->entity_type === 'bill' ? TypeTaxUse::PURCHASE : TypeTaxUse::SALE)
+                    ->exists()) {
+                    $messages[] = ['severity' => 'error', 'field' => 'tax_percent', 'message' => 'No active company tax matches this percentage and document type.'];
+                }
+            } catch (Throwable) {
+                $messages[] = ['severity' => 'error', 'field' => 'tax_percent', 'message' => 'Tax percentage must be a valid number.'];
+            }
         }
 
         if ($profile->entity_type === 'bank_statement') {
@@ -220,6 +323,82 @@ final class ImportPreviewService
                 ->whereHas('companies', fn ($query) => $query->where('companies.id', $profile->company_id))
                 ->exists()) {
                 $messages[] = ['severity' => 'error', 'field' => 'bank_gl_code', 'message' => 'The Bank GL code is not an active company-owned Bank/Cash account.'];
+            }
+
+            if (! empty($values['offset_gl_code']) && ! Account::query()
+                ->postable()
+                ->where('deprecated', false)
+                ->whereRaw('UPPER(code) = ?', [mb_strtoupper((string) $values['offset_gl_code'])])
+                ->whereHas('companies', fn ($query) => $query->where('companies.id', $profile->company_id))
+                ->exists()) {
+                $messages[] = ['severity' => 'error', 'field' => 'offset_gl_code', 'message' => 'The Offset GL code is not an active postable account in this company.'];
+            }
+
+            if (! empty($values['fs_tag']) && ! FsTag::query()
+                ->where('company_id', $profile->company_id)
+                ->whereRaw('UPPER(code) = ?', [mb_strtoupper(trim((string) $values['fs_tag']))])
+                ->where('is_active', true)
+                ->exists()) {
+                $messages[] = ['severity' => 'error', 'field' => 'fs_tag', 'message' => 'The FS Tag is inactive or does not exist in this company.'];
+            }
+        }
+
+        if ($profile->entity_type === 'fs_tag') {
+            $code = mb_strtoupper(trim((string) ($values['code'] ?? '')));
+            $name = mb_strtolower(trim((string) ($values['name'] ?? '')));
+
+            if ($code !== '' && FsTag::query()->where('company_id', $profile->company_id)->where('code', $code)->exists()) {
+                $messages[] = ['severity' => 'error', 'field' => 'code', 'message' => 'The FS Tag code already exists in this company.'];
+            }
+            if ($name !== '' && FsTag::query()->where('company_id', $profile->company_id)->where('normalized_name', $name)->exists()) {
+                $messages[] = ['severity' => 'error', 'field' => 'name', 'message' => 'The FS Tag name already exists in this company.'];
+            }
+            if (! empty($values['gl_code']) && ! Account::query()
+                ->postable()
+                ->where('deprecated', false)
+                ->whereRaw('UPPER(code) = ?', [mb_strtoupper(trim((string) $values['gl_code']))])
+                ->whereHas('companies', fn ($query) => $query->where('companies.id', $profile->company_id))
+                ->exists()) {
+                $messages[] = ['severity' => 'error', 'field' => 'gl_code', 'message' => 'The linked GL code is not an active postable account in this company.'];
+            }
+        }
+
+        if (in_array($profile->entity_type, ['opening_balance', 'journal_entry'], true)) {
+            if (! empty($values['journal_code']) && ! Journal::query()
+                ->where('company_id', $profile->company_id)
+                ->where('type', JournalType::GENERAL)
+                ->whereRaw('UPPER(code) = ?', [mb_strtoupper((string) $values['journal_code'])])
+                ->exists()) {
+                $messages[] = ['severity' => 'error', 'field' => 'journal_code', 'message' => 'The general journal code does not exist in this company.'];
+            }
+
+            if (! empty($values['gl_code']) && ! Account::query()
+                ->postable()
+                ->where('deprecated', false)
+                ->whereRaw('UPPER(code) = ?', [mb_strtoupper((string) $values['gl_code'])])
+                ->whereHas('companies', fn ($query) => $query->where('companies.id', $profile->company_id))
+                ->exists()) {
+                $messages[] = ['severity' => 'error', 'field' => 'gl_code', 'message' => 'The GL code is not an active postable account in this company.'];
+            }
+
+            try {
+                $debit = BigDecimal::of((string) ($values['debit'] ?? '0'));
+                $credit = BigDecimal::of((string) ($values['credit'] ?? '0'));
+                $bothPositive = $debit->isPositive() && $credit->isPositive();
+                $bothZero = $debit->isZero() && $credit->isZero();
+                if ($debit->isNegative() || $credit->isNegative() || $bothPositive || ($bothZero && $profile->entity_type === 'journal_entry')) {
+                    $messages[] = ['severity' => 'error', 'field' => 'debit', 'message' => 'Each row must contain one positive debit or credit amount, never both.'];
+                }
+            } catch (Throwable) {
+                $messages[] = ['severity' => 'error', 'field' => 'debit', 'message' => 'Debit and credit must be valid numbers.'];
+            }
+
+            if ($profile->entity_type === 'journal_entry' && ! empty($values['fs_tag']) && ! FsTag::query()
+                ->where('company_id', $profile->company_id)
+                ->where('code', mb_strtoupper(trim((string) $values['fs_tag'])))
+                ->where('is_active', true)
+                ->exists()) {
+                $messages[] = ['severity' => 'error', 'field' => 'fs_tag', 'message' => 'The FS Tag is inactive or does not exist in this company.'];
             }
         }
 
@@ -271,5 +450,38 @@ final class ImportPreviewService
         } catch (Throwable) {
             return false;
         }
+    }
+
+    /** @param array<string, mixed> $values */
+    private function fingerprint(string $entityType, array $values): ?string
+    {
+        $keys = match ($entityType) {
+            'bank_statement' => [
+                'bank_account_number', 'currency', 'date', 'value_date', 'reference', 'description', 'debit', 'credit',
+            ],
+            'vendor', 'customer'                        => ['reference', 'name', 'email', 'tax_id'],
+            'employee'                                  => ['identification_id', 'work_email', 'name'],
+            'fs_tag'                                    => ['code'],
+            'invoice', 'bill', 'claim', 'miscellaneous' => [
+                'reference', 'partner_reference', 'customer_name', 'customer_email', 'date', 'amount_total', 'currency',
+            ],
+            'opening_balance' => ['gl_code', 'date', 'debit', 'credit', 'currency'],
+            'journal_entry'   => ['journal_entry_id', 'gl_code', 'date', 'debit', 'credit', 'currency'],
+            default           => array_keys($values),
+        };
+
+        $identity = [];
+        foreach ($keys as $key) {
+            $value = $values[$key] ?? null;
+            $identity[$key] = is_string($value)
+                ? mb_strtoupper(preg_replace('/\s+/u', ' ', trim($value)) ?? trim($value))
+                : $value;
+        }
+
+        if (collect($identity)->every(fn (mixed $value): bool => $value === null || $value === '')) {
+            return null;
+        }
+
+        return hash('sha256', json_encode($identity, JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
     }
 }

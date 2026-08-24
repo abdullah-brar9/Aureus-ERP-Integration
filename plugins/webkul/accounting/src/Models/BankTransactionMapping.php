@@ -78,6 +78,11 @@ class BankTransactionMapping extends Model
         return $this->belongsTo(Move::class);
     }
 
+    public function matchedMove(): BelongsTo
+    {
+        return $this->belongsTo(Move::class, 'matched_move_id');
+    }
+
     public function originalCurrency(): BelongsTo
     {
         return $this->belongsTo(Currency::class, 'original_currency_id');

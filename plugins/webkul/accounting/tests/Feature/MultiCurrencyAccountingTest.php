@@ -32,8 +32,10 @@ use Webkul\Security\Models\Permission;
 use Webkul\Security\Models\Role;
 use Webkul\Security\Models\User;
 use Webkul\Security\PermissionRegistrar;
+use Webkul\Support\Models\ApprovalWorkflow;
 use Webkul\Support\Models\Company;
 use Webkul\Support\Models\Currency;
+use Webkul\Support\Services\ApprovalEngine;
 
 function multiCurrencyTestFixture(): array
 {
@@ -185,6 +187,43 @@ it('approval invalidates missing-rate state and rejects duplicate approved rate 
             $fixture['base'],
             '2026-07-20',
         )->recordId)->toBe($approved->id);
+});
+
+it('enforces the shared configurable approval chain when one is configured for exchange rates', function (): void {
+    $fixture = multiCurrencyTestFixture();
+    $rate = ExchangeRate::query()->create([
+        'company_id'         => $fixture['company']->id,
+        'source_currency_id' => $fixture['foreign']->id,
+        'target_currency_id' => $fixture['base']->id,
+        'effective_date'     => '2026-08-25',
+        'rate'               => '281.500000000000000',
+        'rate_type'          => ExchangeRateType::Transaction,
+        'source'             => ExchangeRateSource::Manual,
+        'approval_status'    => ExchangeRateApprovalStatus::Draft,
+        'created_by'         => $fixture['user']->id,
+    ]);
+    $workflow = ApprovalWorkflow::query()->create([
+        'company_id' => $fixture['company']->id, 'creator_id' => $fixture['user']->id,
+        'name'       => 'Exchange rate approval', 'request_type' => 'exchange_rate_change',
+        'priority'   => 100, 'is_active' => true,
+    ]);
+    $workflow->steps()->create([
+        'sequence'           => 1, 'name' => 'Finance controller', 'approver_user_id' => $fixture['user']->id,
+        'required_approvals' => 1,
+    ]);
+    $service = app(ExchangeRateApprovalService::class);
+
+    expect($service->requiresConfiguredApproval($rate))->toBeTrue()
+        ->and(fn () => $service->approve($rate, $fixture['user']))
+        ->toThrow(RuntimeException::class, 'completed configured approval');
+
+    $request = $service->submit($rate, $fixture['user']);
+    $request = app(ApprovalEngine::class)->approve($request, $fixture['user'], 'Rate source checked.');
+    $approved = $service->approve($rate, $fixture['user']);
+
+    expect($request->status)->toBe('approved')
+        ->and($approved->approval_status)->toBe(ExchangeRateApprovalStatus::Approved)
+        ->and($approved->approved_by)->toBe($fixture['user']->id);
 });
 
 it('creates canonical company-scoped bank and offset accounts without overwriting duplicates', function (): void {

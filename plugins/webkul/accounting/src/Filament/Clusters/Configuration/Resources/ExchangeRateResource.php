@@ -99,6 +99,16 @@ class ExchangeRateResource extends Resource
             ])
             ->recordActions([
                 EditAction::make()->visible(fn (ExchangeRate $record): bool => $record->approval_status !== ExchangeRateApprovalStatus::Approved),
+                Action::make('submit_approval')
+                    ->label('Submit for approval')
+                    ->authorize(AccountingPermissions::ManageExchangeRates)
+                    ->icon('heroicon-o-paper-airplane')
+                    ->visible(fn (ExchangeRate $record): bool => $record->approval_status !== ExchangeRateApprovalStatus::Approved
+                        && app(ExchangeRateApprovalService::class)->requiresConfiguredApproval($record))
+                    ->action(function (ExchangeRate $record): void {
+                        $request = app(ExchangeRateApprovalService::class)->submit($record, Auth::user());
+                        Notification::make()->success()->title("Approval request APR-{$request->id} is in the shared approval queue.")->send();
+                    }),
                 Action::make('approve')
                     ->authorize(AccountingPermissions::ApproveExchangeRates)
                     ->color('success')

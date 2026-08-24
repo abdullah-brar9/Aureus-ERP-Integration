@@ -17,9 +17,10 @@ class ImportRun extends Model
     protected function casts(): array
     {
         return [
-            'summary'      => 'array',
-            'confirmed_at' => 'datetime',
-            'completed_at' => 'datetime',
+            'summary'                 => 'array',
+            'confirmed_at'            => 'datetime',
+            'duplicates_confirmed_at' => 'datetime',
+            'completed_at'            => 'datetime',
         ];
     }
 

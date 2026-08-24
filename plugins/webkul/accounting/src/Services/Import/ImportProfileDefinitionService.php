@@ -19,7 +19,7 @@ final class ImportProfileDefinitionService
             'schema_version' => 1,
             'profile'        => $profile->only([
                 'name', 'entity_type', 'file_type', 'sheet_name', 'header_row', 'data_start_row', 'skip_rows',
-                'blank_row_rule', 'stop_rule', 'delimiter', 'encoding', 'version',
+                'blank_row_rule', 'failure_policy', 'stop_rule', 'delimiter', 'encoding', 'version',
             ]),
             'mappings' => $profile->mappings->map->only([
                 'position', 'source_header', 'source_position', 'source_aliases', 'target_field',

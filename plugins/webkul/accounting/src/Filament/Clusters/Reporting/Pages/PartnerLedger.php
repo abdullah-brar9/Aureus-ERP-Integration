@@ -143,7 +143,11 @@ class PartnerLedger extends Page implements HasForms
                     Select::make('partners')
                         ->label(__('accounting::filament/clusters/reporting.pages.partner-ledger.filters.partners'))
                         ->multiple()
-                        ->options(Partner::pluck('name', 'id'))
+                        ->options(fn (): array => Partner::query()
+                            ->where('company_id', Auth::user()?->default_company_id)
+                            ->orderBy('name')
+                            ->pluck('name', 'id')
+                            ->all())
                         ->searchable()
                         ->live()
                         ->afterStateUpdated(fn () => $this->resetExpandedState()),
