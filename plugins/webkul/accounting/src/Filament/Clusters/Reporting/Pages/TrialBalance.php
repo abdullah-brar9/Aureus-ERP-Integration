@@ -4,28 +4,36 @@ namespace Webkul\Accounting\Filament\Clusters\Reporting\Pages;
 
 use Barryvdh\DomPDF\Facade\Pdf;
 use BezhanSalleh\FilamentShield\Traits\HasPageShield;
-use Carbon\Carbon;
 use Filament\Actions\Action;
+use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Toggle;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Pages\Page;
 use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Utilities\Get;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Computed;
 use Maatwebsite\Excel\Facades\Excel;
-use Malzariey\FilamentDaterangepickerFilter\Fields\DateRangePicker;
-use Webkul\Account\Enums\MoveState;
-use Webkul\Account\Models\Account;
 use Webkul\Account\Models\Journal;
+use Webkul\Accounting\Enums\ReportCurrencyMode;
 use Webkul\Accounting\Filament\Clusters\Reporting;
-use Webkul\Accounting\Filament\Clusters\Reporting\Pages\Concerns\NormalizeDateFilter;
 use Webkul\Accounting\Filament\Clusters\Reporting\Pages\Exports\TrialBalanceExport;
+use Webkul\Accounting\Services\ReportCompletenessService;
+use Webkul\Accounting\Services\TrialBalanceService;
+use Webkul\Accounting\Support\AccountingPermissions;
+use Webkul\Support\Models\Company;
+use Webkul\Support\Models\Currency;
 
+/**
+ * Ledger-backed Trial Balance: opening / movement / adjustment / closing from
+ * posted account-move lines only (see TrialBalanceService), replacing the old
+ * hardcoded page. Grouped under Reports beside the other statements.
+ */
 class TrialBalance extends Page implements HasForms
 {
-    use HasPageShield, InteractsWithForms, NormalizeDateFilter;
+    use HasPageShield, InteractsWithForms;
 
     protected string $view = 'accounting::filament.clusters.reporting.pages.trial-balance';
 
@@ -33,7 +41,7 @@ class TrialBalance extends Page implements HasForms
 
     protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-scale';
 
-    protected static ?int $navigationSort = 4;
+    protected static ?int $navigationSort = 2;
 
     public ?array $data = [];
 
@@ -44,7 +52,7 @@ class TrialBalance extends Page implements HasForms
 
     public static function getNavigationGroup(): ?string
     {
-        return __('accounting::filament/clusters/reporting.pages.trial-balance.navigation.group');
+        return 'Reports';
     }
 
     public static function getNavigationLabel(): string
@@ -59,81 +67,60 @@ class TrialBalance extends Page implements HasForms
 
     public function mount(): void
     {
-        $this->form->fill([]);
-    }
-
-    protected function getHeaderActions(): array
-    {
-        return [
-            Action::make('excel')
-                ->label(__('accounting::filament/clusters/reporting.pages.trial-balance.actions.export-excel'))
-                ->icon('heroicon-o-document-arrow-down')
-                ->color('success')
-                ->action(function () {
-                    $data = $this->trialBalanceData;
-
-                    return Excel::download(
-                        new TrialBalanceExport(
-                            $data['accounts'],
-                            $data['date_from'],
-                            $data['date_to'],
-                            $data['totals']
-                        ),
-                        'trial-balance-'.$data['date_from']->format('Y-m-d').'-'.$data['date_to']->format('Y-m-d').'.xlsx'
-                    );
-                }),
-            Action::make('pdf')
-                ->label(__('accounting::filament/clusters/reporting.pages.trial-balance.actions.export-pdf'))
-                ->icon('heroicon-o-document-text')
-                ->color('danger')
-                ->action(function () {
-                    $data = $this->trialBalanceData;
-
-                    $pdf = Pdf::loadView('accounting::filament.clusters.reporting.pages.pdfs.trial-balance', [
-                        'data' => $data,
-                    ])->setPaper('a4', 'landscape');
-
-                    return response()->streamDownload(function () use ($pdf) {
-                        echo $pdf->stream();
-                    }, 'trial-balance-'.$data['date_from']->format('Y-m-d').'-'.$data['date_to']->format('Y-m-d').'.pdf');
-                }),
-        ];
+        $this->form->fill([
+            'company_id'            => Auth::user()?->default_company_id,
+            'from_date'             => now()->startOfMonth()->toDateString(),
+            'to_date'               => now()->endOfMonth()->toDateString(),
+            'posted_only'           => true,
+            'include_zero'          => false,
+            'include_groups'        => false,
+            'journals'              => [],
+            'currency_mode'         => ReportCurrencyMode::Company->value,
+            'reporting_currency_id' => null,
+        ]);
     }
 
     protected function getFormSchema(): array
     {
         return [
             Section::make()
-                ->columns([
-                    'default' => 1,
-                    'sm'      => 2,
-                ])
+                ->columns(['default' => 1, 'sm' => 3])
                 ->schema([
-                    DateRangePicker::make('date_range')
-                        ->label(__('accounting::filament/clusters/reporting.pages.trial-balance.filters.date-range'))
-                        ->suffixIcon('heroicon-o-calendar')
-                        ->defaultThisMonth()
-                        ->ranges([
-                            'Today'        => [now()->startOfDay(), now()->endOfDay()],
-                            'Yesterday'    => [now()->subDay()->startOfDay(), now()->subDay()->endOfDay()],
-                            'This Month'   => [now()->startOfMonth(), now()->endOfMonth()],
-                            'Last Month'   => [now()->subMonth()->startOfMonth(), now()->subMonth()->endOfMonth()],
-                            'This Quarter' => [now()->startOfQuarter(), now()->endOfQuarter()],
-                            'Last Quarter' => [now()->subQuarter()->startOfQuarter(), now()->subQuarter()->endOfQuarter()],
-                            'This Year'    => [now()->startOfYear(), now()->endOfYear()],
-                            'Last Year'    => [now()->subYear()->startOfYear(), now()->subYear()->endOfYear()],
-                        ])
-                        ->alwaysShowCalendar()
-                        ->live()
-                        ->afterStateUpdated(fn () => null),
+                    Select::make('company_id')
+                        ->label('Company')
+                        ->options(fn () => Company::query()->whereKey(Auth::user()?->default_company_id)->pluck('name', 'id'))
+                        ->default(Auth::user()?->default_company_id)
+                        ->disabled()->dehydrated()->live(),
+                    DatePicker::make('from_date')
+                        ->label('From')->live(),
+                    DatePicker::make('to_date')
+                        ->label('To')->live(),
                     Select::make('journals')
-                        ->label(__('accounting::filament/clusters/reporting.pages.trial-balance.filters.journals'))
+                        ->label('Journals')
                         ->multiple()
-                        ->options(fn () => Journal::pluck('name', 'id'))
-                        ->searchable()
-                        ->preload()
-                        ->live()
-                        ->afterStateUpdated(fn () => null),
+                        ->options(fn (Get $get) => Journal::query()
+                            ->where('company_id', (int) $get('company_id'))
+                            ->pluck('name', 'id'))
+                        ->searchable()->live(),
+                    Select::make('currency_mode')
+                        ->label('Currency mode')
+                        ->options(ReportCurrencyMode::options())
+                        ->default(ReportCurrencyMode::Company->value)
+                        ->live(),
+                    Select::make('reporting_currency_id')
+                        ->label('Reporting currency')
+                        ->visible(fn (Get $get): bool => $get('currency_mode') === ReportCurrencyMode::Reporting->value)
+                        ->options(fn (Get $get) => Currency::query()
+                            ->whereHas('enabledCompanies', fn ($query) => $query
+                                ->where('companies.id', (int) $get('company_id'))
+                                ->where('accounting_company_currencies.reporting_enabled', true))
+                            ->orderBy('display_order')->get()
+                            ->mapWithKeys(fn (Currency $currency): array => [$currency->id => $currency->display_name]))
+                        ->required(fn (Get $get): bool => $get('currency_mode') === ReportCurrencyMode::Reporting->value)
+                        ->searchable()->live(),
+                    Toggle::make('posted_only')->label('Posted only')->default(true)->live(),
+                    Toggle::make('include_zero')->label('Show zero balances')->live(),
+                    Toggle::make('include_groups')->label('Show hierarchy groups')->live(),
                 ])
                 ->columnSpanFull(),
         ];
@@ -147,54 +134,95 @@ class TrialBalance extends Page implements HasForms
     #[Computed]
     public function trialBalanceData(): array
     {
-        $dateRange = $this->parseDateRange();
-        $dateFrom = $dateRange ? Carbon::parse($dateRange[0]) : now()->startOfMonth();
-        $dateTo = $dateRange ? Carbon::parse($dateRange[1]) : now()->endOfMonth();
+        $companyId = (int) Auth::user()?->default_company_id;
 
-        $companyId = Auth::user()->default_company_id;
-        $journalIds = $this->data['journals'] ?? [];
-
-        $accountsQuery = Account::select(
-            'accounts_accounts.id',
-            'accounts_accounts.code',
-            'accounts_accounts.name',
-            'accounts_accounts.account_type',
-            DB::raw('COALESCE(SUM(CASE WHEN accounts_account_moves.date < ? THEN accounts_account_move_lines.debit ELSE 0 END), 0) as initial_debit'),
-            DB::raw('COALESCE(SUM(CASE WHEN accounts_account_moves.date < ? THEN accounts_account_move_lines.credit ELSE 0 END), 0) as initial_credit'),
-            DB::raw('COALESCE(SUM(CASE WHEN accounts_account_moves.date BETWEEN ? AND ? THEN accounts_account_move_lines.debit ELSE 0 END), 0) as period_debit'),
-            DB::raw('COALESCE(SUM(CASE WHEN accounts_account_moves.date BETWEEN ? AND ? THEN accounts_account_move_lines.credit ELSE 0 END), 0) as period_credit'),
-            DB::raw('COALESCE(SUM(CASE WHEN accounts_account_moves.date <= ? THEN accounts_account_move_lines.debit ELSE 0 END), 0) as end_debit'),
-            DB::raw('COALESCE(SUM(CASE WHEN accounts_account_moves.date <= ? THEN accounts_account_move_lines.credit ELSE 0 END), 0) as end_credit')
-        )
-            ->leftJoin('accounts_account_move_lines', 'accounts_accounts.id', '=', 'accounts_account_move_lines.account_id')
-            ->leftJoin('accounts_account_moves', function ($join) use ($companyId) {
-                $join->on('accounts_account_move_lines.move_id', '=', 'accounts_account_moves.id')
-                    ->where('accounts_account_moves.state', MoveState::POSTED)
-                    ->where('accounts_account_moves.company_id', $companyId);
-            })
-            ->addBinding([$dateFrom, $dateFrom, $dateFrom, $dateTo, $dateFrom, $dateTo, $dateTo, $dateTo], 'select')
-            ->groupBy('accounts_accounts.id', 'accounts_accounts.code', 'accounts_accounts.name', 'accounts_accounts.account_type')
-            ->havingRaw('(COALESCE(SUM(CASE WHEN accounts_account_moves.date <= ? THEN accounts_account_move_lines.debit ELSE 0 END), 0) + COALESCE(SUM(CASE WHEN accounts_account_moves.date <= ? THEN accounts_account_move_lines.credit ELSE 0 END), 0)) > 0', [$dateTo, $dateTo])
-            ->orderBy('accounts_accounts.code');
-
-        if (! empty($journalIds)) {
-            $accountsQuery->whereIn('accounts_account_moves.journal_id', $journalIds);
+        if (! $companyId) {
+            return ['rows' => [], 'totals' => [], 'company' => null, 'from' => null, 'to' => null];
         }
 
-        $accounts = $accountsQuery->get();
+        $from = $this->data['from_date'] ?? now()->startOfMonth()->toDateString();
+        $to = $this->data['to_date'] ?? now()->endOfMonth()->toDateString();
 
+        $result = app(TrialBalanceService::class)->compute($companyId, $from, $to, [
+            'posted_only'           => (bool) ($this->data['posted_only'] ?? true),
+            'journal_ids'           => array_map('intval', $this->data['journals'] ?? []),
+            'include_zero'          => (bool) ($this->data['include_zero'] ?? false),
+            'include_groups'        => (bool) ($this->data['include_groups'] ?? false),
+            'currency_mode'         => $this->authorizedCurrencyMode(),
+            'reporting_currency_id' => isset($this->data['reporting_currency_id']) ? (int) $this->data['reporting_currency_id'] : null,
+        ]);
+
+        return array_merge($result, [
+            'company' => Company::find($companyId),
+            'from'    => $from,
+            'to'      => $to,
+        ]);
+    }
+
+    private function authorizedCurrencyMode(): string
+    {
+        $mode = $this->data['currency_mode'] ?? ReportCurrencyMode::Company->value;
+        if ($mode !== ReportCurrencyMode::Company->value) {
+            abort_unless(Auth::user()?->can(AccountingPermissions::ViewMultiCurrencyReports), 403);
+        }
+
+        return $mode;
+    }
+
+    #[Computed]
+    public function completeness(): array
+    {
+        $companyId = (int) ($this->data['company_id'] ?? Auth::user()?->default_company_id);
+        $from = $this->data['from_date'] ?? now()->startOfMonth()->toDateString();
+        $to = $this->data['to_date'] ?? now()->endOfMonth()->toDateString();
+
+        return app(ReportCompletenessService::class)->assess($companyId, $from, $to);
+    }
+
+    protected function getHeaderActions(): array
+    {
         return [
-            'accounts'  => $accounts,
-            'totals'    => [
-                'initial_debit'  => $accounts->sum('initial_debit'),
-                'initial_credit' => $accounts->sum('initial_credit'),
-                'period_debit'   => $accounts->sum('period_debit'),
-                'period_credit'  => $accounts->sum('period_credit'),
-                'end_debit'      => $accounts->sum('end_debit'),
-                'end_credit'     => $accounts->sum('end_credit'),
-            ],
-            'date_from' => $dateFrom,
-            'date_to'   => $dateTo,
+            Action::make('excel')
+                ->label('Export Excel')
+                ->icon('heroicon-o-document-arrow-down')
+                ->color('success')
+                ->action(function () {
+                    $data = $this->trialBalanceData;
+                    $name = 'trial-balance-'.$data['from'].'-to-'.$data['to'].'.xlsx';
+
+                    return Excel::download(new TrialBalanceExport(
+                        $data['rows'],
+                        $data['totals'],
+                        $data['company']?->name,
+                        $data['from'],
+                        $data['to'],
+                        $data['currency_totals'] ?? [],
+                        $data['currency_mode'] ?? ReportCurrencyMode::Company->value,
+                        $data['rate_basis'] ?? '',
+                        $data['conversion_status'] ?? 'complete',
+                    ), $name);
+                }),
+            Action::make('pdf')
+                ->label('Export PDF')
+                ->icon('heroicon-o-document-arrow-down')
+                ->color('danger')
+                ->action(function () {
+                    $data = $this->trialBalanceData;
+                    $pdf = Pdf::loadView('accounting::filament.clusters.reporting.pages.pdfs.trial-balance', [
+                        'rows'             => $data['rows'],
+                        'totals'           => $data['totals'],
+                        'currencyTotals'   => $data['currency_totals'] ?? [],
+                        'currencyMode'     => $data['currency_mode'] ?? ReportCurrencyMode::Company->value,
+                        'rateBasis'        => $data['rate_basis'] ?? '',
+                        'conversionStatus' => $data['conversion_status'] ?? 'complete',
+                        'company'          => $data['company']?->name,
+                        'from'             => $data['from'],
+                        'to'               => $data['to'],
+                        'generatedAt'      => now(),
+                    ])->setPaper('a4', 'landscape');
+
+                    return response()->streamDownload(fn () => print ($pdf->output()), 'trial-balance-'.$data['from'].'-to-'.$data['to'].'.pdf');
+                }),
         ];
     }
 }

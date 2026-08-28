@@ -20,17 +20,8 @@ class DatabaseSeeder extends Seeder
                 CurrencySeeder::class,
                 CountrySeeder::class,
                 StateSeeder::class,
-                CompanySeeder::class,
-                ActivityTypeSeeder::class,
-                ActivityPlanSeeder::class,
                 UOMCategorySeeder::class,
                 UOMSeeder::class,
-                UtmStageSeeder::class,
-                UtmCampaignSeeder::class,
-                UTMMediumSeeder::class,
-                UTMSourceSeeder::class,
-                CalendarSeeder::class,
-                CalendarAttendanceSeeder::class,
             ]);
         });
     }

@@ -33,7 +33,7 @@ class AgedReceivable extends Page implements HasForms
 
     protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-currency-dollar';
 
-    protected static ?int $navigationSort = 6;
+    protected static ?int $navigationSort = 96;
 
     public ?array $data = [];
 
@@ -173,7 +173,10 @@ class AgedReceivable extends Page implements HasForms
                     Select::make('journals')
                         ->label(__('accounting::filament/clusters/reporting.pages.aged-receivable.filters.journals'))
                         ->multiple()
-                        ->options(Journal::pluck('name', 'id'))
+                        ->options(fn (): array => Journal::query()
+                            ->where('company_id', Auth::user()?->default_company_id)
+                            ->pluck('name', 'id')
+                            ->all())
                         ->searchable()
                         ->live()
                         ->afterStateUpdated(fn () => $this->resetExpandedState()),
@@ -181,7 +184,11 @@ class AgedReceivable extends Page implements HasForms
                     Select::make('partners')
                         ->label(__('accounting::filament/clusters/reporting.pages.aged-receivable.filters.partners'))
                         ->multiple()
-                        ->options(Partner::pluck('name', 'id'))
+                        ->options(fn (): array => Partner::query()
+                            ->where('company_id', Auth::user()?->default_company_id)
+                            ->orderBy('name')
+                            ->pluck('name', 'id')
+                            ->all())
                         ->searchable()
                         ->live()
                         ->afterStateUpdated(fn () => $this->resetExpandedState()),

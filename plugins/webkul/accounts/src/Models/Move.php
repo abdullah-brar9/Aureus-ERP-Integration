@@ -18,6 +18,7 @@ use Webkul\Account\Enums\MoveState;
 use Webkul\Account\Enums\MoveType;
 use Webkul\Account\Enums\PaymentState;
 use Webkul\Account\Enums\PaymentStatus;
+use Webkul\Accounting\Models\ExchangeRate;
 use Webkul\Chatter\Traits\HasChatter;
 use Webkul\Chatter\Traits\HasLogActivity;
 use Webkul\Field\Traits\HasCustomFields;
@@ -60,6 +61,9 @@ class Move extends Model implements Sortable
         'partner_bank_id',
         'fiscal_position_id',
         'currency_id',
+        'original_currency_id',
+        'company_currency_id',
+        'reporting_currency_id',
         'reversed_entry_id',
         'invoice_user_id',
         'invoice_incoterm_id',
@@ -78,8 +82,12 @@ class Move extends Model implements Sortable
         'qr_code_method',
         'payment_state',
         'invoice_source_email',
+        'billing_address',
         'invoice_partner_display_name',
         'invoice_origin',
+        'booking_id',
+        'consolidated_number',
+        'drop_off',
         'incoterm_location',
         'date',
         'auto_post_until',
@@ -109,6 +117,19 @@ class Move extends Model implements Sortable
         'is_move_sent',
         'source_id',
         'medium_id',
+        'accounting_source_type',
+        'accounting_source_id',
+        'bank_statement_id',
+        'bank_mapping_id',
+        'cash_flow_category',
+        'tax_treatment',
+        'review_status',
+        'exchange_rate_id',
+        'exchange_rate',
+        'rate_date',
+        'rate_source',
+        'rate_type',
+        'conversion_status',
     ];
 
     protected function getLogAttributeLabels(): array
@@ -124,8 +145,12 @@ class Move extends Model implements Sortable
             'payment_state'            => __('accounts::models/move.log-attributes.payment-state'),
             'amount_untaxed'           => __('accounts::models/move.log-attributes.amount-untaxed'),
             'invoice_source_email'     => __('accounts::models/move.log-attributes.invoice-source-email'),
+            'billing_address'          => 'Billing address',
             'is_move_sent'             => __('accounts::models/move.log-attributes.is-move-sent'),
             'invoice_origin'           => __('accounts::models/move.log-attributes.invoice-origin'),
+            'booking_id'               => 'Booking ID',
+            'consolidated_number'      => 'Consolidated number',
+            'drop_off'                 => 'Drop-off',
             'currency.name'            => __('accounts::models/move.log-attributes.currency'),
             'partner.name'             => __('accounts::models/move.log-attributes.partner'),
             'partnerBank.name'         => __('accounts::models/move.log-attributes.partner-bank'),
@@ -154,6 +179,8 @@ class Move extends Model implements Sortable
         'move_type'                         => MoveType::class,
         'invoice_date'                      => 'date',
         'date'                              => 'date',
+        'exchange_rate'                     => 'decimal:15',
+        'rate_date'                         => 'date',
     ];
 
     public $typeReverseMapping = [
@@ -239,6 +266,26 @@ class Move extends Model implements Sortable
     public function currency()
     {
         return $this->belongsTo(Currency::class, 'currency_id');
+    }
+
+    public function originalCurrency()
+    {
+        return $this->belongsTo(Currency::class, 'original_currency_id');
+    }
+
+    public function companyCurrency()
+    {
+        return $this->belongsTo(Currency::class, 'company_currency_id');
+    }
+
+    public function reportingCurrency()
+    {
+        return $this->belongsTo(Currency::class, 'reporting_currency_id');
+    }
+
+    public function exchangeRate()
+    {
+        return $this->belongsTo(ExchangeRate::class, 'exchange_rate_id');
     }
 
     public function reversedEntry()

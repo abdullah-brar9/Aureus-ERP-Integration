@@ -110,14 +110,21 @@ class TestBootstrapHelper
             return;
         }
 
-        Artisan::call('migrate:fresh', ['--force' => true]);
+        $databaseName = DB::connection()->getDatabaseName();
 
-        Artisan::call('erp:install', [
-            '--force'          => true,
-            '--admin-name'     => 'Test Admin',
-            '--admin-email'    => 'admin@example.com',
-            '--admin-password' => 'admin123',
-        ]);
+        if ($databaseName !== 'aureuserp_testing') {
+            throw new RuntimeException(
+                "Test bootstrap refused to run against database [{$databaseName}]. Expected [aureuserp_testing].",
+            );
+        }
+
+        foreach (['migrations', 'plugins', 'users', 'companies'] as $requiredTable) {
+            if (! Schema::hasTable($requiredTable)) {
+                throw new RuntimeException(
+                    "Prepared test database is missing required table [{$requiredTable}].",
+                );
+            }
+        }
 
         static::$isERPInstalled = true;
     }

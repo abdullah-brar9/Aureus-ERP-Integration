@@ -28,59 +28,67 @@ class BalanceSheetExport implements FromCollection, WithColumnWidths, WithStyles
     {
         $rows = collect([
             [null, 'As of '.$this->date->format('M d, Y')],
-            [null, null],
+            [null, 'Currency mode: '.($this->balanceSheetData['currency_mode'] ?? 'company').' · status: '.($this->balanceSheetData['conversion_status'] ?? 'complete')],
             [null, 'Balance'],
             [null, null],
         ]);
 
         $rowIndex = 5;
 
-        foreach ($this->balanceSheetData['sections'] as $section) {
-            $rows->push([$section['title'], '']);
+        $reports = $this->balanceSheetData['reports'] ?? [($this->balanceSheetData['currency'] ?? '') => $this->balanceSheetData];
+        foreach ($reports as $currency => $report) {
+            $rows->push([$currency, $this->balanceSheetData['rate_basis'] ?? '']);
             $this->rowMetadata[$rowIndex++] = 'section_header';
 
-            foreach ($section['subsections'] as $subsection) {
-                $hasAccounts = ! empty($subsection['accounts']);
-                $showSubsection = $hasAccounts || ! isset($subsection['show_if_empty']) || $subsection['show_if_empty'];
+            foreach ($report['sections'] as $section) {
+                $rows->push([$section['title'], '']);
+                $this->rowMetadata[$rowIndex++] = 'section_header';
 
-                if ($showSubsection) {
-                    $rows->push(['            '.$subsection['title'], '']);
-                    $this->rowMetadata[$rowIndex++] = 'subsection_header';
+                foreach ($section['subsections'] as $subsection) {
+                    $hasAccounts = ! empty($subsection['accounts']);
+                    $showSubsection = $hasAccounts || ! isset($subsection['show_if_empty']) || $subsection['show_if_empty'];
 
-                    if ($hasAccounts) {
-                        collect($subsection['accounts'])->each(function ($account) use (&$rows, &$rowIndex) {
-                            $accountName = ($account['code'] ? $account['code'].' - ' : '').$account['name'];
+                    if ($showSubsection) {
+                        $rows->push(['            '.$subsection['title'], '']);
+                        $this->rowMetadata[$rowIndex++] = 'subsection_header';
+
+                        if ($hasAccounts) {
+                            collect($subsection['accounts'])->each(function ($account) use (&$rows, &$rowIndex) {
+                                $accountName = ($account['code'] ? $account['code'].' - ' : '').$account['name'];
+                                $rows->push([
+                                    '                        '.$accountName,
+                                    number_format($account['balance'], 2),
+                                ]);
+                                $this->rowMetadata[$rowIndex++] = 'account_line';
+                            });
+
                             $rows->push([
-                                '                        '.$accountName,
-                                number_format($account['balance'], 2),
+                                '            '.$subsection['total_label'],
+                                number_format($subsection['total'], 2),
                             ]);
-                            $this->rowMetadata[$rowIndex++] = 'account_line';
-                        });
-
-                        $rows->push([
-                            '            '.$subsection['total_label'],
-                            number_format($subsection['total'], 2),
-                        ]);
-                        $this->rowMetadata[$rowIndex++] = 'subsection_total';
+                            $this->rowMetadata[$rowIndex++] = 'subsection_total';
+                        }
                     }
                 }
+
+                $rows->push([
+                    $section['total_label'],
+                    number_format($section['total'], 2),
+                ]);
+                $this->rowMetadata[$rowIndex++] = 'section_total';
+
+                $rows->push(['', '']);
+                $rowIndex++;
             }
 
             $rows->push([
-                $section['total_label'],
-                number_format($section['total'], 2),
+                $report['grand_total_label'],
+                number_format($report['grand_total'], 2),
             ]);
-            $this->rowMetadata[$rowIndex++] = 'section_total';
-
+            $this->rowMetadata[$rowIndex++] = 'grand_total';
             $rows->push(['', '']);
             $rowIndex++;
         }
-
-        $rows->push([
-            $this->balanceSheetData['grand_total_label'],
-            number_format($this->balanceSheetData['grand_total'], 2),
-        ]);
-        $this->rowMetadata[$rowIndex] = 'grand_total';
 
         return $rows;
     }

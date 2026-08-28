@@ -3,14 +3,25 @@
         {{-- Filters --}}
         {{ $this->form }}
 
-        {{-- Report Header --}}
+        @php $completeness = $this->completeness; @endphp
+        <x-filament::section compact>
+            <span class="font-semibold">Report completeness:</span>
+            {{ $completeness['status']->value }} · {{ $completeness['provisional_label'] }}
+        </x-filament::section>
+
+        @php $reportData = $this->profitLossData; @endphp
+        <x-filament::section compact>
+            Currency mode: {{ $reportData['currency_mode'] }} · status: {{ $reportData['conversion_status'] }} · {{ $reportData['rate_basis'] }}
+            @foreach ($reportData['warnings'] as $warning)
+                <div class="text-warning-600">{{ $warning }}</div>
+            @endforeach
+        </x-filament::section>
+
+        @foreach ($reportData['reports'] as $currency => $data)
         <x-filament::section>
-            @php
-                $data = $this->profitLossData;
-            @endphp
             
             <x-slot name="heading">
-                Profit & Loss Report - From {{ \Carbon\Carbon::parse($data['date_from'])->format('M d, Y') }} to {{ \Carbon\Carbon::parse($data['date_to'])->format('M d, Y') }}
+                Profit & Loss Report - From {{ \Carbon\Carbon::parse($data['date_from'])->format('M d, Y') }} to {{ \Carbon\Carbon::parse($data['date_to'])->format('M d, Y') }} — {{ $currency }}
             </x-slot>
             
             {{-- Profit & Loss Table --}}
@@ -76,5 +87,6 @@
                 </table>
             </div>
         </x-filament::section>
+        @endforeach
     </div>
 </x-filament-panels::page>

@@ -280,6 +280,28 @@ class JournalEntryResource extends Resource
                     ->searchable()
                     ->placeholder('-')
                     ->sortable(),
+                TextColumn::make('accounting_source_type')
+                    ->label('Source')
+                    ->badge()
+                    ->placeholder('-')
+                    ->sortable()
+                    ->toggleable(),
+                TextColumn::make('accounting_source_id')
+                    ->label('Source ID')
+                    ->placeholder('-')
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('cash_flow_category')
+                    ->label('Cash Flow Category')
+                    ->placeholder('-')
+                    ->sortable()
+                    ->toggleable(),
+                TextColumn::make('review_status')
+                    ->label('Review Status')
+                    ->badge()
+                    ->placeholder('-')
+                    ->sortable()
+                    ->toggleable(),
                 TextColumn::make('journal.name')
                     ->label(__('accounting::filament/clusters/accounting/resources/journal-entry.table.columns.journal'))
                     ->searchable()

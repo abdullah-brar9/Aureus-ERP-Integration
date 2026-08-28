@@ -5,11 +5,16 @@ namespace Webkul\Support\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 use Spatie\EloquentSortable\Sortable;
 use Spatie\EloquentSortable\SortableTrait;
+use Webkul\Account\Models\Account;
+use Webkul\Accounting\Models\ExchangeRate;
 use Webkul\Chatter\Traits\HasChatter;
 use Webkul\Field\Traits\HasCustomFields;
 use Webkul\Partner\Models\Partner;
@@ -43,6 +48,12 @@ class Company extends Model implements Sortable
         'founded_date',
         'creator_id',
         'currency_id',
+        'fx_gain_account_id',
+        'fx_loss_account_id',
+        'rate_source_priority',
+        'allow_previous_rate_fallback',
+        'pnl_translation_policy',
+        'balance_sheet_translation_policy',
         'partner_id',
         'website',
     ];
@@ -51,6 +62,16 @@ class Company extends Model implements Sortable
         'order_column_name'  => 'sort',
         'sort_when_creating' => true,
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'is_active'                     => 'boolean',
+            'founded_date'                  => 'date',
+            'rate_source_priority'          => 'array',
+            'allow_previous_rate_fallback'  => 'boolean',
+        ];
+    }
 
     public function country(): BelongsTo
     {
@@ -95,6 +116,28 @@ class Company extends Model implements Sortable
     public function currency(): BelongsTo
     {
         return $this->belongsTo(Currency::class);
+    }
+
+    public function enabledCurrencies(): BelongsToMany
+    {
+        return $this->belongsToMany(Currency::class, 'accounting_company_currencies')
+            ->withPivot(['transaction_enabled', 'reporting_enabled'])
+            ->withTimestamps();
+    }
+
+    public function exchangeRates(): HasMany
+    {
+        return $this->hasMany(ExchangeRate::class);
+    }
+
+    public function fxGainAccount(): BelongsTo
+    {
+        return $this->belongsTo(Account::class, 'fx_gain_account_id');
+    }
+
+    public function fxLossAccount(): BelongsTo
+    {
+        return $this->belongsTo(Account::class, 'fx_loss_account_id');
     }
 
     public function partner()
@@ -190,6 +233,13 @@ class Company extends Model implements Sortable
                     'company_id'       => $company->id,
                 ]
             );
+
+            if ($company->currency_id && Schema::hasTable('accounting_company_currencies')) {
+                DB::table('accounting_company_currencies')->updateOrInsert(
+                    ['company_id' => $company->id, 'currency_id' => $company->currency_id],
+                    ['transaction_enabled' => true, 'updated_at' => now(), 'created_at' => now()],
+                );
+            }
         });
     }
 }

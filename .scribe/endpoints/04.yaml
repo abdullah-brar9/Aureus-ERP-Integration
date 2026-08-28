@@ -17,7 +17,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -90,7 +90,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":[{"id":1,"name":"Client Task for Magement Work","tasks_label":null,"description":"<p>Client Task for Magement Work<\/p>","visibility":"internal","color":null,"sort":1,"start_date":"2025-04-11T00:00:00.000000Z","end_date":"2025-04-30T00:00:00.000000Z","allocated_hours":500,"allow_timesheets":true,"allow_milestones":true,"allow_task_dependencies":false,"is_active":true,"stage_id":1,"partner_id":21,"company_id":3,"user_id":1,"creator_id":1,"created_at":"2025-04-11T11:01:38.000000Z","updated_at":"2025-04-11T11:01:38.000000Z","deleted_at":null},{"id":1,"name":"Client Task for Magement Work","tasks_label":null,"description":"<p>Client Task for Magement Work<\/p>","visibility":"internal","color":null,"sort":1,"start_date":"2025-04-11T00:00:00.000000Z","end_date":"2025-04-30T00:00:00.000000Z","allocated_hours":500,"allow_timesheets":true,"allow_milestones":true,"allow_task_dependencies":false,"is_active":true,"stage_id":1,"partner_id":21,"company_id":3,"user_id":1,"creator_id":1,"created_at":"2025-04-11T11:01:38.000000Z","updated_at":"2025-04-11T11:01:38.000000Z","deleted_at":null}],"links":{"first":"\/?page=1","last":"\/?page=1","prev":null,"next":null},"meta":{"current_page":1,"from":1,"last_page":1,"links":[{"url":null,"label":"&laquo; Previous","active":false},{"url":"\/?page=1","label":"1","active":true},{"url":null,"label":"Next &raquo;","active":false}],"path":"\/","per_page":10,"to":2,"total":2}}'
+        content: '{"data":[{"id":null,"name":"Morgan Hirthe","tasks_label":"Tasks","description":"Qui commodi incidunt iure odit.","visibility":"public","color":"#559641","sort":627,"start_date":"1971-11-16T00:00:00.000000Z","end_date":"1973-01-05T00:00:00.000000Z","allocated_hours":8669606,"allow_timesheets":true,"allow_milestones":false,"allow_task_dependencies":false,"is_active":true,"stage_id":98,"partner_id":1,"company_id":2809,"user_id":1,"creator_id":1,"created_at":null,"updated_at":null,"deleted_at":null},{"id":null,"name":"Keshawn Tromp PhD","tasks_label":"Tasks","description":"Dolorem et ut dicta.","visibility":"public","color":"#ae11af","sort":865321074,"start_date":"2012-10-14T00:00:00.000000Z","end_date":"1970-02-23T00:00:00.000000Z","allocated_hours":47,"allow_timesheets":true,"allow_milestones":false,"allow_task_dependencies":false,"is_active":true,"stage_id":99,"partner_id":1,"company_id":2811,"user_id":1,"creator_id":1,"created_at":null,"updated_at":null,"deleted_at":null}],"links":{"first":"\/?page=1","last":"\/?page=1","prev":null,"next":null},"meta":{"current_page":1,"from":1,"last_page":1,"links":[{"url":null,"label":"&laquo; Previous","page":null,"active":false},{"url":"\/?page=1","label":"1","page":1,"active":true},{"url":null,"label":"Next &raquo;","page":null,"active":false}],"path":"\/","per_page":10,"to":2,"total":2}}'
         headers: []
         description: ''
       -
@@ -103,7 +103,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -123,7 +123,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -249,7 +249,7 @@ endpoints:
         name: allow_timesheets
         description: 'Allow timesheet entries.'
         required: false
-        example: false
+        example: true
         type: boolean
         enumValues: []
         exampleWasSpecified: false
@@ -260,7 +260,7 @@ endpoints:
         name: allow_milestones
         description: 'Allow milestone usage.'
         required: false
-        example: false
+        example: true
         type: boolean
         enumValues: []
         exampleWasSpecified: false
@@ -289,8 +289,8 @@ endpoints:
       start_date: '2026-03-01'
       end_date: '2026-03-31'
       allocated_hours: 120.0
-      allow_timesheets: false
-      allow_milestones: false
+      allow_timesheets: true
+      allow_milestones: true
       tags:
         - 16
     fileParameters: []
@@ -298,7 +298,7 @@ endpoints:
       -
         custom: []
         status: 201
-        content: '{"data":{"id":1,"name":"Client Task for Magement Work","tasks_label":null,"description":"<p>Client Task for Magement Work<\/p>","visibility":"internal","color":null,"sort":1,"start_date":"2025-04-11T00:00:00.000000Z","end_date":"2025-04-30T00:00:00.000000Z","allocated_hours":500,"allow_timesheets":true,"allow_milestones":true,"allow_task_dependencies":false,"is_active":true,"stage_id":1,"partner_id":21,"company_id":3,"user_id":1,"creator_id":1,"created_at":"2025-04-11T11:01:38.000000Z","updated_at":"2025-04-11T11:01:38.000000Z","deleted_at":null},"message":"Project created successfully."}'
+        content: '{"data":{"id":null,"name":"Ms. Elisabeth Okuneva","tasks_label":"Tasks","description":"Et fugiat sunt nihil accusantium.","visibility":"public","color":"#902510","sort":52631582,"start_date":"2022-07-24T00:00:00.000000Z","end_date":"2024-05-15T00:00:00.000000Z","allocated_hours":2106748,"allow_timesheets":true,"allow_milestones":false,"allow_task_dependencies":false,"is_active":true,"stage_id":100,"partner_id":1,"company_id":2813,"user_id":1,"creator_id":1,"created_at":null,"updated_at":null,"deleted_at":null},"message":"Project created successfully."}'
         headers: []
         description: ''
       -
@@ -317,7 +317,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -337,7 +337,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -375,7 +375,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":1,"name":"Client Task for Magement Work","tasks_label":null,"description":"<p>Client Task for Magement Work<\/p>","visibility":"internal","color":null,"sort":1,"start_date":"2025-04-11T00:00:00.000000Z","end_date":"2025-04-30T00:00:00.000000Z","allocated_hours":500,"allow_timesheets":true,"allow_milestones":true,"allow_task_dependencies":false,"is_active":true,"stage_id":1,"partner_id":21,"company_id":3,"user_id":1,"creator_id":1,"created_at":"2025-04-11T11:01:38.000000Z","updated_at":"2025-04-11T11:01:38.000000Z","deleted_at":null}}'
+        content: '{"data":{"id":null,"name":"Morgan Hirthe","tasks_label":"Tasks","description":"Qui commodi incidunt iure odit.","visibility":"public","color":"#559641","sort":627,"start_date":"1971-11-16T00:00:00.000000Z","end_date":"1973-01-05T00:00:00.000000Z","allocated_hours":8669606,"allow_timesheets":true,"allow_milestones":false,"allow_task_dependencies":false,"is_active":true,"stage_id":101,"partner_id":1,"company_id":2815,"user_id":1,"creator_id":1,"created_at":null,"updated_at":null,"deleted_at":null}}'
         headers: []
         description: ''
       -
@@ -394,7 +394,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -415,7 +415,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -553,7 +553,7 @@ endpoints:
         name: allow_timesheets
         description: 'Allow timesheet entries.'
         required: false
-        example: false
+        example: true
         type: boolean
         enumValues: []
         exampleWasSpecified: false
@@ -564,7 +564,7 @@ endpoints:
         name: allow_milestones
         description: 'Allow milestone usage.'
         required: false
-        example: false
+        example: true
         type: boolean
         enumValues: []
         exampleWasSpecified: false
@@ -593,8 +593,8 @@ endpoints:
       start_date: '2026-03-01'
       end_date: '2026-03-31'
       allocated_hours: 120.0
-      allow_timesheets: false
-      allow_milestones: false
+      allow_timesheets: true
+      allow_milestones: true
       tags:
         - 16
     fileParameters: []
@@ -602,7 +602,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":1,"name":"Client Task for Magement Work","tasks_label":null,"description":"<p>Client Task for Magement Work<\/p>","visibility":"internal","color":null,"sort":1,"start_date":"2025-04-11T00:00:00.000000Z","end_date":"2025-04-30T00:00:00.000000Z","allocated_hours":500,"allow_timesheets":true,"allow_milestones":true,"allow_task_dependencies":false,"is_active":true,"stage_id":1,"partner_id":21,"company_id":3,"user_id":1,"creator_id":1,"created_at":"2025-04-11T11:01:38.000000Z","updated_at":"2025-04-11T11:01:38.000000Z","deleted_at":null},"message":"Project updated successfully."}'
+        content: '{"data":{"id":null,"name":"Ms. Elisabeth Okuneva","tasks_label":"Tasks","description":"Et fugiat sunt nihil accusantium.","visibility":"public","color":"#902510","sort":52631582,"start_date":"2022-07-24T00:00:00.000000Z","end_date":"2024-05-15T00:00:00.000000Z","allocated_hours":2106748,"allow_timesheets":true,"allow_milestones":false,"allow_task_dependencies":false,"is_active":true,"stage_id":102,"partner_id":1,"company_id":2817,"user_id":1,"creator_id":1,"created_at":null,"updated_at":null,"deleted_at":null},"message":"Project updated successfully."}'
         headers: []
         description: ''
       -
@@ -627,7 +627,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -647,7 +647,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -692,7 +692,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -712,7 +712,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -738,7 +738,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":1,"name":"Client Task for Magement Work","tasks_label":null,"description":"<p>Client Task for Magement Work<\/p>","visibility":"internal","color":null,"sort":1,"start_date":"2025-04-11T00:00:00.000000Z","end_date":"2025-04-30T00:00:00.000000Z","allocated_hours":500,"allow_timesheets":true,"allow_milestones":true,"allow_task_dependencies":false,"is_active":true,"stage_id":1,"partner_id":21,"company_id":3,"user_id":1,"creator_id":1,"created_at":"2025-04-11T11:01:38.000000Z","updated_at":"2025-04-11T11:01:38.000000Z","deleted_at":null},"message":"Project restored successfully."}'
+        content: '{"data":{"id":null,"name":"Morgan Hirthe","tasks_label":"Tasks","description":"Qui commodi incidunt iure odit.","visibility":"public","color":"#559641","sort":627,"start_date":"1971-11-16T00:00:00.000000Z","end_date":"1973-01-05T00:00:00.000000Z","allocated_hours":8669606,"allow_timesheets":true,"allow_milestones":false,"allow_task_dependencies":false,"is_active":true,"stage_id":103,"partner_id":1,"company_id":2819,"user_id":1,"creator_id":1,"created_at":null,"updated_at":null,"deleted_at":null},"message":"Project restored successfully."}'
         headers: []
         description: ''
       -
@@ -757,7 +757,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -777,7 +777,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -822,7 +822,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -842,7 +842,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -915,7 +915,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":[{"id":1,"title":"Frontend Development","description":"<p>Implement the new UI using modern frameworks (e.g., React, Vue).<\/p>","color":null,"priority":false,"state":"in_progress","sort":1,"is_active":true,"is_recurring":false,"deadline":"2026-09-24T00:00:00.000000Z","working_hours_open":0,"working_hours_close":0,"allocated_hours":150,"remaining_hours":0,"effective_hours":0,"total_hours_spent":0,"subtask_effective_hours":0,"overtime":0,"progress":0,"stage_id":1,"project_id":4,"partner_id":39,"parent_id":null,"company_id":null,"creator_id":1,"created_at":"2025-09-23T12:55:10.000000Z","updated_at":"2025-09-23T12:55:10.000000Z","deleted_at":null},{"id":1,"title":"Frontend Development","description":"<p>Implement the new UI using modern frameworks (e.g., React, Vue).<\/p>","color":null,"priority":false,"state":"in_progress","sort":1,"is_active":true,"is_recurring":false,"deadline":"2026-09-24T00:00:00.000000Z","working_hours_open":0,"working_hours_close":0,"allocated_hours":150,"remaining_hours":0,"effective_hours":0,"total_hours_spent":0,"subtask_effective_hours":0,"overtime":0,"progress":0,"stage_id":1,"project_id":4,"partner_id":39,"parent_id":null,"company_id":null,"creator_id":1,"created_at":"2025-09-23T12:55:10.000000Z","updated_at":"2025-09-23T12:55:10.000000Z","deleted_at":null}],"links":{"first":"\/?page=1","last":"\/?page=1","prev":null,"next":null},"meta":{"current_page":1,"from":1,"last_page":1,"links":[{"url":null,"label":"&laquo; Previous","active":false},{"url":"\/?page=1","label":"1","active":true},{"url":null,"label":"Next &raquo;","active":false}],"path":"\/","per_page":10,"to":2,"total":2}}'
+        content: '{"data":[{"id":null,"title":"Harry Kassulke","description":"Labore quas quod et vel eveniet fugit.","color":"#711191","priority":true,"state":"in_progress","sort":82930658,"is_active":true,"is_recurring":false,"deadline":"1999-03-14T00:00:00.000000Z","working_hours_open":0,"working_hours_close":0,"allocated_hours":44,"remaining_hours":44,"effective_hours":0,"total_hours_spent":0,"subtask_effective_hours":0,"overtime":0,"progress":0,"stage_id":27,"project_id":76,"partner_id":1,"parent_id":null,"company_id":2825,"creator_id":1,"created_at":null,"updated_at":null,"deleted_at":null},{"id":null,"title":"Ms. Leanne Graham","description":"Fugit ea accusamus et voluptatem vel.","color":"#fdefc8","priority":true,"state":"in_progress","sort":450722,"is_active":true,"is_recurring":false,"deadline":"1986-03-26T00:00:00.000000Z","working_hours_open":0,"working_hours_close":0,"allocated_hours":8,"remaining_hours":8,"effective_hours":0,"total_hours_spent":0,"subtask_effective_hours":0,"overtime":0,"progress":0,"stage_id":28,"project_id":78,"partner_id":1,"parent_id":null,"company_id":2831,"creator_id":1,"created_at":null,"updated_at":null,"deleted_at":null}],"links":{"first":"\/?page=1","last":"\/?page=1","prev":null,"next":null},"meta":{"current_page":1,"from":1,"last_page":1,"links":[{"url":null,"label":"&laquo; Previous","page":null,"active":false},{"url":"\/?page=1","label":"1","page":1,"active":true},{"url":null,"label":"Next &raquo;","page":null,"active":false}],"path":"\/","per_page":10,"to":2,"total":2}}'
         headers: []
         description: ''
       -
@@ -928,7 +928,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -948,7 +948,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -1076,7 +1076,7 @@ endpoints:
         name: priority
         description: 'Priority flag.'
         required: false
-        example: false
+        example: true
         type: boolean
         enumValues: []
         exampleWasSpecified: false
@@ -1117,7 +1117,7 @@ endpoints:
       parent_id: 10
       deadline: '2026-03-10 18:00:00'
       allocated_hours: 12.0
-      priority: false
+      priority: true
       users:
         - 16
       tags:
@@ -1127,7 +1127,7 @@ endpoints:
       -
         custom: []
         status: 201
-        content: '{"data":{"id":1,"title":"Frontend Development","description":"<p>Implement the new UI using modern frameworks (e.g., React, Vue).<\/p>","color":null,"priority":false,"state":"in_progress","sort":1,"is_active":true,"is_recurring":false,"deadline":"2026-09-24T00:00:00.000000Z","working_hours_open":0,"working_hours_close":0,"allocated_hours":150,"remaining_hours":0,"effective_hours":0,"total_hours_spent":0,"subtask_effective_hours":0,"overtime":0,"progress":0,"stage_id":1,"project_id":4,"partner_id":39,"parent_id":null,"company_id":null,"creator_id":1,"created_at":"2025-09-23T12:55:10.000000Z","updated_at":"2025-09-23T12:55:10.000000Z","deleted_at":null},"message":"Task created successfully."}'
+        content: '{"data":{"id":null,"title":"Ms. Elisabeth Okuneva","description":"Et fugiat sunt nihil accusantium.","color":"#902510","priority":true,"state":"in_progress","sort":2,"is_active":true,"is_recurring":false,"deadline":"1991-08-13T00:00:00.000000Z","working_hours_open":0,"working_hours_close":0,"allocated_hours":2,"remaining_hours":2,"effective_hours":0,"total_hours_spent":0,"subtask_effective_hours":0,"overtime":0,"progress":0,"stage_id":29,"project_id":80,"partner_id":1,"parent_id":null,"company_id":2837,"creator_id":1,"created_at":null,"updated_at":null,"deleted_at":null},"message":"Task created successfully."}'
         headers: []
         description: ''
       -
@@ -1146,7 +1146,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -1166,7 +1166,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -1204,7 +1204,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":1,"title":"Frontend Development","description":"<p>Implement the new UI using modern frameworks (e.g., React, Vue).<\/p>","color":null,"priority":false,"state":"in_progress","sort":1,"is_active":true,"is_recurring":false,"deadline":"2026-09-24T00:00:00.000000Z","working_hours_open":0,"working_hours_close":0,"allocated_hours":150,"remaining_hours":0,"effective_hours":0,"total_hours_spent":0,"subtask_effective_hours":0,"overtime":0,"progress":0,"stage_id":1,"project_id":4,"partner_id":39,"parent_id":null,"company_id":null,"creator_id":1,"created_at":"2025-09-23T12:55:10.000000Z","updated_at":"2025-09-23T12:55:10.000000Z","deleted_at":null}}'
+        content: '{"data":{"id":null,"title":"Morgan Hirthe","description":"Qui commodi incidunt iure odit.","color":"#559641","priority":true,"state":"in_progress","sort":7365,"is_active":true,"is_recurring":false,"deadline":"2018-08-10T00:00:00.000000Z","working_hours_open":0,"working_hours_close":0,"allocated_hours":5066,"remaining_hours":5066,"effective_hours":0,"total_hours_spent":0,"subtask_effective_hours":0,"overtime":0,"progress":0,"stage_id":30,"project_id":82,"partner_id":1,"parent_id":null,"company_id":2843,"creator_id":1,"created_at":null,"updated_at":null,"deleted_at":null}}'
         headers: []
         description: ''
       -
@@ -1223,7 +1223,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -1244,7 +1244,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -1384,7 +1384,7 @@ endpoints:
         name: priority
         description: 'Priority flag.'
         required: false
-        example: false
+        example: true
         type: boolean
         enumValues: []
         exampleWasSpecified: false
@@ -1425,7 +1425,7 @@ endpoints:
       parent_id: 10
       deadline: '2026-03-10 18:00:00'
       allocated_hours: 12.0
-      priority: false
+      priority: true
       users:
         - 16
       tags:
@@ -1435,7 +1435,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":1,"title":"Frontend Development","description":"<p>Implement the new UI using modern frameworks (e.g., React, Vue).<\/p>","color":null,"priority":false,"state":"in_progress","sort":1,"is_active":true,"is_recurring":false,"deadline":"2026-09-24T00:00:00.000000Z","working_hours_open":0,"working_hours_close":0,"allocated_hours":150,"remaining_hours":0,"effective_hours":0,"total_hours_spent":0,"subtask_effective_hours":0,"overtime":0,"progress":0,"stage_id":1,"project_id":4,"partner_id":39,"parent_id":null,"company_id":null,"creator_id":1,"created_at":"2025-09-23T12:55:10.000000Z","updated_at":"2025-09-23T12:55:10.000000Z","deleted_at":null},"message":"Task updated successfully."}'
+        content: '{"data":{"id":null,"title":"Ms. Elisabeth Okuneva","description":"Et fugiat sunt nihil accusantium.","color":"#902510","priority":true,"state":"in_progress","sort":2,"is_active":true,"is_recurring":false,"deadline":"1991-08-13T00:00:00.000000Z","working_hours_open":0,"working_hours_close":0,"allocated_hours":2,"remaining_hours":2,"effective_hours":0,"total_hours_spent":0,"subtask_effective_hours":0,"overtime":0,"progress":0,"stage_id":31,"project_id":84,"partner_id":1,"parent_id":null,"company_id":2849,"creator_id":1,"created_at":null,"updated_at":null,"deleted_at":null},"message":"Task updated successfully."}'
         headers: []
         description: ''
       -
@@ -1460,7 +1460,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -1480,7 +1480,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -1525,7 +1525,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -1545,7 +1545,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -1571,7 +1571,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":1,"title":"Frontend Development","description":"<p>Implement the new UI using modern frameworks (e.g., React, Vue).<\/p>","color":null,"priority":false,"state":"in_progress","sort":1,"is_active":true,"is_recurring":false,"deadline":"2026-09-24T00:00:00.000000Z","working_hours_open":0,"working_hours_close":0,"allocated_hours":150,"remaining_hours":0,"effective_hours":0,"total_hours_spent":0,"subtask_effective_hours":0,"overtime":0,"progress":0,"stage_id":1,"project_id":4,"partner_id":39,"parent_id":null,"company_id":null,"creator_id":1,"created_at":"2025-09-23T12:55:10.000000Z","updated_at":"2025-09-23T12:55:10.000000Z","deleted_at":null},"message":"Task restored successfully."}'
+        content: '{"data":{"id":null,"title":"Morgan Hirthe","description":"Qui commodi incidunt iure odit.","color":"#559641","priority":true,"state":"in_progress","sort":7365,"is_active":true,"is_recurring":false,"deadline":"2018-08-10T00:00:00.000000Z","working_hours_open":0,"working_hours_close":0,"allocated_hours":5066,"remaining_hours":5066,"effective_hours":0,"total_hours_spent":0,"subtask_effective_hours":0,"overtime":0,"progress":0,"stage_id":32,"project_id":86,"partner_id":1,"parent_id":null,"company_id":2855,"creator_id":1,"created_at":null,"updated_at":null,"deleted_at":null},"message":"Task restored successfully."}'
         headers: []
         description: ''
       -
@@ -1590,7 +1590,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -1610,7 +1610,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -1655,7 +1655,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -1675,7 +1675,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -1713,7 +1713,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":[{"id":1,"name":"To Do","is_active":true,"is_collapsed":false,"sort":1,"company_id":null,"creator_id":1,"created_at":"2025-04-07T13:13:48.000000Z","updated_at":"2025-04-07T13:13:48.000000Z","deleted_at":null},{"id":1,"name":"To Do","is_active":true,"is_collapsed":false,"sort":1,"company_id":null,"creator_id":1,"created_at":"2025-04-07T13:13:48.000000Z","updated_at":"2025-04-07T13:13:48.000000Z","deleted_at":null}],"links":{"first":"\/?page=1","last":"\/?page=1","prev":null,"next":null},"meta":{"current_page":1,"from":1,"last_page":1,"links":[{"url":null,"label":"&laquo; Previous","active":false},{"url":"\/?page=1","label":"1","active":true},{"url":null,"label":"Next &raquo;","active":false}],"path":"\/","per_page":10,"to":2,"total":2}}'
+        content: '{"data":[{"id":1,"name":"To Do","is_active":true,"is_collapsed":false,"sort":1,"company_id":null,"creator_id":1,"created_at":"2026-07-22T08:03:00.000000Z","updated_at":"2026-07-22T08:03:00.000000Z","deleted_at":null},{"id":1,"name":"To Do","is_active":true,"is_collapsed":false,"sort":1,"company_id":null,"creator_id":1,"created_at":"2026-07-22T08:03:00.000000Z","updated_at":"2026-07-22T08:03:00.000000Z","deleted_at":null}],"links":{"first":"\/?page=1","last":"\/?page=1","prev":null,"next":null},"meta":{"current_page":1,"from":1,"last_page":1,"links":[{"url":null,"label":"&laquo; Previous","page":null,"active":false},{"url":"\/?page=1","label":"1","page":1,"active":true},{"url":null,"label":"Next &raquo;","page":null,"active":false}],"path":"\/","per_page":10,"to":2,"total":2}}'
         headers: []
         description: ''
       -
@@ -1726,7 +1726,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -1746,7 +1746,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -1772,7 +1772,7 @@ endpoints:
       -
         custom: []
         status: 201
-        content: '{"data":{"id":1,"name":"To Do","is_active":true,"is_collapsed":false,"sort":1,"company_id":null,"creator_id":1,"created_at":"2025-04-07T13:13:48.000000Z","updated_at":"2025-04-07T13:13:48.000000Z","deleted_at":null},"message":"Project stage created successfully."}'
+        content: '{"data":{"id":1,"name":"To Do","is_active":true,"is_collapsed":false,"sort":1,"company_id":null,"creator_id":1,"created_at":"2026-07-22T08:03:00.000000Z","updated_at":"2026-07-22T08:03:00.000000Z","deleted_at":null},"message":"Project stage created successfully."}'
         headers: []
         description: ''
       -
@@ -1785,7 +1785,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -1805,7 +1805,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -1843,7 +1843,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":1,"name":"To Do","is_active":true,"is_collapsed":false,"sort":1,"company_id":null,"creator_id":1,"created_at":"2025-04-07T13:13:48.000000Z","updated_at":"2025-04-07T13:13:48.000000Z","deleted_at":null}}'
+        content: '{"data":{"id":1,"name":"To Do","is_active":true,"is_collapsed":false,"sort":1,"company_id":null,"creator_id":1,"created_at":"2026-07-22T08:03:00.000000Z","updated_at":"2026-07-22T08:03:00.000000Z","deleted_at":null}}'
         headers: []
         description: ''
       -
@@ -1862,7 +1862,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -1883,7 +1883,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -1921,7 +1921,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":1,"name":"To Do","is_active":true,"is_collapsed":false,"sort":1,"company_id":null,"creator_id":1,"created_at":"2025-04-07T13:13:48.000000Z","updated_at":"2025-04-07T13:13:48.000000Z","deleted_at":null},"message":"Project stage updated successfully."}'
+        content: '{"data":{"id":1,"name":"To Do","is_active":true,"is_collapsed":false,"sort":1,"company_id":null,"creator_id":1,"created_at":"2026-07-22T08:03:00.000000Z","updated_at":"2026-07-22T08:03:00.000000Z","deleted_at":null},"message":"Project stage updated successfully."}'
         headers: []
         description: ''
       -
@@ -1934,7 +1934,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -1954,7 +1954,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -1993,7 +1993,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -2013,7 +2013,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -2039,7 +2039,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":1,"name":"To Do","is_active":true,"is_collapsed":false,"sort":1,"company_id":null,"creator_id":1,"created_at":"2025-04-07T13:13:48.000000Z","updated_at":"2025-04-07T13:13:48.000000Z","deleted_at":null},"message":"Project stage restored successfully."}'
+        content: '{"data":{"id":1,"name":"To Do","is_active":true,"is_collapsed":false,"sort":1,"company_id":null,"creator_id":1,"created_at":"2026-07-22T08:03:00.000000Z","updated_at":"2026-07-22T08:03:00.000000Z","deleted_at":null},"message":"Project stage restored successfully."}'
         headers: []
         description: ''
       -
@@ -2052,7 +2052,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -2072,7 +2072,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -2111,7 +2111,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -2131,7 +2131,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -2169,7 +2169,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":[{"id":1,"name":"In Progress ","is_active":true,"is_collapsed":false,"sort":1,"project_id":4,"company_id":null,"user_id":null,"creator_id":1,"created_at":"2025-09-23T12:51:39.000000Z","updated_at":"2025-09-23T12:52:59.000000Z","deleted_at":null},{"id":1,"name":"In Progress ","is_active":true,"is_collapsed":false,"sort":1,"project_id":4,"company_id":null,"user_id":null,"creator_id":1,"created_at":"2025-09-23T12:51:39.000000Z","updated_at":"2025-09-23T12:52:59.000000Z","deleted_at":null}],"links":{"first":"\/?page=1","last":"\/?page=1","prev":null,"next":null},"meta":{"current_page":1,"from":1,"last_page":1,"links":[{"url":null,"label":"&laquo; Previous","active":false},{"url":"\/?page=1","label":"1","active":true},{"url":null,"label":"Next &raquo;","active":false}],"path":"\/","per_page":10,"to":2,"total":2}}'
+        content: '{"data":[{"id":null,"name":"Morgan Hirthe","is_active":true,"is_collapsed":false,"sort":1031881,"project_id":88,"company_id":2858,"user_id":1,"creator_id":1,"created_at":null,"updated_at":null,"deleted_at":null},{"id":null,"name":"Yazmin Kirlin","is_active":true,"is_collapsed":false,"sort":618343417,"project_id":89,"company_id":2861,"user_id":1,"creator_id":1,"created_at":null,"updated_at":null,"deleted_at":null}],"links":{"first":"\/?page=1","last":"\/?page=1","prev":null,"next":null},"meta":{"current_page":1,"from":1,"last_page":1,"links":[{"url":null,"label":"&laquo; Previous","page":null,"active":false},{"url":"\/?page=1","label":"1","page":1,"active":true},{"url":null,"label":"Next &raquo;","page":null,"active":false}],"path":"\/","per_page":10,"to":2,"total":2}}'
         headers: []
         description: ''
       -
@@ -2182,7 +2182,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -2202,7 +2202,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -2240,7 +2240,7 @@ endpoints:
       -
         custom: []
         status: 201
-        content: '{"data":{"id":1,"name":"In Progress ","is_active":true,"is_collapsed":false,"sort":1,"project_id":4,"company_id":null,"user_id":null,"creator_id":1,"created_at":"2025-09-23T12:51:39.000000Z","updated_at":"2025-09-23T12:52:59.000000Z","deleted_at":null},"message":"Task stage created successfully."}'
+        content: '{"data":{"id":null,"name":"Ms. Audra Crooks II","is_active":true,"is_collapsed":false,"sort":73089432,"project_id":90,"company_id":2864,"user_id":1,"creator_id":1,"created_at":null,"updated_at":null,"deleted_at":null},"message":"Task stage created successfully."}'
         headers: []
         description: ''
       -
@@ -2253,7 +2253,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -2273,7 +2273,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -2311,7 +2311,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":1,"name":"In Progress ","is_active":true,"is_collapsed":false,"sort":1,"project_id":4,"company_id":null,"user_id":null,"creator_id":1,"created_at":"2025-09-23T12:51:39.000000Z","updated_at":"2025-09-23T12:52:59.000000Z","deleted_at":null}}'
+        content: '{"data":{"id":null,"name":"Morgan Hirthe","is_active":true,"is_collapsed":false,"sort":1031881,"project_id":91,"company_id":2867,"user_id":1,"creator_id":1,"created_at":null,"updated_at":null,"deleted_at":null}}'
         headers: []
         description: ''
       -
@@ -2330,7 +2330,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -2351,7 +2351,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -2401,7 +2401,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":1,"name":"In Progress ","is_active":true,"is_collapsed":false,"sort":1,"project_id":4,"company_id":null,"user_id":null,"creator_id":1,"created_at":"2025-09-23T12:51:39.000000Z","updated_at":"2025-09-23T12:52:59.000000Z","deleted_at":null},"message":"Task stage updated successfully."}'
+        content: '{"data":{"id":null,"name":"Ms. Audra Crooks II","is_active":true,"is_collapsed":false,"sort":73089432,"project_id":92,"company_id":2870,"user_id":1,"creator_id":1,"created_at":null,"updated_at":null,"deleted_at":null},"message":"Task stage updated successfully."}'
         headers: []
         description: ''
       -
@@ -2414,7 +2414,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -2434,7 +2434,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -2473,7 +2473,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -2493,7 +2493,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -2519,7 +2519,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":1,"name":"In Progress ","is_active":true,"is_collapsed":false,"sort":1,"project_id":4,"company_id":null,"user_id":null,"creator_id":1,"created_at":"2025-09-23T12:51:39.000000Z","updated_at":"2025-09-23T12:52:59.000000Z","deleted_at":null},"message":"Task stage restored successfully."}'
+        content: '{"data":{"id":null,"name":"Morgan Hirthe","is_active":true,"is_collapsed":false,"sort":1031881,"project_id":93,"company_id":2873,"user_id":1,"creator_id":1,"created_at":null,"updated_at":null,"deleted_at":null},"message":"Task stage restored successfully."}'
         headers: []
         description: ''
       -
@@ -2532,7 +2532,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -2552,7 +2552,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -2591,7 +2591,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -2611,7 +2611,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -2649,7 +2649,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":[{"id":1,"name":"Research and Development","deadline":"2025-04-19T00:00:00.000000Z","is_completed":false,"completed_at":null,"project_id":1,"creator_id":1,"created_at":"2025-04-11T11:04:47.000000Z","updated_at":"2025-04-11T11:04:47.000000Z"},{"id":1,"name":"Research and Development","deadline":"2025-04-19T00:00:00.000000Z","is_completed":false,"completed_at":null,"project_id":1,"creator_id":1,"created_at":"2025-04-11T11:04:47.000000Z","updated_at":"2025-04-11T11:04:47.000000Z"}],"links":{"first":"\/?page=1","last":"\/?page=1","prev":null,"next":null},"meta":{"current_page":1,"from":1,"last_page":1,"links":[{"url":null,"label":"&laquo; Previous","active":false},{"url":"\/?page=1","label":"1","active":true},{"url":null,"label":"Next &raquo;","active":false}],"path":"\/","per_page":10,"to":2,"total":2}}'
+        content: '{"data":[{"id":null,"name":"Rex Hoeger","deadline":"1996-04-24T00:00:00.000000Z","is_completed":false,"completed_at":"1983-03-10T00:00:00.000000Z","project_id":94,"creator_id":1,"created_at":null,"updated_at":null},{"id":null,"name":"Mrs. Julianne Casper","deadline":"1986-09-22T00:00:00.000000Z","is_completed":false,"completed_at":"1992-08-24T00:00:00.000000Z","project_id":95,"creator_id":1,"created_at":null,"updated_at":null}],"links":{"first":"\/?page=1","last":"\/?page=1","prev":null,"next":null},"meta":{"current_page":1,"from":1,"last_page":1,"links":[{"url":null,"label":"&laquo; Previous","page":null,"active":false},{"url":"\/?page=1","label":"1","page":1,"active":true},{"url":null,"label":"Next &raquo;","page":null,"active":false}],"path":"\/","per_page":10,"to":2,"total":2}}'
         headers: []
         description: ''
       -
@@ -2662,7 +2662,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -2682,7 +2682,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -2744,7 +2744,7 @@ endpoints:
       -
         custom: []
         status: 201
-        content: '{"data":{"id":1,"name":"Research and Development","deadline":"2025-04-19T00:00:00.000000Z","is_completed":false,"completed_at":null,"project_id":1,"creator_id":1,"created_at":"2025-04-11T11:04:47.000000Z","updated_at":"2025-04-11T11:04:47.000000Z"},"message":"Milestone created successfully."}'
+        content: '{"data":{"id":null,"name":"Ms. Audra Crooks II","deadline":"1996-09-25T00:00:00.000000Z","is_completed":true,"completed_at":"2018-05-30T00:00:00.000000Z","project_id":96,"creator_id":1,"created_at":null,"updated_at":null},"message":"Milestone created successfully."}'
         headers: []
         description: ''
       -
@@ -2757,7 +2757,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -2777,7 +2777,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -2815,7 +2815,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":1,"name":"Research and Development","deadline":"2025-04-19T00:00:00.000000Z","is_completed":false,"completed_at":null,"project_id":1,"creator_id":1,"created_at":"2025-04-11T11:04:47.000000Z","updated_at":"2025-04-11T11:04:47.000000Z"}}'
+        content: '{"data":{"id":null,"name":"Morgan Hirthe","deadline":"2015-01-19T00:00:00.000000Z","is_completed":false,"completed_at":"2022-08-31T00:00:00.000000Z","project_id":97,"creator_id":1,"created_at":null,"updated_at":null}}'
         headers: []
         description: ''
       -
@@ -2834,7 +2834,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -2855,7 +2855,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -2929,7 +2929,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":1,"name":"Research and Development","deadline":"2025-04-19T00:00:00.000000Z","is_completed":false,"completed_at":null,"project_id":1,"creator_id":1,"created_at":"2025-04-11T11:04:47.000000Z","updated_at":"2025-04-11T11:04:47.000000Z"},"message":"Milestone updated successfully."}'
+        content: '{"data":{"id":null,"name":"Ms. Audra Crooks II","deadline":"1996-09-25T00:00:00.000000Z","is_completed":true,"completed_at":"2018-05-30T00:00:00.000000Z","project_id":98,"creator_id":1,"created_at":null,"updated_at":null},"message":"Milestone updated successfully."}'
         headers: []
         description: ''
       -
@@ -2942,7 +2942,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -2962,7 +2962,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -3001,7 +3001,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -3021,7 +3021,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -3059,7 +3059,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":[{"id":1,"name":"Urgent Work","color":"#ff8f17","creator_id":null,"created_at":"2025-04-11T11:01:07.000000Z","updated_at":"2025-04-11T11:01:07.000000Z","deleted_at":null},{"id":1,"name":"Urgent Work","color":"#ff8f17","creator_id":null,"created_at":"2025-04-11T11:01:07.000000Z","updated_at":"2025-04-11T11:01:07.000000Z","deleted_at":null}],"links":{"first":"\/?page=1","last":"\/?page=1","prev":null,"next":null},"meta":{"current_page":1,"from":1,"last_page":1,"links":[{"url":null,"label":"&laquo; Previous","active":false},{"url":"\/?page=1","label":"1","active":true},{"url":null,"label":"Next &raquo;","active":false}],"path":"\/","per_page":10,"to":2,"total":2}}'
+        content: '{"data":[{"id":null,"name":"aut adipisci","color":"#f76df4","creator_id":1,"created_at":null,"updated_at":null,"deleted_at":null},{"id":null,"name":"nostrum qui","color":"#79ca4d","creator_id":1,"created_at":null,"updated_at":null,"deleted_at":null}],"links":{"first":"\/?page=1","last":"\/?page=1","prev":null,"next":null},"meta":{"current_page":1,"from":1,"last_page":1,"links":[{"url":null,"label":"&laquo; Previous","page":null,"active":false},{"url":"\/?page=1","label":"1","page":1,"active":true},{"url":null,"label":"Next &raquo;","page":null,"active":false}],"path":"\/","per_page":10,"to":2,"total":2}}'
         headers: []
         description: ''
       -
@@ -3072,7 +3072,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -3092,7 +3092,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -3130,7 +3130,7 @@ endpoints:
       -
         custom: []
         status: 201
-        content: '{"data":{"id":1,"name":"Urgent Work","color":"#ff8f17","creator_id":null,"created_at":"2025-04-11T11:01:07.000000Z","updated_at":"2025-04-11T11:01:07.000000Z","deleted_at":null},"message":"Tag created successfully."}'
+        content: '{"data":{"id":null,"name":"architecto eius","color":"#4285c6","creator_id":1,"created_at":null,"updated_at":null,"deleted_at":null},"message":"Tag created successfully."}'
         headers: []
         description: ''
       -
@@ -3143,7 +3143,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -3163,7 +3163,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -3201,7 +3201,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":1,"name":"Urgent Work","color":"#ff8f17","creator_id":null,"created_at":"2025-04-11T11:01:07.000000Z","updated_at":"2025-04-11T11:01:07.000000Z","deleted_at":null}}'
+        content: '{"data":{"id":null,"name":"aut adipisci","color":"#f76df4","creator_id":1,"created_at":null,"updated_at":null,"deleted_at":null}}'
         headers: []
         description: ''
       -
@@ -3220,7 +3220,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -3241,7 +3241,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -3291,7 +3291,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":1,"name":"Urgent Work","color":"#ff8f17","creator_id":null,"created_at":"2025-04-11T11:01:07.000000Z","updated_at":"2025-04-11T11:01:07.000000Z","deleted_at":null},"message":"Tag updated successfully."}'
+        content: '{"data":{"id":null,"name":"architecto eius","color":"#4285c6","creator_id":1,"created_at":null,"updated_at":null,"deleted_at":null},"message":"Tag updated successfully."}'
         headers: []
         description: ''
       -
@@ -3304,7 +3304,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -3324,7 +3324,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -3363,7 +3363,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -3383,7 +3383,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -3409,7 +3409,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":1,"name":"Urgent Work","color":"#ff8f17","creator_id":null,"created_at":"2025-04-11T11:01:07.000000Z","updated_at":"2025-04-11T11:01:07.000000Z","deleted_at":null},"message":"Tag restored successfully."}'
+        content: '{"data":{"id":null,"name":"aut adipisci","color":"#f76df4","creator_id":1,"created_at":null,"updated_at":null,"deleted_at":null},"message":"Tag restored successfully."}'
         headers: []
         description: ''
       -
@@ -3422,7 +3422,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -3442,7 +3442,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -3481,7 +3481,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null

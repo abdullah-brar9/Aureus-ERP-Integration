@@ -5,32 +5,32 @@ return [
         'title' => 'Reporting',
     ],
     'common' => [
-        'from-to' => ':report - From :from to :to',
-        'expand-all' => 'Expand All',
-        'collapse-all' => 'Collapse All',
-        'account' => 'Account',
-        'date' => 'Date',
-        'communication' => 'Communication',
-        'partner' => 'Partner',
-        'journal' => 'Journal',
-        'invoice-date' => 'Invoice Date',
-        'due-date' => 'Due Date',
-        'debit' => 'Debit',
-        'credit' => 'Credit',
-        'balance' => 'Balance',
-        'total' => 'Total',
-        'opening-balance' => 'Opening Balance',
-        'initial-balance' => 'Initial Balance',
-        'end-balance' => 'End Balance',
-        'not-due' => 'Not due',
-        'no-data' => 'No data available',
+        'from-to'                  => ':report - From :from to :to',
+        'expand-all'               => 'Expand All',
+        'collapse-all'             => 'Collapse All',
+        'account'                  => 'Account',
+        'date'                     => 'Date',
+        'communication'            => 'Communication',
+        'partner'                  => 'Partner',
+        'journal'                  => 'Journal',
+        'invoice-date'             => 'Invoice Date',
+        'due-date'                 => 'Due Date',
+        'debit'                    => 'Debit',
+        'credit'                   => 'Credit',
+        'balance'                  => 'Balance',
+        'total'                    => 'Total',
+        'opening-balance'          => 'Opening Balance',
+        'initial-balance'          => 'Initial Balance',
+        'end-balance'              => 'End Balance',
+        'not-due'                  => 'Not due',
+        'no-data'                  => 'No data available',
         'no-accounts-transactions' => 'No accounts with transactions in this period',
     ],
     'pages' => [
         'balance-sheet' => [
             'navigation' => [
                 'title' => 'Balance Sheet',
-                'group' => 'Statement Reports',
+                'group' => 'Reports',
             ],
             'actions' => [
                 'export-excel' => 'Export to Excel',
@@ -97,7 +97,7 @@ return [
         'profit-loss' => [
             'navigation' => [
                 'title' => 'Profit & Loss',
-                'group' => 'Statement Reports',
+                'group' => 'Reports',
             ],
             'actions' => [
                 'export-excel' => 'Export to Excel',
@@ -125,7 +125,7 @@ return [
         'general-ledger' => [
             'navigation' => [
                 'title' => 'General Ledger',
-                'group' => 'Audit Reports',
+                'group' => 'Reports',
             ],
             'actions' => [
                 'export-excel' => 'Export to Excel',
@@ -139,7 +139,7 @@ return [
         'trial-balance' => [
             'navigation' => [
                 'title' => 'Trial Balance',
-                'group' => 'Audit Reports',
+                'group' => 'Legacy Reports',
             ],
             'actions' => [
                 'export-excel' => 'Export to Excel',
@@ -153,7 +153,7 @@ return [
         'partner-ledger' => [
             'navigation' => [
                 'title' => 'Partner Ledger',
-                'group' => 'Partner Reports',
+                'group' => 'Legacy Reports',
             ],
             'actions' => [
                 'export-excel' => 'Export Excel',
@@ -168,7 +168,7 @@ return [
         'aged-receivable' => [
             'navigation' => [
                 'title' => 'Aged Receivable',
-                'group' => 'Partner Reports',
+                'group' => 'Legacy Reports',
             ],
             'actions' => [
                 'export-excel' => 'Export Excel',
@@ -195,7 +195,7 @@ return [
         'aged-payable' => [
             'navigation' => [
                 'title' => 'Aged Payable',
-                'group' => 'Partner Reports',
+                'group' => 'Legacy Reports',
             ],
             'actions' => [
                 'export-excel' => 'Export Excel',

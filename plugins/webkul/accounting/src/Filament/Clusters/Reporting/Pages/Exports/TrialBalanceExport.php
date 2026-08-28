@@ -2,189 +2,84 @@
 
 namespace Webkul\Accounting\Filament\Clusters\Reporting\Pages\Exports;
 
-use Carbon\Carbon;
 use Maatwebsite\Excel\Concerns\FromArray;
-use Maatwebsite\Excel\Concerns\WithColumnWidths;
-use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithStyles;
-use PhpOffice\PhpSpreadsheet\Style\Alignment;
-use PhpOffice\PhpSpreadsheet\Style\Border;
+use Maatwebsite\Excel\Concerns\WithTitle;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
-class TrialBalanceExport implements FromArray, WithColumnWidths, WithHeadings, WithStyles
+/**
+ * Ledger-backed Trial Balance export. Values come from the same computed rows
+ * the screen renders, so Excel, PDF and screen totals are identical.
+ */
+class TrialBalanceExport implements FromArray, ShouldAutoSize, WithStyles, WithTitle
 {
-    protected $accounts;
+    /**
+     * @param  array<int, array<string, mixed>>  $rows
+     * @param  array<string, float>  $totals
+     */
+    public function __construct(
+        protected array $rows,
+        protected array $totals,
+        protected ?string $company,
+        protected string $from,
+        protected string $to,
+        protected array $currencyTotals = [],
+        protected string $currencyMode = 'company',
+        protected string $rateBasis = '',
+        protected string $conversionStatus = 'complete',
+    ) {}
 
-    protected Carbon $dateFrom;
-
-    protected Carbon $dateTo;
-
-    protected array $totals;
-
-    protected array $rowMetadata = [];
-
-    public function __construct($accounts, string $dateFrom, string $dateTo, array $totals)
+    public function title(): string
     {
-        $this->accounts = is_array($accounts) ? $accounts : $accounts->toArray();
-        $this->dateFrom = Carbon::parse($dateFrom);
-        $this->dateTo = Carbon::parse($dateTo);
-        $this->totals = $totals;
+        return 'Trial Balance';
     }
 
-    public function headings(): array
-    {
-        return [
-            ['Trial Balance - From '.$this->dateFrom->format('M d, Y').' to '.$this->dateTo->format('M d, Y')],
-            [],
-            [
-                '',
-                'Initial Balance',
-                '',
-                $this->dateFrom->format('d M Y').' - '.$this->dateTo->format('d M Y'),
-                '',
-                'End Balance',
-                '',
-            ],
-            [
-                'Account',
-                'Debit',
-                'Credit',
-                'Debit',
-                'Credit',
-                'Debit',
-                'Credit',
-            ],
-        ];
-    }
-
+    /**
+     * @return array<int, array<int, mixed>>
+     */
     public function array(): array
     {
-        $rows = [];
-        $rowIndex = 5;
-
-        collect($this->accounts)->each(function ($account) use (&$rows, &$rowIndex) {
-            $rows[] = [
-                '        '.($account['code'] ?? '').' '.($account['name'] ?? ''),
-                $account['initial_debit'] > 0 ? $account['initial_debit'] : '0.00',
-                $account['initial_credit'] > 0 ? $account['initial_credit'] : '0.00',
-                $account['period_debit'] > 0 ? $account['period_debit'] : '0.00',
-                $account['period_credit'] > 0 ? $account['period_credit'] : '0.00',
-                $account['end_debit'] > 0 ? $account['end_debit'] : '0.00',
-                $account['end_credit'] > 0 ? $account['end_credit'] : '0.00',
-            ];
-            $this->rowMetadata[$rowIndex++] = 'account_line';
-        });
-
-        $rows[] = array_fill(0, 7, '');
-        $rowIndex++;
-
-        $rows[] = [
-            'Total',
-            $this->totals['initial_debit'],
-            $this->totals['initial_credit'],
-            $this->totals['period_debit'],
-            $this->totals['period_credit'],
-            $this->totals['end_debit'],
-            $this->totals['end_credit'],
-        ];
-        $this->rowMetadata[$rowIndex] = 'grand_total';
-
-        return $rows;
-    }
-
-    public function columnWidths(): array
-    {
-        return collect(range('A', 'G'))
-            ->mapWithKeys(fn ($col) => [
-                $col => match ($col) {
-                    'A'     => 35,
-                    default => 15,
-                },
-            ])
-            ->all();
-    }
-
-    public function styles(Worksheet $sheet)
-    {
-        $sheet->getStyle('A1:G1')->applyFromArray([
-            'font'      => ['bold' => true, 'size' => 14],
-            'alignment' => ['horizontal' => Alignment::HORIZONTAL_LEFT],
-        ]);
-        $sheet->mergeCells('A1:G1');
-
-        $sheet->getStyle('B3:C3')->applyFromArray([
-            'font'      => ['bold' => true, 'size' => 12, 'color' => ['rgb' => '000000']],
-            'alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER],
-            'borders'   => [
-                'bottom' => [
-                    'borderStyle' => Border::BORDER_THIN,
-                    'color'       => ['rgb' => 'CCCCCC'],
-                ],
-            ],
-        ]);
-        $sheet->mergeCells('B3:C3');
-
-        $sheet->getStyle('D3:E3')->applyFromArray([
-            'font'      => ['bold' => true, 'size' => 12, 'color' => ['rgb' => '000000']],
-            'alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER],
-            'borders'   => [
-                'bottom' => [
-                    'borderStyle' => Border::BORDER_THIN,
-                    'color'       => ['rgb' => 'CCCCCC'],
-                ],
-            ],
-        ]);
-        $sheet->mergeCells('D3:E3');
-
-        $sheet->getStyle('F3:G3')->applyFromArray([
-            'font'      => ['bold' => true, 'size' => 12, 'color' => ['rgb' => '000000']],
-            'alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER],
-            'borders'   => [
-                'bottom' => [
-                    'borderStyle' => Border::BORDER_THIN,
-                    'color'       => ['rgb' => 'CCCCCC'],
-                ],
-            ],
-        ]);
-        $sheet->mergeCells('F3:G3');
-
-        $sheet->getStyle('A4:G4')->applyFromArray([
-            'font'      => ['bold' => true, 'size' => 12, 'color' => ['rgb' => '000000']],
-            'alignment' => ['horizontal' => Alignment::HORIZONTAL_LEFT],
-            'borders'   => [
-                'bottom' => [
-                    'borderStyle' => Border::BORDER_THICK,
-                    'color'       => ['rgb' => '666666'],
-                ],
-            ],
-        ]);
-
-        $styleMap = [
-            'account_line' => [
-                'font'      => ['size' => 12, 'color' => ['rgb' => '666666']],
-                'alignment' => ['horizontal' => Alignment::HORIZONTAL_LEFT],
-            ],
-            'grand_total' => [
-                'font'    => ['bold' => true, 'size' => 11],
-                'borders' => [
-                    'top' => [
-                        'borderStyle' => Border::BORDER_THIN,
-                        'color'       => ['rgb' => '000000'],
-                    ],
-                ],
-            ],
+        $grid = [
+            ["Currency mode: {$this->currencyMode}; status: {$this->conversionStatus}; basis: {$this->rateBasis}"],
+            ['Trial Balance — '.($this->company ?? '')],
+            [$this->from.' to '.$this->to.' (posted ledger lines)'],
+            [],
+            ['Code', 'Account', 'Currency', 'Opening Debit', 'Opening Credit', 'Movement Debit', 'Movement Credit', 'Adjustment Debit', 'Adjustment Credit', 'Closing Debit', 'Closing Credit'],
         ];
 
-        foreach ($this->rowMetadata as $rowNum => $type) {
-            if (isset($styleMap[$type])) {
-                $sheet->getStyle("A{$rowNum}:G{$rowNum}")->applyFromArray($styleMap[$type]);
+        $cols = ['opening_debit', 'opening_credit', 'movement_debit', 'movement_credit', 'adjustment_debit', 'adjustment_credit', 'closing_debit', 'closing_credit'];
+
+        foreach ($this->rows as $row) {
+            $line = [$row['code'], $row['name'], $row['currency'] ?? ''];
+            foreach ($cols as $c) {
+                $line[] = round((float) $row[$c], 2);
             }
+            $grid[] = $line;
         }
 
-        $lastRow = count($this->rowMetadata) + 5;
-        $sheet->getStyle("B5:G{$lastRow}")->getNumberFormat()->setFormatCode('#,##0.00');
-        $sheet->getStyle("B5:G{$lastRow}")->getAlignment()->setHorizontal(Alignment::HORIZONTAL_RIGHT);
+        $currencyTotals = $this->currencyTotals ?: ['' => $this->totals];
+        foreach ($currencyTotals as $currency => $totals) {
+            $totalLine = ['', 'Total', $currency];
+            foreach ($cols as $c) {
+                $totalLine[] = round((float) ($totals[$c] ?? 0), 2);
+            }
+            $grid[] = $totalLine;
+            $grid[] = ['', 'Difference', $currency, '', '', '', '', '', '', '', round((float) ($totals['difference'] ?? 0), 2)];
+        }
 
-        return [];
+        return $grid;
+    }
+
+    /**
+     * @return array<int, array<string, mixed>>
+     */
+    public function styles(Worksheet $sheet): array
+    {
+        return [
+            1                           => ['font' => ['bold' => true, 'size' => 14]],
+            5                           => ['font' => ['bold' => true]],
+            $sheet->getHighestRow() - 1 => ['font' => ['bold' => true]],
+        ];
     }
 }

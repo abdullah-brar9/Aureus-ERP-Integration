@@ -19,6 +19,10 @@ pest()
     ->use(DatabaseTransactions::class)
     ->in('Feature', '../plugins/*/*/tests/Feature');
 
+beforeEach(function (): void {
+    set_time_limit(0);
+});
+
 /*
 |--------------------------------------------------------------------------
 | Database Transactions

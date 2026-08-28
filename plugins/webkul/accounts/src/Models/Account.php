@@ -7,10 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Webkul\Account\Database\Factories\AccountFactory;
 use Webkul\Account\Enums\AccountType;
+use Webkul\Accounting\Models\AccountDetail;
 use Webkul\Security\Models\User;
 use Webkul\Support\Models\Company;
 use Webkul\Support\Models\Currency;
@@ -32,14 +34,26 @@ class Account extends Model
         'deprecated',
         'reconcile',
         'non_trade',
+        'is_group',
+        'source_classification_path',
+        'import_batch_id',
     ];
 
     protected $casts = [
         'deprecated'   => 'boolean',
         'reconcile'    => 'boolean',
         'non_trade'    => 'boolean',
+        'is_group'     => 'boolean',
         'account_type' => AccountType::class,
     ];
+
+    /**
+     * Postable (leaf) accounts only — journal lines may not use group nodes.
+     */
+    public function scopePostable($query)
+    {
+        return $query->where('is_group', false);
+    }
 
     public function currency(): BelongsTo
     {
@@ -106,6 +120,11 @@ class Account extends Model
         return $this->belongsToMany(Company::class, 'accounts_account_companies', 'account_id', 'company_id');
     }
 
+    public function accountingDetail(): HasOne
+    {
+        return $this->hasOne(AccountDetail::class);
+    }
+
     public static function getMostFrequentAccountsForPartner(
         int $companyId,
         int $partnerId,
@@ -138,13 +157,16 @@ class Account extends Model
         if (! $filterNeverUsedAccounts) {
             $accountsBase = DB::table('accounts_accounts')
                 ->select('accounts_accounts.id as account_id')
+                ->join('accounts_account_companies', function ($join) use ($companyId) {
+                    $join->on('accounts_account_companies.account_id', '=', 'accounts_accounts.id')
+                        ->where('accounts_account_companies.company_id', $companyId);
+                })
                 ->leftJoin('accounts_account_move_lines', function ($j) use ($companyId, $partnerId, $minDate) {
                     $j->on('accounts_account_move_lines.account_id', '=', 'accounts_accounts.id')
                         ->where('accounts_account_move_lines.company_id', $companyId)
                         ->where('accounts_account_move_lines.partner_id', $partnerId)
                         ->whereDate('accounts_account_move_lines.date', '>=', $minDate);
                 })
-                ->where('accounts_accounts.company_id', $companyId)
                 ->where('accounts_accounts.deprecated', false);
 
             if ($group) {

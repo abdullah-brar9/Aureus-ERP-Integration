@@ -11,6 +11,7 @@ use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Pages\Page;
 use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Utilities\Get;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Computed;
@@ -21,9 +22,15 @@ use Webkul\Account\Enums\MoveState;
 use Webkul\Account\Models\Account;
 use Webkul\Account\Models\Journal;
 use Webkul\Account\Models\MoveLine;
+use Webkul\Accounting\Enums\ReportCurrencyMode;
 use Webkul\Accounting\Filament\Clusters\Reporting;
 use Webkul\Accounting\Filament\Clusters\Reporting\Pages\Concerns\NormalizeDateFilter;
 use Webkul\Accounting\Filament\Clusters\Reporting\Pages\Exports\ProfitAndLossExport;
+use Webkul\Accounting\Services\Currency\FinancialStatementCurrencyService;
+use Webkul\Accounting\Services\ReportCompletenessService;
+use Webkul\Accounting\Support\AccountingPermissions;
+use Webkul\Support\Models\Company;
+use Webkul\Support\Models\Currency;
 
 class ProfitLoss extends Page implements HasForms
 {
@@ -35,7 +42,7 @@ class ProfitLoss extends Page implements HasForms
 
     protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-chart-bar';
 
-    protected static ?int $navigationSort = 2;
+    protected static ?int $navigationSort = 92;
 
     public ?array $data = [];
 
@@ -61,7 +68,10 @@ class ProfitLoss extends Page implements HasForms
 
     public function mount(): void
     {
-        $this->form->fill([]);
+        $this->form->fill([
+            'currency_mode'         => ReportCurrencyMode::Company->value,
+            'reporting_currency_id' => null,
+        ]);
     }
 
     protected function getHeaderActions(): array
@@ -127,11 +137,40 @@ class ProfitLoss extends Page implements HasForms
                     Select::make('journals')
                         ->label(__('accounting::filament/clusters/reporting.pages.profit-loss.filters.journals'))
                         ->multiple()
-                        ->options(fn () => Journal::pluck('name', 'id'))
                         ->searchable()
-                        ->preload()
+                        ->options(fn (): array => Journal::query()->where('company_id', Auth::user()?->default_company_id)
+                            ->orderBy('name')->limit(50)->pluck('name', 'id')->all())
+                        ->getSearchResultsUsing(fn (string $search): array => Journal::query()
+                            ->where('company_id', Auth::user()?->default_company_id)
+                            ->where('name', 'like', "%{$search}%")
+                            ->orderBy('name')
+                            ->limit(50)
+                            ->pluck('name', 'id')
+                            ->all())
+                        ->getOptionLabelsUsing(fn (array $values): array => Journal::query()
+                            ->where('company_id', Auth::user()?->default_company_id)
+                            ->whereKey($values)
+                            ->pluck('name', 'id')
+                            ->all())
                         ->live()
                         ->afterStateUpdated(fn () => null),
+                    Select::make('currency_mode')
+                        ->label('Currency mode')
+                        ->options(ReportCurrencyMode::options())
+                        ->default(ReportCurrencyMode::Company->value)
+                        ->live(),
+                    Select::make('reporting_currency_id')
+                        ->label('Reporting currency')
+                        ->visible(fn (Get $get): bool => $get('currency_mode') === ReportCurrencyMode::Reporting->value)
+                        ->options(fn () => Currency::query()
+                            ->whereHas('enabledCompanies', fn ($query) => $query
+                                ->where('companies.id', Auth::user()?->default_company_id)
+                                ->where('accounting_company_currencies.reporting_enabled', true))
+                            ->orderBy('display_order')->get()
+                            ->mapWithKeys(fn (Currency $currency): array => [$currency->id => $currency->display_name]))
+                        ->required(fn (Get $get): bool => $get('currency_mode') === ReportCurrencyMode::Reporting->value)
+                        ->searchable()
+                        ->live(),
                 ])
                 ->columnSpanFull(),
         ];
@@ -171,11 +210,84 @@ class ProfitLoss extends Page implements HasForms
 
         $balances = $query->get()->keyBy('account_id');
 
-        $accounts = Account::whereIn('account_type', array_merge(
-            array_keys(AccountType::income()),
-            array_keys(AccountType::expenses())
-        ))->get()->keyBy('id');
+        $accounts = Account::query()
+            ->whereHas('companies', fn ($query) => $query->where('companies.id', $companyId))
+            ->whereIn('account_type', array_merge(
+                array_keys(AccountType::income()),
+                array_keys(AccountType::expenses())
+            ))
+            ->get()
+            ->keyBy('id');
 
+        $company = Company::query()->with('currency')->findOrFail($companyId);
+        $currencyMode = $this->authorizedCurrencyMode();
+        $currencyService = app(FinancialStatementCurrencyService::class);
+
+        if ($currencyMode === ReportCurrencyMode::Original->value) {
+            $bundles = $currencyService->originalBalances(
+                $company,
+                $dateFrom->toDateString(),
+                $dateTo->toDateString(),
+                $journalIds,
+            );
+            $reports = [];
+            foreach ($bundles as $currencyCode => $currencyBalances) {
+                $reports[$currencyCode] = $this->assembleProfitLoss($accounts, $currencyBalances, $dateFrom, $dateTo);
+            }
+            $statement = $reports === []
+                ? $this->assembleProfitLoss($accounts, collect(), $dateFrom, $dateTo)
+                : reset($reports);
+            if ($reports === []) {
+                $emptyCurrency = (string) ($company->currency?->code ?: $company->currency?->name ?: 'Company currency');
+                $reports[$emptyCurrency] = $statement;
+            }
+
+            return array_merge($statement, [
+                'reports'           => $reports,
+                'currency_mode'     => $currencyMode,
+                'currency'          => count($reports) === 1 ? array_key_first($reports) : 'Multiple currencies',
+                'conversion_status' => 'complete',
+                'rate_basis'        => 'Stored original debit and credit amounts, grouped separately by currency.',
+                'warnings'          => [],
+            ]);
+        }
+
+        $currencyCode = (string) ($company->currency?->code ?: $company->currency?->name ?: 'Company currency');
+        $conversionStatus = 'complete';
+        $rateBasis = 'Posted company-currency debit and credit fields; no translation.';
+        $warnings = [];
+
+        if ($currencyMode === ReportCurrencyMode::Reporting->value) {
+            $targetCurrency = Currency::query()->findOrFail((int) ($this->data['reporting_currency_id'] ?? 0));
+            abort_unless($company->enabledCurrencies()->where('currencies.id', $targetCurrency->id)->wherePivot('reporting_enabled', true)->exists(), 422);
+            $translation = $currencyService->reportingMovementBalances(
+                $company,
+                $targetCurrency,
+                $dateFrom->toDateString(),
+                $dateTo->toDateString(),
+                $journalIds,
+            );
+            $balances = $translation['balances'];
+            $conversionStatus = $translation['status'];
+            $rateBasis = $translation['rate_basis'];
+            $warnings = $translation['warnings'];
+            $currencyCode = (string) ($targetCurrency->code ?: $targetCurrency->name);
+        }
+
+        $statement = $this->assembleProfitLoss($accounts, $balances, $dateFrom, $dateTo);
+
+        return array_merge($statement, [
+            'reports'           => [$currencyCode => $statement],
+            'currency_mode'     => $currencyMode,
+            'currency'          => $currencyCode,
+            'conversion_status' => $conversionStatus,
+            'rate_basis'        => $rateBasis,
+            'warnings'          => $warnings,
+        ]);
+    }
+
+    protected function assembleProfitLoss($accounts, $balances, Carbon $dateFrom, Carbon $dateTo): array
+    {
         $revenue = $this->buildRevenueSection($accounts, $balances);
         $expenses = $this->buildExpenseSection($accounts, $balances);
         $netIncome = $revenue['total'] - $expenses['total'];
@@ -203,6 +315,20 @@ class ProfitLoss extends Page implements HasForms
             'date_from'  => $dateFrom,
             'date_to'    => $dateTo,
         ];
+    }
+
+    #[Computed]
+    public function completeness(): array
+    {
+        $dateRange = $this->parseDateRange();
+        $dateFrom = $dateRange ? Carbon::parse($dateRange[0]) : now()->startOfMonth();
+        $dateTo = $dateRange ? Carbon::parse($dateRange[1]) : now()->endOfMonth();
+
+        return app(ReportCompletenessService::class)->assess(
+            Auth::user()->default_company_id,
+            $dateFrom->toDateString(),
+            $dateTo->toDateString(),
+        );
     }
 
     protected function buildRevenueSection($accounts, $balances): array
@@ -258,5 +384,15 @@ class ProfitLoss extends Page implements HasForms
                 'balance' => abs($balance),
             ];
         })->sortBy('code')->values()->all();
+    }
+
+    private function authorizedCurrencyMode(): string
+    {
+        $mode = $this->data['currency_mode'] ?? ReportCurrencyMode::Company->value;
+        if ($mode !== ReportCurrencyMode::Company->value) {
+            abort_unless(Auth::user()?->can(AccountingPermissions::ViewMultiCurrencyReports), 403);
+        }
+
+        return $mode;
     }
 }

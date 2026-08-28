@@ -11,6 +11,7 @@ use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Pages\Page;
 use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Utilities\Get;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Computed;
@@ -21,9 +22,15 @@ use Webkul\Account\Enums\MoveState;
 use Webkul\Account\Models\Account;
 use Webkul\Account\Models\Journal;
 use Webkul\Account\Models\MoveLine;
+use Webkul\Accounting\Enums\ReportCurrencyMode;
 use Webkul\Accounting\Filament\Clusters\Reporting;
 use Webkul\Accounting\Filament\Clusters\Reporting\Pages\Concerns\NormalizeDateFilter;
 use Webkul\Accounting\Filament\Clusters\Reporting\Pages\Exports\BalanceSheetExport;
+use Webkul\Accounting\Services\Currency\FinancialStatementCurrencyService;
+use Webkul\Accounting\Services\ReportCompletenessService;
+use Webkul\Accounting\Support\AccountingPermissions;
+use Webkul\Support\Models\Company;
+use Webkul\Support\Models\Currency;
 
 class BalanceSheet extends Page implements HasForms
 {
@@ -35,7 +42,7 @@ class BalanceSheet extends Page implements HasForms
 
     protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-document-chart-bar';
 
-    protected static ?int $navigationSort = 1;
+    protected static ?int $navigationSort = 91;
 
     public ?array $data = [];
 
@@ -61,7 +68,10 @@ class BalanceSheet extends Page implements HasForms
 
     public function mount(): void
     {
-        $this->form->fill([]);
+        $this->form->fill([
+            'currency_mode'         => ReportCurrencyMode::Company->value,
+            'reporting_currency_id' => null,
+        ]);
     }
 
     protected function getHeaderActions(): array
@@ -126,11 +136,40 @@ class BalanceSheet extends Page implements HasForms
                     Select::make('journals')
                         ->label(__('accounting::filament/clusters/reporting.pages.balance-sheet.filters.journals'))
                         ->multiple()
-                        ->options(fn () => Journal::pluck('name', 'id'))
                         ->searchable()
-                        ->preload()
+                        ->options(fn (): array => Journal::query()->where('company_id', Auth::user()?->default_company_id)
+                            ->orderBy('name')->limit(50)->pluck('name', 'id')->all())
+                        ->getSearchResultsUsing(fn (string $search): array => Journal::query()
+                            ->where('company_id', Auth::user()?->default_company_id)
+                            ->where('name', 'like', "%{$search}%")
+                            ->orderBy('name')
+                            ->limit(50)
+                            ->pluck('name', 'id')
+                            ->all())
+                        ->getOptionLabelsUsing(fn (array $values): array => Journal::query()
+                            ->where('company_id', Auth::user()?->default_company_id)
+                            ->whereKey($values)
+                            ->pluck('name', 'id')
+                            ->all())
                         ->live()
                         ->afterStateUpdated(fn () => null),
+                    Select::make('currency_mode')
+                        ->label('Currency mode')
+                        ->options(ReportCurrencyMode::options())
+                        ->default(ReportCurrencyMode::Company->value)
+                        ->live(),
+                    Select::make('reporting_currency_id')
+                        ->label('Reporting currency')
+                        ->visible(fn (Get $get): bool => $get('currency_mode') === ReportCurrencyMode::Reporting->value)
+                        ->options(fn () => Currency::query()
+                            ->whereHas('enabledCompanies', fn ($query) => $query
+                                ->where('companies.id', Auth::user()?->default_company_id)
+                                ->where('accounting_company_currencies.reporting_enabled', true))
+                            ->orderBy('display_order')->get()
+                            ->mapWithKeys(fn (Currency $currency): array => [$currency->id => $currency->display_name]))
+                        ->required(fn (Get $get): bool => $get('currency_mode') === ReportCurrencyMode::Reporting->value)
+                        ->searchable()
+                        ->live(),
                 ])
                 ->columnSpanFull(),
         ];
@@ -169,15 +208,133 @@ class BalanceSheet extends Page implements HasForms
 
         $balances = $query->get()->keyBy('account_id');
 
-        $accounts = Account::whereIn('account_type', array_merge(
-            array_keys(AccountType::assets()),
-            array_keys(AccountType::liabilities()),
-            array_keys(AccountType::equity())
-        ))->get()->keyBy('id');
+        $accounts = Account::query()
+            ->whereHas('companies', fn ($query) => $query->where('companies.id', $companyId))
+            ->whereIn('account_type', array_merge(
+                array_keys(AccountType::assets()),
+                array_keys(AccountType::liabilities()),
+                array_keys(AccountType::equity())
+            ))
+            ->get()
+            ->keyBy('id');
 
+        $company = Company::query()->with('currency')->findOrFail($companyId);
+        $currencyMode = $this->authorizedCurrencyMode();
+        $currencyService = app(FinancialStatementCurrencyService::class);
+
+        if ($currencyMode === ReportCurrencyMode::Original->value) {
+            $balanceBundles = $currencyService->originalBalances($company, null, $date->toDateString(), $journalIds);
+            $currentYearStart = $date->copy()->startOfYear();
+            $currentEarningsBundles = $currencyService->originalBalances(
+                $company,
+                $currentYearStart->toDateString(),
+                $date->toDateString(),
+                $journalIds,
+            );
+            $previousEarningsBundles = $currencyService->originalBalances(
+                $company,
+                null,
+                $currentYearStart->copy()->subDay()->toDateString(),
+                $journalIds,
+            );
+            $profitLossAccountIds = Account::query()
+                ->whereHas('companies', fn ($query) => $query->where('companies.id', $companyId))
+                ->whereIn('account_type', array_merge(array_keys(AccountType::income()), array_keys(AccountType::expenses())))
+                ->pluck('id');
+            $currencyCodes = collect(array_keys($balanceBundles))
+                ->merge(array_keys($currentEarningsBundles))
+                ->merge(array_keys($previousEarningsBundles))
+                ->unique()
+                ->sort()
+                ->values();
+            $reports = [];
+            foreach ($currencyCodes as $currencyCode) {
+                $currentEarnings = -1 * $profitLossAccountIds->sum(
+                    fn (int $accountId): float => (float) ($currentEarningsBundles[$currencyCode][$accountId]->balance ?? 0),
+                );
+                $previousEarnings = -1 * $profitLossAccountIds->sum(
+                    fn (int $accountId): float => (float) ($previousEarningsBundles[$currencyCode][$accountId]->balance ?? 0),
+                );
+                $reports[$currencyCode] = $this->assembleBalanceSheet(
+                    $accounts,
+                    $balanceBundles[$currencyCode] ?? collect(),
+                    $date,
+                    $companyId,
+                    $journalIds,
+                    $currentEarnings,
+                    $previousEarnings,
+                );
+            }
+
+            $statement = $reports === []
+                ? $this->assembleBalanceSheet($accounts, collect(), $date, $companyId, $journalIds, 0, 0)
+                : reset($reports);
+            if ($reports === []) {
+                $emptyCurrency = (string) ($company->currency?->code ?: $company->currency?->name ?: 'Company currency');
+                $reports[$emptyCurrency] = $statement;
+            }
+
+            return array_merge($statement, [
+                'reports'           => $reports,
+                'currency_mode'     => $currencyMode,
+                'currency'          => count($reports) === 1 ? array_key_first($reports) : 'Multiple currencies',
+                'conversion_status' => 'complete',
+                'rate_basis'        => 'Stored original debit and credit amounts, grouped separately by currency.',
+                'warnings'          => [],
+            ]);
+        }
+
+        $statement = $this->assembleBalanceSheet($accounts, $balances, $date, $companyId, $journalIds);
+        $currencyCode = (string) ($company->currency?->code ?: $company->currency?->name ?: 'Company currency');
+        $warnings = [];
+        $conversionStatus = 'complete';
+        $rateBasis = 'Posted company-currency debit and credit fields; no translation.';
+
+        if ($currencyMode === ReportCurrencyMode::Reporting->value) {
+            $targetCurrency = Currency::query()->findOrFail((int) ($this->data['reporting_currency_id'] ?? 0));
+            abort_unless($company->enabledCurrencies()->where('currencies.id', $targetCurrency->id)->wherePivot('reporting_enabled', true)->exists(), 422);
+            $closing = $currencyService->reportingClosingRate($company, $targetCurrency, $date->toDateString());
+            $warnings = $closing['warnings'];
+            $conversionStatus = $closing['status'];
+            $rateBasis = $closing['rate_basis'];
+            if ($closing['rate'] !== null) {
+                $statement = $currencyService->scaleStatement($statement, $closing['rate']);
+                $currencyCode = (string) ($targetCurrency->code ?: $targetCurrency->name);
+            } else {
+                $warnings[] = "Amounts remain displayed in {$currencyCode}; no reporting-currency values were invented.";
+            }
+        }
+
+        return array_merge($statement, [
+            'reports'           => [$currencyCode => $statement],
+            'currency_mode'     => $currencyMode,
+            'currency'          => $currencyCode,
+            'conversion_status' => $conversionStatus,
+            'rate_basis'        => $rateBasis,
+            'warnings'          => array_values(array_unique($warnings)),
+        ]);
+    }
+
+    protected function assembleBalanceSheet(
+        $accounts,
+        $balances,
+        Carbon $date,
+        int $companyId,
+        array $journalIds,
+        ?float $currentYearEarnings = null,
+        ?float $previousYearsEarnings = null,
+    ): array {
         $assets = $this->buildAssetSection($accounts, $balances);
         $liabilities = $this->buildLiabilitySection($accounts, $balances);
-        $equity = $this->buildEquitySection($accounts, $balances, $date, $companyId, $journalIds);
+        $equity = $this->buildEquitySection(
+            $accounts,
+            $balances,
+            $date,
+            $companyId,
+            $journalIds,
+            $currentYearEarnings,
+            $previousYearsEarnings,
+        );
 
         return [
             'sections' => [
@@ -263,6 +420,19 @@ class BalanceSheet extends Page implements HasForms
         ];
     }
 
+    #[Computed]
+    public function completeness(): array
+    {
+        $dateRange = $this->parseDateRange();
+        $date = $dateRange ? Carbon::parse($dateRange[1]) : now();
+
+        return app(ReportCompletenessService::class)->assess(
+            Auth::user()->default_company_id,
+            $date->copy()->startOfYear()->toDateString(),
+            $date->toDateString(),
+        );
+    }
+
     protected function buildAssetSection($accounts, $balances): array
     {
         $currentAssets = $this->getAccountsByTypes($accounts, $balances, [
@@ -319,13 +489,20 @@ class BalanceSheet extends Page implements HasForms
         ];
     }
 
-    protected function buildEquitySection($accounts, $balances, $date, $companyId, $journalIds): array
-    {
-        $currentYearStart = now()->startOfYear();
+    protected function buildEquitySection(
+        $accounts,
+        $balances,
+        $date,
+        $companyId,
+        $journalIds,
+        ?float $currentYearEarnings = null,
+        ?float $previousYearsEarnings = null,
+    ): array {
+        $currentYearStart = $date->copy()->startOfYear();
 
-        $currentYearEarnings = $this->calculateEarnings($companyId, $currentYearStart, $date, $journalIds);
+        $currentYearEarnings ??= $this->calculateEarnings($companyId, $currentYearStart, $date, $journalIds);
 
-        $previousYearsEarnings = $this->calculateEarnings($companyId, null, $currentYearStart->copy()->subDay(), $journalIds);
+        $previousYearsEarnings ??= $this->calculateEarnings($companyId, null, $currentYearStart->copy()->subDay(), $journalIds);
 
         $equityAccounts = $this->getAccountsByTypes($accounts, $balances, [
             AccountType::EQUITY->value,
@@ -401,5 +578,15 @@ class BalanceSheet extends Page implements HasForms
                 'balance' => $flipSign ? -1 * $balance : $balance,
             ];
         })->sortBy('code')->values()->all();
+    }
+
+    private function authorizedCurrencyMode(): string
+    {
+        $mode = $this->data['currency_mode'] ?? ReportCurrencyMode::Company->value;
+        if ($mode !== ReportCurrencyMode::Company->value) {
+            abort_unless(Auth::user()?->can(AccountingPermissions::ViewMultiCurrencyReports), 403);
+        }
+
+        return $mode;
     }
 }

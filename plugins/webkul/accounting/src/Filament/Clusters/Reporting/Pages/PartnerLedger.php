@@ -34,7 +34,7 @@ class PartnerLedger extends Page implements HasForms
 
     protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-users';
 
-    protected static ?int $navigationSort = 5;
+    protected static ?int $navigationSort = 95;
 
     public ?array $data = [];
 
@@ -143,7 +143,11 @@ class PartnerLedger extends Page implements HasForms
                     Select::make('partners')
                         ->label(__('accounting::filament/clusters/reporting.pages.partner-ledger.filters.partners'))
                         ->multiple()
-                        ->options(Partner::pluck('name', 'id'))
+                        ->options(fn (): array => Partner::query()
+                            ->where('company_id', Auth::user()?->default_company_id)
+                            ->orderBy('name')
+                            ->pluck('name', 'id')
+                            ->all())
                         ->searchable()
                         ->live()
                         ->afterStateUpdated(fn () => $this->resetExpandedState()),
@@ -151,8 +155,21 @@ class PartnerLedger extends Page implements HasForms
                     Select::make('journals')
                         ->label(__('accounting::filament/clusters/reporting.pages.partner-ledger.filters.journals'))
                         ->multiple()
-                        ->options(Journal::pluck('name', 'id'))
                         ->searchable()
+                        ->options(fn (): array => Journal::query()->where('company_id', Auth::user()?->default_company_id)
+                            ->orderBy('name')->limit(50)->pluck('name', 'id')->all())
+                        ->getSearchResultsUsing(fn (string $search): array => Journal::query()
+                            ->where('company_id', Auth::user()?->default_company_id)
+                            ->where('name', 'like', "%{$search}%")
+                            ->orderBy('name')
+                            ->limit(50)
+                            ->pluck('name', 'id')
+                            ->all())
+                        ->getOptionLabelsUsing(fn (array $values): array => Journal::query()
+                            ->where('company_id', Auth::user()?->default_company_id)
+                            ->whereKey($values)
+                            ->pluck('name', 'id')
+                            ->all())
                         ->live()
                         ->afterStateUpdated(fn () => $this->resetExpandedState()),
                 ])

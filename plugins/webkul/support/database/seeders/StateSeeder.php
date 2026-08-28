@@ -18,8 +18,9 @@ class StateSeeder extends Seeder
         if (File::exists($path)) {
             $states = json_decode(File::get($path), true);
 
-            $formattedStates = collect($states)->map(function ($state) {
+            $formattedStates = collect($states)->values()->map(function ($state, int $index) {
                 return [
+                    'id'         => $index + 1,
                     'country_id' => (int) $state['country_id'] ?? null,
                     'name'       => (string) $state['name'] ?? null,
                     'code'       => (string) $state['code'] ?? null,
@@ -28,7 +29,11 @@ class StateSeeder extends Seeder
                 ];
             })->toArray();
 
-            DB::table('states')->insert($formattedStates);
+            DB::table('states')->upsert(
+                $formattedStates,
+                ['id'],
+                ['country_id', 'name', 'code', 'updated_at'],
+            );
         }
     }
 }

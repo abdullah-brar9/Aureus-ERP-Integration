@@ -25,8 +25,16 @@ class GeneralLedgerExport implements FromArray, WithColumnWidths, WithHeadings, 
 
     protected array $rowMetadata = [];
 
-    public function __construct($accounts, Carbon $dateFrom, Carbon $dateTo, callable $getAccountMovesCallback, array $expandedAccounts = [])
-    {
+    public function __construct(
+        $accounts,
+        Carbon $dateFrom,
+        Carbon $dateTo,
+        callable $getAccountMovesCallback,
+        array $expandedAccounts = [],
+        protected string $currencyMode = 'company',
+        protected string $conversionStatus = 'complete',
+        protected string $rateBasis = '',
+    ) {
         $this->accounts = $accounts;
         $this->dateFrom = $dateFrom;
         $this->dateTo = $dateTo;
@@ -38,6 +46,7 @@ class GeneralLedgerExport implements FromArray, WithColumnWidths, WithHeadings, 
     {
         return [
             ['General Ledger - From '.$this->dateFrom->format('M d, Y').' to '.$this->dateTo->format('M d, Y')],
+            ["Currency mode: {$this->currencyMode}; status: {$this->conversionStatus}; basis: {$this->rateBasis}"],
             [],
             ['Account', 'Date', 'Communication', 'Partner', 'Debit', 'Credit', 'Balance'],
         ];
@@ -46,7 +55,7 @@ class GeneralLedgerExport implements FromArray, WithColumnWidths, WithHeadings, 
     public function array(): array
     {
         $rows = [];
-        $rowIndex = 4;
+        $rowIndex = 5;
 
         $totals = collect(['debit', 'credit'])
             ->mapWithKeys(fn ($key) => [$key => 0])
@@ -57,7 +66,7 @@ class GeneralLedgerExport implements FromArray, WithColumnWidths, WithHeadings, 
             $totals['credit'] += $account->period_credit;
 
             $rows[] = [
-                $account->code.' '.$account->name,
+                $account->code.' '.$account->name.' ('.($account->report_currency ?? '').')',
                 '',
                 '',
                 '',
@@ -67,7 +76,7 @@ class GeneralLedgerExport implements FromArray, WithColumnWidths, WithHeadings, 
             ];
             $this->rowMetadata[$rowIndex++] = 'account_header';
 
-            if (in_array($account->id, $this->expandedAccounts)) {
+            if (in_array($account->ledger_key ?? (string) $account->id, $this->expandedAccounts)) {
                 if ($account->opening_balance != 0) {
                     $rows[] = [
                         '        Opening Balance',
@@ -81,7 +90,7 @@ class GeneralLedgerExport implements FromArray, WithColumnWidths, WithHeadings, 
                     $this->rowMetadata[$rowIndex++] = 'opening_balance';
                 }
 
-                $moves = ($this->getAccountMovesCallback)($account->id);
+                $moves = ($this->getAccountMovesCallback)($account->ledger_key ?? (string) $account->id);
                 $runningBalance = $account->opening_balance;
 
                 collect($moves)->each(function ($move) use (&$rows, &$rowIndex, &$runningBalance) {
@@ -136,7 +145,7 @@ class GeneralLedgerExport implements FromArray, WithColumnWidths, WithHeadings, 
         ]);
         $sheet->mergeCells('A1:G1');
 
-        $sheet->getStyle('A3:G3')->applyFromArray([
+        $sheet->getStyle('A4:G4')->applyFromArray([
             'font'      => ['bold' => true, 'size' => 12, 'color' => ['rgb' => '000000']],
             'alignment' => ['horizontal' => Alignment::HORIZONTAL_LEFT],
             'borders'   => [
@@ -192,9 +201,9 @@ class GeneralLedgerExport implements FromArray, WithColumnWidths, WithHeadings, 
             }
         }
 
-        $lastRow = count($this->rowMetadata) + 4;
-        $sheet->getStyle("E4:G{$lastRow}")->getNumberFormat()->setFormatCode('#,##0.00');
-        $sheet->getStyle("E4:G{$lastRow}")->getAlignment()->setHorizontal(Alignment::HORIZONTAL_RIGHT);
+        $lastRow = count($this->rowMetadata) + 5;
+        $sheet->getStyle("E5:G{$lastRow}")->getNumberFormat()->setFormatCode('#,##0.00');
+        $sheet->getStyle("E5:G{$lastRow}")->getAlignment()->setHorizontal(Alignment::HORIZONTAL_RIGHT);
 
         return [];
     }

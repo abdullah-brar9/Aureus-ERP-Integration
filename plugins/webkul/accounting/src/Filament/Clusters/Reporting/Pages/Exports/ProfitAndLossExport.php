@@ -32,55 +32,63 @@ class ProfitAndLossExport implements FromCollection, WithColumnWidths, WithStyle
         $rows = collect();
 
         $rows->push([null, 'From '.$this->dateFrom->format('M d, Y').' to '.$this->dateTo->format('M d, Y')]);
-        $rows->push([null, null]);
+        $rows->push([null, 'Currency mode: '.($this->profitLossData['currency_mode'] ?? 'company').' · status: '.($this->profitLossData['conversion_status'] ?? 'complete')]);
         $rows->push([null, 'Balance']);
         $rows->push([null, null]);
 
         $rowIndex = 5;
 
-        foreach ($this->profitLossData['sections'] as $section) {
-            $rows->push([
-                $section['title'],
-                '',
-            ]);
-            $this->rowMetadata[$rowIndex] = 'section_header';
-            $rowIndex++;
+        $reports = $this->profitLossData['reports'] ?? [($this->profitLossData['currency'] ?? '') => $this->profitLossData];
+        foreach ($reports as $currency => $report) {
+            $rows->push([$currency, $this->profitLossData['rate_basis'] ?? '']);
+            $this->rowMetadata[$rowIndex++] = 'section_header';
 
-            if (! empty($section['accounts'])) {
-                foreach ($section['accounts'] as $account) {
-                    $accountName = ($account['code'] ? $account['code'].' - ' : '').$account['name'];
+            foreach ($report['sections'] as $section) {
+                $rows->push([
+                    $section['title'],
+                    '',
+                ]);
+                $this->rowMetadata[$rowIndex] = 'section_header';
+                $rowIndex++;
+
+                if (! empty($section['accounts'])) {
+                    foreach ($section['accounts'] as $account) {
+                        $accountName = ($account['code'] ? $account['code'].' - ' : '').$account['name'];
+                        $rows->push([
+                            '            '.$accountName,
+                            number_format($account['balance'], 2),
+                        ]);
+                        $this->rowMetadata[$rowIndex] = 'account_line';
+                        $rowIndex++;
+                    }
+
                     $rows->push([
-                        '            '.$accountName,
-                        number_format($account['balance'], 2),
+                        $section['total_label'],
+                        number_format($section['total'], 2),
                     ]);
-                    $this->rowMetadata[$rowIndex] = 'account_line';
+                    $this->rowMetadata[$rowIndex] = 'section_total';
+                    $rowIndex++;
+                } else {
+                    $rows->push([
+                        '            '.$section['empty_message'],
+                        '',
+                    ]);
+                    $this->rowMetadata[$rowIndex] = 'empty_message';
                     $rowIndex++;
                 }
 
-                $rows->push([
-                    $section['total_label'],
-                    number_format($section['total'], 2),
-                ]);
-                $this->rowMetadata[$rowIndex] = 'section_total';
-                $rowIndex++;
-            } else {
-                $rows->push([
-                    '            '.$section['empty_message'],
-                    '',
-                ]);
-                $this->rowMetadata[$rowIndex] = 'empty_message';
+                $rows->push(['', '']);
                 $rowIndex++;
             }
 
+            $rows->push([
+                $report['is_profit'] ? 'Net Profit' : 'Net Loss',
+                number_format(abs($report['net_income']), 2),
+            ]);
+            $this->rowMetadata[$rowIndex++] = 'net_income';
             $rows->push(['', '']);
             $rowIndex++;
         }
-
-        $rows->push([
-            $this->profitLossData['is_profit'] ? 'Net Profit' : 'Net Loss',
-            number_format(abs($this->profitLossData['net_income']), 2),
-        ]);
-        $this->rowMetadata[$rowIndex] = 'net_income';
 
         return $rows;
     }

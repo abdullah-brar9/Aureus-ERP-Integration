@@ -5,6 +5,7 @@ namespace Webkul\Support\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Auth;
 use InvalidArgumentException;
@@ -16,16 +17,21 @@ class Currency extends Model
 
     protected $fillable = [
         'name',
+        'code',
         'symbol',
         'iso_numeric',
         'decimal_places',
         'full_name',
         'rounding',
         'active',
+        'is_iso_fiat',
+        'display_order',
     ];
 
     protected $casts = [
-        'active' => 'boolean',
+        'active'        => 'boolean',
+        'is_iso_fiat'   => 'boolean',
+        'display_order' => 'integer',
     ];
 
     public function scopeActive(Builder $query): Builder
@@ -36,6 +42,20 @@ class Currency extends Model
     public function rates(): HasMany
     {
         return $this->hasMany(CurrencyRate::class);
+    }
+
+    public function enabledCompanies(): BelongsToMany
+    {
+        return $this->belongsToMany(Company::class, 'accounting_company_currencies')
+            ->withPivot(['transaction_enabled', 'reporting_enabled'])
+            ->withTimestamps();
+    }
+
+    public function getDisplayNameAttribute(): string
+    {
+        $code = $this->code ?: $this->name;
+
+        return trim("{$code} - {$this->full_name}");
     }
 
     public function convert(float|int $fromAmount, Currency $toCurrency, ?Company $company = null, $date = null, bool $round = true): float

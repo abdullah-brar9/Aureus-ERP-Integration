@@ -344,6 +344,25 @@ class InvoiceResource extends Resource
                                             ->native(false)
                                             ->label(__('accounts::filament/resources/invoice.form.tabs.other-information.fieldset.invoice.fields.delivery-date'))
                                             ->disabled(fn ($record) => in_array($record?->state, [MoveState::POSTED, MoveState::CANCEL])),
+                                        TextInput::make('invoice_source_email')
+                                            ->label('Customer email')
+                                            ->email()
+                                            ->maxLength(255),
+                                        TextInput::make('billing_address')
+                                            ->label('Billing address')
+                                            ->maxLength(2000),
+                                        TextInput::make('incoterm_location')
+                                            ->label('Location')
+                                            ->maxLength(255),
+                                        TextInput::make('booking_id')
+                                            ->label('Booking ID')
+                                            ->maxLength(255),
+                                        TextInput::make('consolidated_number')
+                                            ->label('Consolidated number')
+                                            ->maxLength(255),
+                                        TextInput::make('drop_off')
+                                            ->label('Drop-off')
+                                            ->maxLength(255),
                                     ])
                                     ->columns(2),
 
@@ -377,8 +396,6 @@ class InvoiceResource extends Resource
                                             ->searchable()
                                             ->preload()
                                             ->default(fn (CustomerInvoiceSettings $settings) => $settings->incoterm_id),
-                                        TextInput::make('incoterm_location')
-                                            ->label(__('accounts::filament/resources/invoice.form.tabs.other-information.fieldset.accounting.fields.incoterm-location')),
                                         Select::make('preferred_payment_method_line_id')
                                             ->relationship(
                                                 name: 'paymentMethodLine',
@@ -859,6 +876,10 @@ class InvoiceResource extends Resource
                                             ->alignCenter()
                                             ->toggleable()
                                             ->label(__('accounts::filament/resources/invoice.infolist.tabs.invoice-lines.repeater.products.entries.product')),
+                                        InfolistTableColumn::make('source_product_service')
+                                            ->alignCenter()
+                                            ->toggleable()
+                                            ->label('Imported product/service'),
                                         InfolistTableColumn::make('quantity')
                                             ->alignCenter()
                                             ->toggleable()
@@ -886,6 +907,8 @@ class InvoiceResource extends Resource
                                     ])
                                     ->schema([
                                         TextEntry::make('name')
+                                            ->placeholder('-'),
+                                        TextEntry::make('source_product_service')
                                             ->placeholder('-'),
                                         TextEntry::make('quantity')
                                             ->placeholder('-'),
@@ -1025,6 +1048,12 @@ class InvoiceResource extends Resource
                                             ->placeholder('-')
                                             ->label(__('accounts::filament/resources/invoice.infolist.tabs.other-information.fieldset.invoice.entries.delivery-date'))
                                             ->date(),
+                                        TextEntry::make('invoice_source_email')->label('Customer email')->placeholder('-'),
+                                        TextEntry::make('billing_address')->label('Billing address')->placeholder('-'),
+                                        TextEntry::make('incoterm_location')->label('Location')->placeholder('-'),
+                                        TextEntry::make('booking_id')->label('Booking ID')->placeholder('-'),
+                                        TextEntry::make('consolidated_number')->label('Consolidated number')->placeholder('-'),
+                                        TextEntry::make('drop_off')->label('Drop-off')->placeholder('-'),
                                     ])
                                     ->columns(2),
 
@@ -1036,9 +1065,6 @@ class InvoiceResource extends Resource
                                         TextEntry::make('invoiceIncoterm.name')
                                             ->placeholder('-')
                                             ->label(__('accounts::filament/resources/invoice.infolist.tabs.other-information.fieldset.accounting.entries.incoterm')),
-                                        TextEntry::make('incoterm_location')
-                                            ->placeholder('-')
-                                            ->label(__('accounts::filament/resources/invoice.infolist.tabs.other-information.fieldset.accounting.entries.incoterm-location')),
                                         TextEntry::make('fiscalPosition.name')
                                             ->placeholder('-')
                                             ->label(__('accounts::filament/resources/invoice.infolist.tabs.other-information.fieldset.accounting.entries.fiscal-position')),
@@ -1110,6 +1136,10 @@ class InvoiceResource extends Resource
                     ->resizable()
                     ->markAsRequired()
                     ->toggleable(),
+                TableColumn::make('source_product_service')
+                    ->label('Imported product/service')
+                    ->resizable()
+                    ->toggleable(),
                 TableColumn::make('quantity')
                     ->label(__('accounts::filament/resources/invoice.form.tabs.invoice-lines.repeater.products.columns.quantity'))
                     ->resizable()
@@ -1177,7 +1207,11 @@ class InvoiceResource extends Resource
                     ->dehydrated()
                     ->disabled(fn ($record) => in_array($record?->parent_state, [MoveState::POSTED, MoveState::CANCEL]))
                     ->afterStateUpdated(fn (Set $set, Get $get) => static::afterProductUpdated($set, $get))
-                    ->required(),
+                    ->required(fn (Get $get): bool => blank($get('source_product_service'))),
+                TextInput::make('source_product_service')
+                    ->label('Imported product/service')
+                    ->maxLength(255)
+                    ->required(fn (Get $get): bool => blank($get('product_id'))),
                 TextInput::make('quantity')
                     ->label(__('accounts::filament/resources/invoice.form.tabs.invoice-lines.repeater.products.fields.quantity'))
                     ->required()
@@ -1252,6 +1286,12 @@ class InvoiceResource extends Resource
                     ->default(0)
                     ->readOnly()
                     ->reactive()
+                    ->dehydrated(),
+                TextInput::make('source_tax_percent')
+                    ->label('Imported tax %')
+                    ->numeric()
+                    ->minValue(0)
+                    ->maxValue(100)
                     ->dehydrated(),
                 Hidden::make('product_uom_qty')
                     ->default(0)

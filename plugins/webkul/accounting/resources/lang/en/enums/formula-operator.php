@@ -1,0 +1,8 @@
+<?php
+
+return [
+    'add'      => 'Add (+)',
+    'subtract' => 'Subtract (-)',
+    'multiply' => 'Multiply (×)',
+    'divide'   => 'Divide (÷)',
+];

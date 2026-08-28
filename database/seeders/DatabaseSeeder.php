@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
             SecurityDatabaseSeeder::class,
             SupportDatabaseSeeder::class,
             PluginSeeder::class,
+            PermissionSeeder::class,
         ]);
     }
 }

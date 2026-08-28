@@ -17,7 +17,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -100,7 +100,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":[{"id":1,"name":"All","full_name":"All","parent_path":"\/","parent_id":null,"creator_id":1,"created_at":"2025-01-28T10:49:51.000000Z","updated_at":"2025-01-28T10:49:51.000000Z","parent":null},{"id":1,"name":"All","full_name":"All","parent_path":"\/","parent_id":null,"creator_id":1,"created_at":"2025-01-28T10:49:51.000000Z","updated_at":"2025-01-28T10:49:51.000000Z","parent":null}],"links":{"first":"\/?page=1","last":"\/?page=1","prev":null,"next":null},"meta":{"current_page":1,"from":1,"last_page":1,"links":[{"url":null,"label":"&laquo; Previous","active":false},{"url":"\/?page=1","label":"1","active":true},{"url":null,"label":"Next &raquo;","active":false}],"path":"\/","per_page":10,"to":2,"total":2}}'
+        content: '{"data":[{"id":1,"name":"All","full_name":"All","parent_path":"\/","parent_id":null,"creator_id":1,"created_at":"2025-01-28T10:49:51.000000Z","updated_at":"2025-01-28T10:49:51.000000Z","parent":null},{"id":1,"name":"All","full_name":"All","parent_path":"\/","parent_id":null,"creator_id":1,"created_at":"2025-01-28T10:49:51.000000Z","updated_at":"2025-01-28T10:49:51.000000Z","parent":null}],"links":{"first":"\/?page=1","last":"\/?page=1","prev":null,"next":null},"meta":{"current_page":1,"from":1,"last_page":1,"links":[{"url":null,"label":"&laquo; Previous","page":null,"active":false},{"url":"\/?page=1","label":"1","page":1,"active":true},{"url":null,"label":"Next &raquo;","page":null,"active":false}],"path":"\/","per_page":10,"to":2,"total":2}}'
         headers: []
         description: ''
       -
@@ -113,7 +113,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -133,7 +133,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -190,7 +190,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -210,7 +210,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -248,7 +248,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":1,"name":"All","full_name":"All","parent_path":"\/","parent_id":null,"creator_id":1,"created_at":"2025-01-28T10:49:51.000000Z","updated_at":"2025-01-28T10:49:51.000000Z","parent":null,"children":[{"id":2,"name":"Consumable","full_name":"All \/ Consumable","parent_path":"\/1\/","parent_id":1,"creator_id":1,"created_at":"2025-01-28T10:50:15.000000Z","updated_at":"2025-01-28T10:50:15.000000Z"},{"id":3,"name":"Expenses","full_name":"All \/ Expenses","parent_path":"\/1\/","parent_id":1,"creator_id":1,"created_at":"2025-01-28T10:55:42.000000Z","updated_at":"2025-01-28T10:55:42.000000Z"},{"id":4,"name":"Home Construction","full_name":"All \/ Home Construction","parent_path":"\/1\/","parent_id":1,"creator_id":1,"created_at":"2025-01-28T10:55:56.000000Z","updated_at":"2025-01-28T10:56:43.000000Z"},{"id":5,"name":"Internal","full_name":"All \/ Internal","parent_path":"\/1\/","parent_id":1,"creator_id":1,"created_at":"2025-01-28T10:56:07.000000Z","updated_at":"2025-01-28T10:56:27.000000Z"},{"id":6,"name":"Saleable","full_name":"All \/ Saleable","parent_path":"\/1\/","parent_id":1,"creator_id":1,"created_at":"2025-01-28T10:56:55.000000Z","updated_at":"2025-01-28T10:56:55.000000Z"},{"id":11,"name":"Electronic''s Devices","full_name":"All \/ Electronic''s Devices","parent_path":"\/1\/","parent_id":1,"creator_id":1,"created_at":"2025-04-08T03:34:44.000000Z","updated_at":"2025-04-08T03:34:44.000000Z"}]}}'
+        content: '{"data":{"id":1,"name":"All","full_name":"All","parent_path":"\/","parent_id":null,"creator_id":1,"created_at":"2025-01-28T10:49:51.000000Z","updated_at":"2025-01-28T10:49:51.000000Z","parent":null,"children":[{"id":2,"name":"Consumable","full_name":"All \/ Consumable","parent_path":"\/1\/","parent_id":1,"creator_id":1,"created_at":"2025-01-28T10:50:15.000000Z","updated_at":"2025-01-28T10:50:15.000000Z"},{"id":3,"name":"Expenses","full_name":"All \/ Expenses","parent_path":"\/1\/","parent_id":1,"creator_id":1,"created_at":"2025-01-28T10:55:42.000000Z","updated_at":"2025-01-28T10:55:42.000000Z"},{"id":4,"name":"Home Construction","full_name":"All \/ Home Construction","parent_path":"\/1\/","parent_id":1,"creator_id":1,"created_at":"2025-01-28T10:55:56.000000Z","updated_at":"2025-01-28T10:56:43.000000Z"},{"id":5,"name":"Internal","full_name":"All \/ Internal","parent_path":"\/1\/","parent_id":1,"creator_id":1,"created_at":"2025-01-28T10:56:07.000000Z","updated_at":"2025-01-28T10:56:27.000000Z"},{"id":6,"name":"Saleable","full_name":"All \/ Saleable","parent_path":"\/1\/","parent_id":1,"creator_id":1,"created_at":"2025-01-28T10:56:55.000000Z","updated_at":"2025-01-28T10:56:55.000000Z"}]}}'
         headers: []
         description: ''
       -
@@ -267,7 +267,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -288,7 +288,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -363,7 +363,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -383,7 +383,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -428,7 +428,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -448,7 +448,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -534,7 +534,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":[{"id":1,"name":"sales","color":null,"created_at":"2025-09-25T05:28:25.000000Z","updated_at":"2025-09-25T05:28:25.000000Z","deleted_at":null},{"id":1,"name":"sales","color":null,"created_at":"2025-09-25T05:28:25.000000Z","updated_at":"2025-09-25T05:28:25.000000Z","deleted_at":null}],"links":{"first":"\/?page=1","last":"\/?page=1","prev":null,"next":null},"meta":{"current_page":1,"from":1,"last_page":1,"links":[{"url":null,"label":"&laquo; Previous","active":false},{"url":"\/?page=1","label":"1","active":true},{"url":null,"label":"Next &raquo;","active":false}],"path":"\/","per_page":10,"to":2,"total":2}}'
+        content: '{"data":[{"id":null,"name":"aut adipisci","color":"#f76df4","created_at":null,"updated_at":null,"deleted_at":null},{"id":null,"name":"nostrum qui","color":"#79ca4d","created_at":null,"updated_at":null,"deleted_at":null}],"links":{"first":"\/?page=1","last":"\/?page=1","prev":null,"next":null},"meta":{"current_page":1,"from":1,"last_page":1,"links":[{"url":null,"label":"&laquo; Previous","page":null,"active":false},{"url":"\/?page=1","label":"1","page":1,"active":true},{"url":null,"label":"Next &raquo;","page":null,"active":false}],"path":"\/","per_page":10,"to":2,"total":2}}'
         headers: []
         description: ''
       -
@@ -547,7 +547,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -567,7 +567,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -605,7 +605,7 @@ endpoints:
       -
         custom: []
         status: 201
-        content: '{"data":{"id":1,"name":"sales","color":null,"created_at":"2025-09-25T05:28:25.000000Z","updated_at":"2025-09-25T05:28:25.000000Z","deleted_at":null},"message":"Tag created successfully."}'
+        content: '{"data":{"id":null,"name":"architecto eius","color":"#4285c6","created_at":null,"updated_at":null,"deleted_at":null},"message":"Tag created successfully."}'
         headers: []
         description: ''
       -
@@ -624,7 +624,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -644,7 +644,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -682,7 +682,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":1,"name":"sales","color":null,"created_at":"2025-09-25T05:28:25.000000Z","updated_at":"2025-09-25T05:28:25.000000Z","deleted_at":null}}'
+        content: '{"data":{"id":null,"name":"aut adipisci","color":"#f76df4","created_at":null,"updated_at":null,"deleted_at":null}}'
         headers: []
         description: ''
       -
@@ -701,7 +701,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -722,7 +722,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -772,7 +772,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":1,"name":"sales","color":null,"created_at":"2025-09-25T05:28:25.000000Z","updated_at":"2025-09-25T05:28:25.000000Z","deleted_at":null},"message":"Tag updated successfully."}'
+        content: '{"data":{"id":null,"name":"architecto eius","color":"#4285c6","created_at":null,"updated_at":null,"deleted_at":null},"message":"Tag updated successfully."}'
         headers: []
         description: ''
       -
@@ -797,7 +797,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -817,7 +817,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -862,7 +862,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -882,7 +882,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -908,7 +908,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":1,"name":"sales","color":null,"created_at":"2025-09-25T05:28:25.000000Z","updated_at":"2025-09-25T05:28:25.000000Z","deleted_at":null},"message":"Tag restored successfully."}'
+        content: '{"data":{"id":null,"name":"aut adipisci","color":"#f76df4","created_at":null,"updated_at":null,"deleted_at":null},"message":"Tag restored successfully."}'
         headers: []
         description: ''
       -
@@ -927,7 +927,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -947,7 +947,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -992,7 +992,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -1012,7 +1012,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -1110,7 +1110,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":[{"id":1,"name":"Size","type":"select","sort":null,"creator_id":1,"created_at":"2025-04-08T03:29:17.000000Z","updated_at":"2025-04-08T03:29:17.000000Z","deleted_at":null,"options":[{"id":1,"name":"Small","color":null,"extra_price":"10.0000","sort":null,"attribute_id":1,"created_at":"2025-04-08T03:29:17.000000Z","updated_at":"2025-04-08T03:29:17.000000Z"},{"id":2,"name":"Medium","color":null,"extra_price":"20.0000","sort":null,"attribute_id":1,"created_at":"2025-04-08T03:29:17.000000Z","updated_at":"2025-04-08T03:29:17.000000Z"},{"id":3,"name":"Large","color":null,"extra_price":"30.0000","sort":null,"attribute_id":1,"created_at":"2025-04-08T03:29:17.000000Z","updated_at":"2025-04-08T03:29:17.000000Z"},{"id":4,"name":"Extra Large","color":null,"extra_price":"40.0000","sort":null,"attribute_id":1,"created_at":"2025-04-08T03:29:17.000000Z","updated_at":"2025-04-08T03:29:17.000000Z"}]},{"id":1,"name":"Size","type":"select","sort":null,"creator_id":1,"created_at":"2025-04-08T03:29:17.000000Z","updated_at":"2025-04-08T03:29:17.000000Z","deleted_at":null,"options":[{"id":1,"name":"Small","color":null,"extra_price":"10.0000","sort":null,"attribute_id":1,"created_at":"2025-04-08T03:29:17.000000Z","updated_at":"2025-04-08T03:29:17.000000Z"},{"id":2,"name":"Medium","color":null,"extra_price":"20.0000","sort":null,"attribute_id":1,"created_at":"2025-04-08T03:29:17.000000Z","updated_at":"2025-04-08T03:29:17.000000Z"},{"id":3,"name":"Large","color":null,"extra_price":"30.0000","sort":null,"attribute_id":1,"created_at":"2025-04-08T03:29:17.000000Z","updated_at":"2025-04-08T03:29:17.000000Z"},{"id":4,"name":"Extra Large","color":null,"extra_price":"40.0000","sort":null,"attribute_id":1,"created_at":"2025-04-08T03:29:17.000000Z","updated_at":"2025-04-08T03:29:17.000000Z"}]}],"links":{"first":"\/?page=1","last":"\/?page=1","prev":null,"next":null},"meta":{"current_page":1,"from":1,"last_page":1,"links":[{"url":null,"label":"&laquo; Previous","active":false},{"url":"\/?page=1","label":"1","active":true},{"url":null,"label":"Next &raquo;","active":false}],"path":"\/","per_page":10,"to":2,"total":2}}'
+        content: '{"data":[{"id":null,"name":"Morgan Hirthe","type":"radio","sort":1031881,"creator_id":1,"created_at":null,"updated_at":null,"deleted_at":null},{"id":null,"name":"Miss Jazlyn Keebler III","type":"radio","sort":627,"creator_id":1,"created_at":null,"updated_at":null,"deleted_at":null}],"links":{"first":"\/?page=1","last":"\/?page=1","prev":null,"next":null},"meta":{"current_page":1,"from":1,"last_page":1,"links":[{"url":null,"label":"&laquo; Previous","page":null,"active":false},{"url":"\/?page=1","label":"1","page":1,"active":true},{"url":null,"label":"Next &raquo;","page":null,"active":false}],"path":"\/","per_page":10,"to":2,"total":2}}'
         headers: []
         description: ''
       -
@@ -1123,7 +1123,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -1143,7 +1143,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -1196,7 +1196,7 @@ endpoints:
       -
         custom: []
         status: 201
-        content: '{"data":{"id":1,"name":"Size","type":"select","sort":null,"creator_id":1,"created_at":"2025-04-08T03:29:17.000000Z","updated_at":"2025-04-08T03:29:17.000000Z","deleted_at":null,"options":[{"id":1,"name":"Small","color":null,"extra_price":"10.0000","sort":null,"attribute_id":1,"created_at":"2025-04-08T03:29:17.000000Z","updated_at":"2025-04-08T03:29:17.000000Z"},{"id":2,"name":"Medium","color":null,"extra_price":"20.0000","sort":null,"attribute_id":1,"created_at":"2025-04-08T03:29:17.000000Z","updated_at":"2025-04-08T03:29:17.000000Z"},{"id":3,"name":"Large","color":null,"extra_price":"30.0000","sort":null,"attribute_id":1,"created_at":"2025-04-08T03:29:17.000000Z","updated_at":"2025-04-08T03:29:17.000000Z"},{"id":4,"name":"Extra Large","color":null,"extra_price":"40.0000","sort":null,"attribute_id":1,"created_at":"2025-04-08T03:29:17.000000Z","updated_at":"2025-04-08T03:29:17.000000Z"}]},"message":"Attribute created successfully."}'
+        content: '{"data":{"id":null,"name":"Ms. Audra Crooks II","type":"radio","sort":73089432,"creator_id":1,"created_at":null,"updated_at":null,"deleted_at":null},"message":"Attribute created successfully."}'
         headers: []
         description: ''
       -
@@ -1215,7 +1215,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -1235,7 +1235,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -1273,7 +1273,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":1,"name":"Size","type":"select","sort":null,"creator_id":1,"created_at":"2025-04-08T03:29:17.000000Z","updated_at":"2025-04-08T03:29:17.000000Z","deleted_at":null,"options":[{"id":1,"name":"Small","color":null,"extra_price":"10.0000","sort":null,"attribute_id":1,"created_at":"2025-04-08T03:29:17.000000Z","updated_at":"2025-04-08T03:29:17.000000Z"},{"id":2,"name":"Medium","color":null,"extra_price":"20.0000","sort":null,"attribute_id":1,"created_at":"2025-04-08T03:29:17.000000Z","updated_at":"2025-04-08T03:29:17.000000Z"},{"id":3,"name":"Large","color":null,"extra_price":"30.0000","sort":null,"attribute_id":1,"created_at":"2025-04-08T03:29:17.000000Z","updated_at":"2025-04-08T03:29:17.000000Z"},{"id":4,"name":"Extra Large","color":null,"extra_price":"40.0000","sort":null,"attribute_id":1,"created_at":"2025-04-08T03:29:17.000000Z","updated_at":"2025-04-08T03:29:17.000000Z"}]}}'
+        content: '{"data":{"id":null,"name":"Morgan Hirthe","type":"radio","sort":1031881,"creator_id":1,"created_at":null,"updated_at":null,"deleted_at":null}}'
         headers: []
         description: ''
       -
@@ -1292,7 +1292,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -1313,7 +1313,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -1378,7 +1378,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":1,"name":"Size","type":"select","sort":null,"creator_id":1,"created_at":"2025-04-08T03:29:17.000000Z","updated_at":"2025-04-08T03:29:17.000000Z","deleted_at":null,"options":[{"id":1,"name":"Small","color":null,"extra_price":"10.0000","sort":null,"attribute_id":1,"created_at":"2025-04-08T03:29:17.000000Z","updated_at":"2025-04-08T03:29:17.000000Z"},{"id":2,"name":"Medium","color":null,"extra_price":"20.0000","sort":null,"attribute_id":1,"created_at":"2025-04-08T03:29:17.000000Z","updated_at":"2025-04-08T03:29:17.000000Z"},{"id":3,"name":"Large","color":null,"extra_price":"30.0000","sort":null,"attribute_id":1,"created_at":"2025-04-08T03:29:17.000000Z","updated_at":"2025-04-08T03:29:17.000000Z"},{"id":4,"name":"Extra Large","color":null,"extra_price":"40.0000","sort":null,"attribute_id":1,"created_at":"2025-04-08T03:29:17.000000Z","updated_at":"2025-04-08T03:29:17.000000Z"}]},"message":"Attribute updated successfully."}'
+        content: '{"data":{"id":null,"name":"Ms. Audra Crooks II","type":"radio","sort":73089432,"creator_id":1,"created_at":null,"updated_at":null,"deleted_at":null},"message":"Attribute updated successfully."}'
         headers: []
         description: ''
       -
@@ -1403,7 +1403,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -1423,7 +1423,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -1468,7 +1468,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -1488,7 +1488,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -1514,7 +1514,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":1,"name":"Size","type":"select","sort":null,"creator_id":1,"created_at":"2025-04-08T03:29:17.000000Z","updated_at":"2025-04-08T03:29:17.000000Z","deleted_at":null,"options":[{"id":1,"name":"Small","color":null,"extra_price":"10.0000","sort":null,"attribute_id":1,"created_at":"2025-04-08T03:29:17.000000Z","updated_at":"2025-04-08T03:29:17.000000Z"},{"id":2,"name":"Medium","color":null,"extra_price":"20.0000","sort":null,"attribute_id":1,"created_at":"2025-04-08T03:29:17.000000Z","updated_at":"2025-04-08T03:29:17.000000Z"},{"id":3,"name":"Large","color":null,"extra_price":"30.0000","sort":null,"attribute_id":1,"created_at":"2025-04-08T03:29:17.000000Z","updated_at":"2025-04-08T03:29:17.000000Z"},{"id":4,"name":"Extra Large","color":null,"extra_price":"40.0000","sort":null,"attribute_id":1,"created_at":"2025-04-08T03:29:17.000000Z","updated_at":"2025-04-08T03:29:17.000000Z"}]},"message":"Attribute restored successfully."}'
+        content: '{"data":{"id":null,"name":"Morgan Hirthe","type":"radio","sort":1031881,"creator_id":1,"created_at":null,"updated_at":null,"deleted_at":null},"message":"Attribute restored successfully."}'
         headers: []
         description: ''
       -
@@ -1533,7 +1533,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -1553,7 +1553,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -1598,7 +1598,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -1618,7 +1618,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -1702,7 +1702,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":[{"id":1,"name":"Small","color":null,"extra_price":"10.0000","sort":null,"attribute_id":1,"created_at":"2025-04-08T03:29:17.000000Z","updated_at":"2025-04-08T03:29:17.000000Z","attribute":{"id":1,"name":"Size","type":"select","sort":null,"creator_id":1,"created_at":"2025-04-08T03:29:17.000000Z","updated_at":"2025-04-08T03:29:17.000000Z","deleted_at":null}},{"id":1,"name":"Small","color":null,"extra_price":"10.0000","sort":null,"attribute_id":1,"created_at":"2025-04-08T03:29:17.000000Z","updated_at":"2025-04-08T03:29:17.000000Z","attribute":{"id":1,"name":"Size","type":"select","sort":null,"creator_id":1,"created_at":"2025-04-08T03:29:17.000000Z","updated_at":"2025-04-08T03:29:17.000000Z","deleted_at":null}}],"links":{"first":"\/?page=1","last":"\/?page=1","prev":null,"next":null},"meta":{"current_page":1,"from":1,"last_page":1,"links":[{"url":null,"label":"&laquo; Previous","active":false},{"url":"\/?page=1","label":"1","active":true},{"url":null,"label":"Next &raquo;","active":false}],"path":"\/","per_page":10,"to":2,"total":2}}'
+        content: '{"data":[{"id":null,"name":"Mavis Bosco","color":null,"extra_price":47.65,"sort":645817677,"attribute_id":11,"created_at":null,"updated_at":null},{"id":null,"name":"Lori Bogisich II","color":null,"extra_price":98.45,"sort":523233,"attribute_id":12,"created_at":null,"updated_at":null}],"links":{"first":"\/?page=1","last":"\/?page=1","prev":null,"next":null},"meta":{"current_page":1,"from":1,"last_page":1,"links":[{"url":null,"label":"&laquo; Previous","page":null,"active":false},{"url":"\/?page=1","label":"1","page":1,"active":true},{"url":null,"label":"Next &raquo;","page":null,"active":false}],"path":"\/","per_page":10,"to":2,"total":2}}'
         headers: []
         description: ''
       -
@@ -1715,7 +1715,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -1735,7 +1735,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -1809,7 +1809,7 @@ endpoints:
       -
         custom: []
         status: 201
-        content: '{"data":{"id":1,"name":"Small","color":null,"extra_price":"10.0000","sort":null,"attribute_id":1,"created_at":"2025-04-08T03:29:17.000000Z","updated_at":"2025-04-08T03:29:17.000000Z","attribute":{"id":1,"name":"Size","type":"select","sort":null,"creator_id":1,"created_at":"2025-04-08T03:29:17.000000Z","updated_at":"2025-04-08T03:29:17.000000Z","deleted_at":null}},"message":"Attribute option created successfully."}'
+        content: '{"data":{"id":null,"name":"Ms. Audra Crooks II","color":null,"extra_price":54.27,"sort":73089432,"attribute_id":13,"created_at":null,"updated_at":null},"message":"Attribute option created successfully."}'
         headers: []
         description: ''
       -
@@ -1828,7 +1828,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -1848,7 +1848,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -1898,7 +1898,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":1,"name":"Small","color":null,"extra_price":"10.0000","sort":null,"attribute_id":1,"created_at":"2025-04-08T03:29:17.000000Z","updated_at":"2025-04-08T03:29:17.000000Z","attribute":{"id":1,"name":"Size","type":"select","sort":null,"creator_id":1,"created_at":"2025-04-08T03:29:17.000000Z","updated_at":"2025-04-08T03:29:17.000000Z","deleted_at":null}}}'
+        content: '{"data":{"id":null,"name":"Morgan Hirthe","color":null,"extra_price":60.53,"sort":1031881,"attribute_id":14,"created_at":null,"updated_at":null}}'
         headers: []
         description: ''
       -
@@ -1917,7 +1917,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -1938,7 +1938,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -2024,7 +2024,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":1,"name":"Small","color":null,"extra_price":"10.0000","sort":null,"attribute_id":1,"created_at":"2025-04-08T03:29:17.000000Z","updated_at":"2025-04-08T03:29:17.000000Z","attribute":{"id":1,"name":"Size","type":"select","sort":null,"creator_id":1,"created_at":"2025-04-08T03:29:17.000000Z","updated_at":"2025-04-08T03:29:17.000000Z","deleted_at":null}},"message":"Attribute option updated successfully."}'
+        content: '{"data":{"id":null,"name":"Ms. Audra Crooks II","color":null,"extra_price":54.27,"sort":73089432,"attribute_id":15,"created_at":null,"updated_at":null},"message":"Attribute option updated successfully."}'
         headers: []
         description: ''
       -
@@ -2049,7 +2049,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -2069,7 +2069,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -2126,7 +2126,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -2146,7 +2146,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -2269,7 +2269,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":[{"id":1,"type":"goods","name":"Big Vision 4K Action Camera","service_tracking":"none","reference":"Action-01","barcode":"BV4K-0001","price":150,"cost":100,"volume":0,"weight":1.2,"description":"<p>A high-quality 4k action camera designed for everyday use.<\/p><p>The <strong>4K Action Camera<\/strong> is crafted with premium materials, ensuring durability and functionality. Perfect for those who value quality and innovation in their everyday essentials.<\/p>","description_purchase":null,"description_sale":null,"enable_sales":false,"enable_purchase":false,"is_favorite":false,"is_configurable":true,"images":["01JR9QKPXFKP1S054PZDM17MEP.png","01JR9QKPXPX1TJKCH0DMZ29M12.png"],"sort":null,"parent_id":null,"uom_id":1,"uom_po_id":1,"category_id":11,"creator_id":1,"company_id":1,"created_at":"2025-04-08T03:37:55.000000Z","updated_at":"2025-09-23T07:28:33.000000Z","deleted_at":null,"category":{"id":11,"name":"Electronic''s Devices","full_name":"All \/ Electronic''s Devices","parent_path":"\/1\/","parent_id":1,"creator_id":1,"created_at":"2025-04-08T03:34:44.000000Z","updated_at":"2025-04-08T03:34:44.000000Z"},"tags":[]},{"id":1,"type":"goods","name":"Big Vision 4K Action Camera","service_tracking":"none","reference":"Action-01","barcode":"BV4K-0001","price":150,"cost":100,"volume":0,"weight":1.2,"description":"<p>A high-quality 4k action camera designed for everyday use.<\/p><p>The <strong>4K Action Camera<\/strong> is crafted with premium materials, ensuring durability and functionality. Perfect for those who value quality and innovation in their everyday essentials.<\/p>","description_purchase":null,"description_sale":null,"enable_sales":false,"enable_purchase":false,"is_favorite":false,"is_configurable":true,"images":["01JR9QKPXFKP1S054PZDM17MEP.png","01JR9QKPXPX1TJKCH0DMZ29M12.png"],"sort":null,"parent_id":null,"uom_id":1,"uom_po_id":1,"category_id":11,"creator_id":1,"company_id":1,"created_at":"2025-04-08T03:37:55.000000Z","updated_at":"2025-09-23T07:28:33.000000Z","deleted_at":null,"category":{"id":11,"name":"Electronic''s Devices","full_name":"All \/ Electronic''s Devices","parent_path":"\/1\/","parent_id":1,"creator_id":1,"created_at":"2025-04-08T03:34:44.000000Z","updated_at":"2025-04-08T03:34:44.000000Z"},"tags":[]}],"links":{"first":"\/?page=1","last":"\/?page=1","prev":null,"next":null},"meta":{"current_page":1,"from":1,"last_page":1,"links":[{"url":null,"label":"&laquo; Previous","active":false},{"url":"\/?page=1","label":"1","active":true},{"url":null,"label":"Next &raquo;","active":false}],"path":"\/","per_page":10,"to":2,"total":2}}'
+        content: '{"data":[{"id":190,"type":"goods","name":"Shanel Lueilwitz","service_tracking":"none","reference":null,"barcode":"3766574218162","price":5.79,"cost":69.73,"volume":19.31,"weight":89.92,"description":"Iusto nesciunt reprehenderit eaque atque dolor quos cupiditate.","description_purchase":"Itaque ipsam temporibus expedita quis.","description_sale":"Distinctio labore cupiditate consequuntur qui et sit ullam.","enable_sales":true,"enable_purchase":false,"is_favorite":false,"is_configurable":false,"images":null,"sort":1,"parent_id":null,"uom_id":255,"uom_po_id":256,"category_id":208,"creator_id":null,"company_id":686,"created_at":"2026-07-22T07:30:27.000000Z","updated_at":"2026-07-22T07:30:27.000000Z","deleted_at":null,"category":{"id":208,"name":"Gianni Muller","full_name":"Gianni Muller","parent_path":"\/","parent_id":null,"creator_id":1,"created_at":"2026-07-22T07:30:27.000000Z","updated_at":"2026-07-22T07:30:27.000000Z"},"tags":[]},{"id":190,"type":"goods","name":"Shanel Lueilwitz","service_tracking":"none","reference":null,"barcode":"3766574218162","price":5.79,"cost":69.73,"volume":19.31,"weight":89.92,"description":"Iusto nesciunt reprehenderit eaque atque dolor quos cupiditate.","description_purchase":"Itaque ipsam temporibus expedita quis.","description_sale":"Distinctio labore cupiditate consequuntur qui et sit ullam.","enable_sales":true,"enable_purchase":false,"is_favorite":false,"is_configurable":false,"images":null,"sort":1,"parent_id":null,"uom_id":255,"uom_po_id":256,"category_id":208,"creator_id":null,"company_id":686,"created_at":"2026-07-22T07:30:27.000000Z","updated_at":"2026-07-22T07:30:27.000000Z","deleted_at":null,"category":{"id":208,"name":"Gianni Muller","full_name":"Gianni Muller","parent_path":"\/","parent_id":null,"creator_id":1,"created_at":"2026-07-22T07:30:27.000000Z","updated_at":"2026-07-22T07:30:27.000000Z"},"tags":[]}],"links":{"first":"\/?page=1","last":"\/?page=1","prev":null,"next":null},"meta":{"current_page":1,"from":1,"last_page":1,"links":[{"url":null,"label":"&laquo; Previous","page":null,"active":false},{"url":"\/?page=1","label":"1","page":1,"active":true},{"url":null,"label":"Next &raquo;","page":null,"active":false}],"path":"\/","per_page":10,"to":2,"total":2}}'
         headers: []
         description: ''
       -
@@ -2282,7 +2282,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -2302,7 +2302,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -2449,7 +2449,7 @@ endpoints:
         name: enable_sales
         description: 'Whether this product can be sold.'
         required: false
-        example: false
+        example: true
         type: boolean
         enumValues: []
         exampleWasSpecified: false
@@ -2460,7 +2460,7 @@ endpoints:
         name: enable_purchase
         description: 'Whether this product can be purchased.'
         required: false
-        example: false
+        example: true
         type: boolean
         enumValues: []
         exampleWasSpecified: false
@@ -2558,8 +2558,8 @@ endpoints:
       description: 'High-performance laptop with latest specifications.'
       description_purchase: 'Enterprise laptop for business use.'
       description_sale: 'Perfect for professionals and power users.'
-      enable_sales: false
-      enable_purchase: false
+      enable_sales: true
+      enable_purchase: true
       is_favorite: false
       images:
         - architecto
@@ -2574,7 +2574,7 @@ endpoints:
       -
         custom: []
         status: 201
-        content: '{"data":{"id":1,"type":"goods","name":"Big Vision 4K Action Camera","service_tracking":"none","reference":"Action-01","barcode":"BV4K-0001","price":150,"cost":100,"volume":0,"weight":1.2,"description":"<p>A high-quality 4k action camera designed for everyday use.<\/p><p>The <strong>4K Action Camera<\/strong> is crafted with premium materials, ensuring durability and functionality. Perfect for those who value quality and innovation in their everyday essentials.<\/p>","description_purchase":null,"description_sale":null,"enable_sales":false,"enable_purchase":false,"is_favorite":false,"is_configurable":true,"images":["01JR9QKPXFKP1S054PZDM17MEP.png","01JR9QKPXPX1TJKCH0DMZ29M12.png"],"sort":null,"parent_id":null,"uom_id":1,"uom_po_id":1,"category_id":11,"creator_id":1,"company_id":1,"created_at":"2025-04-08T03:37:55.000000Z","updated_at":"2025-09-23T07:28:33.000000Z","deleted_at":null,"category":{"id":11,"name":"Electronic''s Devices","full_name":"All \/ Electronic''s Devices","parent_path":"\/1\/","parent_id":1,"creator_id":1,"created_at":"2025-04-08T03:34:44.000000Z","updated_at":"2025-04-08T03:34:44.000000Z"},"tags":[]},"message":"Product created successfully."}'
+        content: '{"data":{"id":190,"type":"goods","name":"Shanel Lueilwitz","service_tracking":"none","reference":null,"barcode":"3766574218162","price":5.79,"cost":69.73,"volume":19.31,"weight":89.92,"description":"Iusto nesciunt reprehenderit eaque atque dolor quos cupiditate.","description_purchase":"Itaque ipsam temporibus expedita quis.","description_sale":"Distinctio labore cupiditate consequuntur qui et sit ullam.","enable_sales":true,"enable_purchase":false,"is_favorite":false,"is_configurable":false,"images":null,"sort":1,"parent_id":null,"uom_id":255,"uom_po_id":256,"category_id":208,"creator_id":null,"company_id":686,"created_at":"2026-07-22T07:30:27.000000Z","updated_at":"2026-07-22T07:30:27.000000Z","deleted_at":null,"category":{"id":208,"name":"Gianni Muller","full_name":"Gianni Muller","parent_path":"\/","parent_id":null,"creator_id":1,"created_at":"2026-07-22T07:30:27.000000Z","updated_at":"2026-07-22T07:30:27.000000Z"},"tags":[]},"message":"Product created successfully."}'
         headers: []
         description: ''
       -
@@ -2593,7 +2593,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -2613,7 +2613,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -2651,7 +2651,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":1,"type":"goods","name":"Big Vision 4K Action Camera","service_tracking":"none","reference":"Action-01","barcode":"BV4K-0001","price":150,"cost":100,"volume":0,"weight":1.2,"description":"<p>A high-quality 4k action camera designed for everyday use.<\/p><p>The <strong>4K Action Camera<\/strong> is crafted with premium materials, ensuring durability and functionality. Perfect for those who value quality and innovation in their everyday essentials.<\/p>","description_purchase":null,"description_sale":null,"enable_sales":false,"enable_purchase":false,"is_favorite":false,"is_configurable":true,"images":["01JR9QKPXFKP1S054PZDM17MEP.png","01JR9QKPXPX1TJKCH0DMZ29M12.png"],"sort":null,"parent_id":null,"uom_id":1,"uom_po_id":1,"category_id":11,"creator_id":1,"company_id":1,"created_at":"2025-04-08T03:37:55.000000Z","updated_at":"2025-09-23T07:28:33.000000Z","deleted_at":null,"category":{"id":11,"name":"Electronic''s Devices","full_name":"All \/ Electronic''s Devices","parent_path":"\/1\/","parent_id":1,"creator_id":1,"created_at":"2025-04-08T03:34:44.000000Z","updated_at":"2025-04-08T03:34:44.000000Z"},"tags":[]}}'
+        content: '{"data":{"id":190,"type":"goods","name":"Shanel Lueilwitz","service_tracking":"none","reference":null,"barcode":"3766574218162","price":5.79,"cost":69.73,"volume":19.31,"weight":89.92,"description":"Iusto nesciunt reprehenderit eaque atque dolor quos cupiditate.","description_purchase":"Itaque ipsam temporibus expedita quis.","description_sale":"Distinctio labore cupiditate consequuntur qui et sit ullam.","enable_sales":true,"enable_purchase":false,"is_favorite":false,"is_configurable":false,"images":null,"sort":1,"parent_id":null,"uom_id":255,"uom_po_id":256,"category_id":208,"creator_id":null,"company_id":686,"created_at":"2026-07-22T07:30:27.000000Z","updated_at":"2026-07-22T07:30:27.000000Z","deleted_at":null,"category":{"id":208,"name":"Gianni Muller","full_name":"Gianni Muller","parent_path":"\/","parent_id":null,"creator_id":1,"created_at":"2026-07-22T07:30:27.000000Z","updated_at":"2026-07-22T07:30:27.000000Z"},"tags":[]}}'
         headers: []
         description: ''
       -
@@ -2670,7 +2670,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -2691,7 +2691,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -2850,7 +2850,7 @@ endpoints:
         name: enable_sales
         description: 'Whether this product can be sold.'
         required: false
-        example: false
+        example: true
         type: boolean
         enumValues: []
         exampleWasSpecified: false
@@ -2861,7 +2861,7 @@ endpoints:
         name: enable_purchase
         description: 'Whether this product can be purchased.'
         required: false
-        example: false
+        example: true
         type: boolean
         enumValues: []
         exampleWasSpecified: false
@@ -2959,8 +2959,8 @@ endpoints:
       description: 'High-performance laptop with latest specifications.'
       description_purchase: 'Enterprise laptop for business use.'
       description_sale: 'Perfect for professionals and power users.'
-      enable_sales: false
-      enable_purchase: false
+      enable_sales: true
+      enable_purchase: true
       is_favorite: false
       images:
         - architecto
@@ -2975,7 +2975,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":1,"type":"goods","name":"Big Vision 4K Action Camera","service_tracking":"none","reference":"Action-01","barcode":"BV4K-0001","price":150,"cost":100,"volume":0,"weight":1.2,"description":"<p>A high-quality 4k action camera designed for everyday use.<\/p><p>The <strong>4K Action Camera<\/strong> is crafted with premium materials, ensuring durability and functionality. Perfect for those who value quality and innovation in their everyday essentials.<\/p>","description_purchase":null,"description_sale":null,"enable_sales":false,"enable_purchase":false,"is_favorite":false,"is_configurable":true,"images":["01JR9QKPXFKP1S054PZDM17MEP.png","01JR9QKPXPX1TJKCH0DMZ29M12.png"],"sort":null,"parent_id":null,"uom_id":1,"uom_po_id":1,"category_id":11,"creator_id":1,"company_id":1,"created_at":"2025-04-08T03:37:55.000000Z","updated_at":"2025-09-23T07:28:33.000000Z","deleted_at":null,"category":{"id":11,"name":"Electronic''s Devices","full_name":"All \/ Electronic''s Devices","parent_path":"\/1\/","parent_id":1,"creator_id":1,"created_at":"2025-04-08T03:34:44.000000Z","updated_at":"2025-04-08T03:34:44.000000Z"},"tags":[]},"message":"Product updated successfully."}'
+        content: '{"data":{"id":190,"type":"goods","name":"Shanel Lueilwitz","service_tracking":"none","reference":null,"barcode":"3766574218162","price":5.79,"cost":69.73,"volume":19.31,"weight":89.92,"description":"Iusto nesciunt reprehenderit eaque atque dolor quos cupiditate.","description_purchase":"Itaque ipsam temporibus expedita quis.","description_sale":"Distinctio labore cupiditate consequuntur qui et sit ullam.","enable_sales":true,"enable_purchase":false,"is_favorite":false,"is_configurable":false,"images":null,"sort":1,"parent_id":null,"uom_id":255,"uom_po_id":256,"category_id":208,"creator_id":null,"company_id":686,"created_at":"2026-07-22T07:30:27.000000Z","updated_at":"2026-07-22T07:30:27.000000Z","deleted_at":null,"category":{"id":208,"name":"Gianni Muller","full_name":"Gianni Muller","parent_path":"\/","parent_id":null,"creator_id":1,"created_at":"2026-07-22T07:30:27.000000Z","updated_at":"2026-07-22T07:30:27.000000Z"},"tags":[]},"message":"Product updated successfully."}'
         headers: []
         description: ''
       -
@@ -3000,7 +3000,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -3020,7 +3020,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -3065,7 +3065,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -3085,7 +3085,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -3111,7 +3111,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":1,"type":"goods","name":"Big Vision 4K Action Camera","service_tracking":"none","reference":"Action-01","barcode":"BV4K-0001","price":150,"cost":100,"volume":0,"weight":1.2,"description":"<p>A high-quality 4k action camera designed for everyday use.<\/p><p>The <strong>4K Action Camera<\/strong> is crafted with premium materials, ensuring durability and functionality. Perfect for those who value quality and innovation in their everyday essentials.<\/p>","description_purchase":null,"description_sale":null,"enable_sales":false,"enable_purchase":false,"is_favorite":false,"is_configurable":true,"images":["01JR9QKPXFKP1S054PZDM17MEP.png","01JR9QKPXPX1TJKCH0DMZ29M12.png"],"sort":null,"parent_id":null,"uom_id":1,"uom_po_id":1,"category_id":11,"creator_id":1,"company_id":1,"created_at":"2025-04-08T03:37:55.000000Z","updated_at":"2025-09-23T07:28:33.000000Z","deleted_at":null,"category":{"id":11,"name":"Electronic''s Devices","full_name":"All \/ Electronic''s Devices","parent_path":"\/1\/","parent_id":1,"creator_id":1,"created_at":"2025-04-08T03:34:44.000000Z","updated_at":"2025-04-08T03:34:44.000000Z"},"tags":[]},"message":"Product restored successfully."}'
+        content: '{"data":{"id":190,"type":"goods","name":"Shanel Lueilwitz","service_tracking":"none","reference":null,"barcode":"3766574218162","price":5.79,"cost":69.73,"volume":19.31,"weight":89.92,"description":"Iusto nesciunt reprehenderit eaque atque dolor quos cupiditate.","description_purchase":"Itaque ipsam temporibus expedita quis.","description_sale":"Distinctio labore cupiditate consequuntur qui et sit ullam.","enable_sales":true,"enable_purchase":false,"is_favorite":false,"is_configurable":false,"images":null,"sort":1,"parent_id":null,"uom_id":255,"uom_po_id":256,"category_id":208,"creator_id":null,"company_id":686,"created_at":"2026-07-22T07:30:27.000000Z","updated_at":"2026-07-22T07:30:27.000000Z","deleted_at":null,"category":{"id":208,"name":"Gianni Muller","full_name":"Gianni Muller","parent_path":"\/","parent_id":null,"creator_id":1,"created_at":"2026-07-22T07:30:27.000000Z","updated_at":"2026-07-22T07:30:27.000000Z"},"tags":[]},"message":"Product restored successfully."}'
         headers: []
         description: ''
       -
@@ -3130,7 +3130,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -3150,7 +3150,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -3195,7 +3195,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -3215,7 +3215,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -3299,7 +3299,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":[{"id":1,"sort":null,"product_id":1,"attribute_id":3,"creator_id":1,"created_at":"2025-04-08T03:49:27.000000Z","updated_at":"2025-04-08T03:49:27.000000Z","attribute":{"id":3,"name":"Lense Type","type":"radio","sort":null,"creator_id":1,"created_at":"2025-04-08T03:33:22.000000Z","updated_at":"2025-04-08T03:33:22.000000Z","deleted_at":null}},{"id":1,"sort":null,"product_id":1,"attribute_id":3,"creator_id":1,"created_at":"2025-04-08T03:49:27.000000Z","updated_at":"2025-04-08T03:49:27.000000Z","attribute":{"id":3,"name":"Lense Type","type":"radio","sort":null,"creator_id":1,"created_at":"2025-04-08T03:33:22.000000Z","updated_at":"2025-04-08T03:33:22.000000Z","deleted_at":null}}],"links":{"first":"\/?page=1","last":"\/?page=1","prev":null,"next":null},"meta":{"current_page":1,"from":1,"last_page":1,"links":[{"url":null,"label":"&laquo; Previous","active":false},{"url":"\/?page=1","label":"1","active":true},{"url":null,"label":"Next &raquo;","active":false}],"path":"\/","per_page":10,"to":2,"total":2}}'
+        content: '{"data":[{"id":null,"sort":866730091,"product_id":963,"attribute_id":16,"creator_id":1,"created_at":null,"updated_at":null},{"id":null,"sort":9,"product_id":964,"attribute_id":17,"creator_id":1,"created_at":null,"updated_at":null}],"links":{"first":"\/?page=1","last":"\/?page=1","prev":null,"next":null},"meta":{"current_page":1,"from":1,"last_page":1,"links":[{"url":null,"label":"&laquo; Previous","page":null,"active":false},{"url":"\/?page=1","label":"1","page":1,"active":true},{"url":null,"label":"Next &raquo;","page":null,"active":false}],"path":"\/","per_page":10,"to":2,"total":2}}'
         headers: []
         description: ''
       -
@@ -3312,7 +3312,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -3332,7 +3332,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -3396,7 +3396,7 @@ endpoints:
       -
         custom: []
         status: 201
-        content: '{"data":{"id":1,"sort":null,"product_id":1,"attribute_id":3,"creator_id":1,"created_at":"2025-04-08T03:49:27.000000Z","updated_at":"2025-04-08T03:49:27.000000Z","attribute":{"id":3,"name":"Lense Type","type":"radio","sort":null,"creator_id":1,"created_at":"2025-04-08T03:33:22.000000Z","updated_at":"2025-04-08T03:33:22.000000Z","deleted_at":null}},"message":"Product attribute created successfully."}'
+        content: '{"data":{"id":null,"sort":6806,"product_id":965,"attribute_id":18,"creator_id":1,"created_at":null,"updated_at":null},"message":"Product attribute created successfully."}'
         headers: []
         description: ''
       -
@@ -3415,7 +3415,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -3435,7 +3435,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -3485,7 +3485,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":1,"sort":null,"product_id":1,"attribute_id":3,"creator_id":1,"created_at":"2025-04-08T03:49:27.000000Z","updated_at":"2025-04-08T03:49:27.000000Z","attribute":{"id":3,"name":"Lense Type","type":"radio","sort":null,"creator_id":1,"created_at":"2025-04-08T03:33:22.000000Z","updated_at":"2025-04-08T03:33:22.000000Z","deleted_at":null}}}'
+        content: '{"data":{"id":null,"sort":933724,"product_id":966,"attribute_id":19,"creator_id":1,"created_at":null,"updated_at":null}}'
         headers: []
         description: ''
       -
@@ -3504,7 +3504,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -3525,7 +3525,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -3601,7 +3601,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":1,"sort":null,"product_id":1,"attribute_id":3,"creator_id":1,"created_at":"2025-04-08T03:49:27.000000Z","updated_at":"2025-04-08T03:49:27.000000Z","attribute":{"id":3,"name":"Lense Type","type":"radio","sort":null,"creator_id":1,"created_at":"2025-04-08T03:33:22.000000Z","updated_at":"2025-04-08T03:33:22.000000Z","deleted_at":null}},"message":"Product attribute updated successfully."}'
+        content: '{"data":{"id":null,"sort":6806,"product_id":967,"attribute_id":20,"creator_id":1,"created_at":null,"updated_at":null},"message":"Product attribute updated successfully."}'
         headers: []
         description: ''
       -
@@ -3626,7 +3626,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -3646,7 +3646,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -3703,7 +3703,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -3723,7 +3723,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -3858,7 +3858,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":[{"id":1,"type":"goods","name":"Big Vision 4K Action Camera","service_tracking":"none","reference":"Action-01","barcode":"BV4K-0001","price":150,"cost":100,"volume":0,"weight":1.2,"description":"<p>A high-quality 4k action camera designed for everyday use.<\/p><p>The <strong>4K Action Camera<\/strong> is crafted with premium materials, ensuring durability and functionality. Perfect for those who value quality and innovation in their everyday essentials.<\/p>","description_purchase":null,"description_sale":null,"enable_sales":false,"enable_purchase":false,"is_favorite":false,"is_configurable":true,"images":["01JR9QKPXFKP1S054PZDM17MEP.png","01JR9QKPXPX1TJKCH0DMZ29M12.png"],"sort":null,"parent_id":null,"uom_id":1,"uom_po_id":1,"category_id":11,"creator_id":1,"company_id":1,"created_at":"2025-04-08T03:37:55.000000Z","updated_at":"2025-09-23T07:28:33.000000Z","deleted_at":null},{"id":1,"type":"goods","name":"Big Vision 4K Action Camera","service_tracking":"none","reference":"Action-01","barcode":"BV4K-0001","price":150,"cost":100,"volume":0,"weight":1.2,"description":"<p>A high-quality 4k action camera designed for everyday use.<\/p><p>The <strong>4K Action Camera<\/strong> is crafted with premium materials, ensuring durability and functionality. Perfect for those who value quality and innovation in their everyday essentials.<\/p>","description_purchase":null,"description_sale":null,"enable_sales":false,"enable_purchase":false,"is_favorite":false,"is_configurable":true,"images":["01JR9QKPXFKP1S054PZDM17MEP.png","01JR9QKPXPX1TJKCH0DMZ29M12.png"],"sort":null,"parent_id":null,"uom_id":1,"uom_po_id":1,"category_id":11,"creator_id":1,"company_id":1,"created_at":"2025-04-08T03:37:55.000000Z","updated_at":"2025-09-23T07:28:33.000000Z","deleted_at":null}],"links":{"first":"\/?page=1","last":"\/?page=1","prev":null,"next":null},"meta":{"current_page":1,"from":1,"last_page":1,"links":[{"url":null,"label":"&laquo; Previous","active":false},{"url":"\/?page=1","label":"1","active":true},{"url":null,"label":"Next &raquo;","active":false}],"path":"\/","per_page":10,"to":2,"total":2}}'
+        content: '{"data":[{"id":190,"type":"goods","name":"Shanel Lueilwitz","service_tracking":"none","reference":null,"barcode":"3766574218162","price":5.79,"cost":69.73,"volume":19.31,"weight":89.92,"description":"Iusto nesciunt reprehenderit eaque atque dolor quos cupiditate.","description_purchase":"Itaque ipsam temporibus expedita quis.","description_sale":"Distinctio labore cupiditate consequuntur qui et sit ullam.","enable_sales":true,"enable_purchase":false,"is_favorite":false,"is_configurable":false,"images":null,"sort":1,"parent_id":null,"uom_id":255,"uom_po_id":256,"category_id":208,"creator_id":null,"company_id":686,"created_at":"2026-07-22T07:30:27.000000Z","updated_at":"2026-07-22T07:30:27.000000Z","deleted_at":null},{"id":190,"type":"goods","name":"Shanel Lueilwitz","service_tracking":"none","reference":null,"barcode":"3766574218162","price":5.79,"cost":69.73,"volume":19.31,"weight":89.92,"description":"Iusto nesciunt reprehenderit eaque atque dolor quos cupiditate.","description_purchase":"Itaque ipsam temporibus expedita quis.","description_sale":"Distinctio labore cupiditate consequuntur qui et sit ullam.","enable_sales":true,"enable_purchase":false,"is_favorite":false,"is_configurable":false,"images":null,"sort":1,"parent_id":null,"uom_id":255,"uom_po_id":256,"category_id":208,"creator_id":null,"company_id":686,"created_at":"2026-07-22T07:30:27.000000Z","updated_at":"2026-07-22T07:30:27.000000Z","deleted_at":null}],"links":{"first":"\/?page=1","last":"\/?page=1","prev":null,"next":null},"meta":{"current_page":1,"from":1,"last_page":1,"links":[{"url":null,"label":"&laquo; Previous","page":null,"active":false},{"url":"\/?page=1","label":"1","page":1,"active":true},{"url":null,"label":"Next &raquo;","page":null,"active":false}],"path":"\/","per_page":10,"to":2,"total":2}}'
         headers: []
         description: ''
       -
@@ -3871,7 +3871,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -3891,7 +3891,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -3917,7 +3917,7 @@ endpoints:
       -
         custom: []
         status: 201
-        content: '{"data":[{"id":1,"type":"goods","name":"Big Vision 4K Action Camera","service_tracking":"none","reference":"Action-01","barcode":"BV4K-0001","price":150,"cost":100,"volume":0,"weight":1.2,"description":"<p>A high-quality 4k action camera designed for everyday use.<\/p><p>The <strong>4K Action Camera<\/strong> is crafted with premium materials, ensuring durability and functionality. Perfect for those who value quality and innovation in their everyday essentials.<\/p>","description_purchase":null,"description_sale":null,"enable_sales":false,"enable_purchase":false,"is_favorite":false,"is_configurable":true,"images":["01JR9QKPXFKP1S054PZDM17MEP.png","01JR9QKPXPX1TJKCH0DMZ29M12.png"],"sort":null,"parent_id":null,"uom_id":1,"uom_po_id":1,"category_id":11,"creator_id":1,"company_id":1,"created_at":"2025-04-08T03:37:55.000000Z","updated_at":"2025-09-23T07:28:33.000000Z","deleted_at":null},{"id":1,"type":"goods","name":"Big Vision 4K Action Camera","service_tracking":"none","reference":"Action-01","barcode":"BV4K-0001","price":150,"cost":100,"volume":0,"weight":1.2,"description":"<p>A high-quality 4k action camera designed for everyday use.<\/p><p>The <strong>4K Action Camera<\/strong> is crafted with premium materials, ensuring durability and functionality. Perfect for those who value quality and innovation in their everyday essentials.<\/p>","description_purchase":null,"description_sale":null,"enable_sales":false,"enable_purchase":false,"is_favorite":false,"is_configurable":true,"images":["01JR9QKPXFKP1S054PZDM17MEP.png","01JR9QKPXPX1TJKCH0DMZ29M12.png"],"sort":null,"parent_id":null,"uom_id":1,"uom_po_id":1,"category_id":11,"creator_id":1,"company_id":1,"created_at":"2025-04-08T03:37:55.000000Z","updated_at":"2025-09-23T07:28:33.000000Z","deleted_at":null}],"message":"Product variants synced successfully."}'
+        content: '{"data":[{"id":190,"type":"goods","name":"Shanel Lueilwitz","service_tracking":"none","reference":null,"barcode":"3766574218162","price":5.79,"cost":69.73,"volume":19.31,"weight":89.92,"description":"Iusto nesciunt reprehenderit eaque atque dolor quos cupiditate.","description_purchase":"Itaque ipsam temporibus expedita quis.","description_sale":"Distinctio labore cupiditate consequuntur qui et sit ullam.","enable_sales":true,"enable_purchase":false,"is_favorite":false,"is_configurable":false,"images":null,"sort":1,"parent_id":null,"uom_id":255,"uom_po_id":256,"category_id":208,"creator_id":null,"company_id":686,"created_at":"2026-07-22T07:30:27.000000Z","updated_at":"2026-07-22T07:30:27.000000Z","deleted_at":null},{"id":190,"type":"goods","name":"Shanel Lueilwitz","service_tracking":"none","reference":null,"barcode":"3766574218162","price":5.79,"cost":69.73,"volume":19.31,"weight":89.92,"description":"Iusto nesciunt reprehenderit eaque atque dolor quos cupiditate.","description_purchase":"Itaque ipsam temporibus expedita quis.","description_sale":"Distinctio labore cupiditate consequuntur qui et sit ullam.","enable_sales":true,"enable_purchase":false,"is_favorite":false,"is_configurable":false,"images":null,"sort":1,"parent_id":null,"uom_id":255,"uom_po_id":256,"category_id":208,"creator_id":null,"company_id":686,"created_at":"2026-07-22T07:30:27.000000Z","updated_at":"2026-07-22T07:30:27.000000Z","deleted_at":null}],"message":"Product variants synced successfully."}'
         headers: []
         description: ''
       -
@@ -3930,7 +3930,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -3950,7 +3950,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -4000,7 +4000,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":1,"type":"goods","name":"Big Vision 4K Action Camera","service_tracking":"none","reference":"Action-01","barcode":"BV4K-0001","price":150,"cost":100,"volume":0,"weight":1.2,"description":"<p>A high-quality 4k action camera designed for everyday use.<\/p><p>The <strong>4K Action Camera<\/strong> is crafted with premium materials, ensuring durability and functionality. Perfect for those who value quality and innovation in their everyday essentials.<\/p>","description_purchase":null,"description_sale":null,"enable_sales":false,"enable_purchase":false,"is_favorite":false,"is_configurable":true,"images":["01JR9QKPXFKP1S054PZDM17MEP.png","01JR9QKPXPX1TJKCH0DMZ29M12.png"],"sort":null,"parent_id":null,"uom_id":1,"uom_po_id":1,"category_id":11,"creator_id":1,"company_id":1,"created_at":"2025-04-08T03:37:55.000000Z","updated_at":"2025-09-23T07:28:33.000000Z","deleted_at":null}}'
+        content: '{"data":{"id":190,"type":"goods","name":"Shanel Lueilwitz","service_tracking":"none","reference":null,"barcode":"3766574218162","price":5.79,"cost":69.73,"volume":19.31,"weight":89.92,"description":"Iusto nesciunt reprehenderit eaque atque dolor quos cupiditate.","description_purchase":"Itaque ipsam temporibus expedita quis.","description_sale":"Distinctio labore cupiditate consequuntur qui et sit ullam.","enable_sales":true,"enable_purchase":false,"is_favorite":false,"is_configurable":false,"images":null,"sort":1,"parent_id":null,"uom_id":255,"uom_po_id":256,"category_id":208,"creator_id":null,"company_id":686,"created_at":"2026-07-22T07:30:27.000000Z","updated_at":"2026-07-22T07:30:27.000000Z","deleted_at":null}}'
         headers: []
         description: ''
       -
@@ -4019,7 +4019,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -4040,7 +4040,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -4211,7 +4211,7 @@ endpoints:
         name: enable_sales
         description: 'Whether this product can be sold.'
         required: false
-        example: false
+        example: true
         type: boolean
         enumValues: []
         exampleWasSpecified: false
@@ -4222,7 +4222,7 @@ endpoints:
         name: enable_purchase
         description: 'Whether this product can be purchased.'
         required: false
-        example: false
+        example: true
         type: boolean
         enumValues: []
         exampleWasSpecified: false
@@ -4320,8 +4320,8 @@ endpoints:
       description: 'High-performance laptop with latest specifications.'
       description_purchase: 'Enterprise laptop for business use.'
       description_sale: 'Perfect for professionals and power users.'
-      enable_sales: false
-      enable_purchase: false
+      enable_sales: true
+      enable_purchase: true
       is_favorite: false
       images:
         - architecto
@@ -4336,7 +4336,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":1,"type":"goods","name":"Big Vision 4K Action Camera","service_tracking":"none","reference":"Action-01","barcode":"BV4K-0001","price":150,"cost":100,"volume":0,"weight":1.2,"description":"<p>A high-quality 4k action camera designed for everyday use.<\/p><p>The <strong>4K Action Camera<\/strong> is crafted with premium materials, ensuring durability and functionality. Perfect for those who value quality and innovation in their everyday essentials.<\/p>","description_purchase":null,"description_sale":null,"enable_sales":false,"enable_purchase":false,"is_favorite":false,"is_configurable":true,"images":["01JR9QKPXFKP1S054PZDM17MEP.png","01JR9QKPXPX1TJKCH0DMZ29M12.png"],"sort":null,"parent_id":null,"uom_id":1,"uom_po_id":1,"category_id":11,"creator_id":1,"company_id":1,"created_at":"2025-04-08T03:37:55.000000Z","updated_at":"2025-09-23T07:28:33.000000Z","deleted_at":null},"message":"Product variant updated successfully."}'
+        content: '{"data":{"id":190,"type":"goods","name":"Shanel Lueilwitz","service_tracking":"none","reference":null,"barcode":"3766574218162","price":5.79,"cost":69.73,"volume":19.31,"weight":89.92,"description":"Iusto nesciunt reprehenderit eaque atque dolor quos cupiditate.","description_purchase":"Itaque ipsam temporibus expedita quis.","description_sale":"Distinctio labore cupiditate consequuntur qui et sit ullam.","enable_sales":true,"enable_purchase":false,"is_favorite":false,"is_configurable":false,"images":null,"sort":1,"parent_id":null,"uom_id":255,"uom_po_id":256,"category_id":208,"creator_id":null,"company_id":686,"created_at":"2026-07-22T07:30:27.000000Z","updated_at":"2026-07-22T07:30:27.000000Z","deleted_at":null},"message":"Product variant updated successfully."}'
         headers: []
         description: ''
       -
@@ -4361,7 +4361,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -4381,7 +4381,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -4438,7 +4438,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -4458,7 +4458,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -4496,7 +4496,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":1,"type":"goods","name":"Big Vision 4K Action Camera","service_tracking":"none","reference":"Action-01","barcode":"BV4K-0001","price":150,"cost":100,"volume":0,"weight":1.2,"description":"<p>A high-quality 4k action camera designed for everyday use.<\/p><p>The <strong>4K Action Camera<\/strong> is crafted with premium materials, ensuring durability and functionality. Perfect for those who value quality and innovation in their everyday essentials.<\/p>","description_purchase":null,"description_sale":null,"enable_sales":false,"enable_purchase":false,"is_favorite":false,"is_configurable":true,"images":["01JR9QKPXFKP1S054PZDM17MEP.png","01JR9QKPXPX1TJKCH0DMZ29M12.png"],"sort":null,"parent_id":null,"uom_id":1,"uom_po_id":1,"category_id":11,"creator_id":1,"company_id":1,"created_at":"2025-04-08T03:37:55.000000Z","updated_at":"2025-09-23T07:28:33.000000Z","deleted_at":null},"message":"Product variant restored successfully."}'
+        content: '{"data":{"id":190,"type":"goods","name":"Shanel Lueilwitz","service_tracking":"none","reference":null,"barcode":"3766574218162","price":5.79,"cost":69.73,"volume":19.31,"weight":89.92,"description":"Iusto nesciunt reprehenderit eaque atque dolor quos cupiditate.","description_purchase":"Itaque ipsam temporibus expedita quis.","description_sale":"Distinctio labore cupiditate consequuntur qui et sit ullam.","enable_sales":true,"enable_purchase":false,"is_favorite":false,"is_configurable":false,"images":null,"sort":1,"parent_id":null,"uom_id":255,"uom_po_id":256,"category_id":208,"creator_id":null,"company_id":686,"created_at":"2026-07-22T07:30:27.000000Z","updated_at":"2026-07-22T07:30:27.000000Z","deleted_at":null},"message":"Product variant restored successfully."}'
         headers: []
         description: ''
       -
@@ -4515,7 +4515,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -4535,7 +4535,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -4592,7 +4592,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -4612,7 +4612,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -4695,7 +4695,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":[{"id":1,"name":"Box","barcode":"BOX-01","qty":"10.0000","sort":null,"product_id":10,"creator_id":1,"created_at":"2025-04-10T08:44:18.000000Z","updated_at":"2025-04-10T08:44:18.000000Z"},{"id":1,"name":"Box","barcode":"BOX-01","qty":"10.0000","sort":null,"product_id":10,"creator_id":1,"created_at":"2025-04-10T08:44:18.000000Z","updated_at":"2025-04-10T08:44:18.000000Z"}],"links":{"first":"\/?page=1","last":"\/?page=1","prev":null,"next":null},"meta":{"current_page":1,"from":1,"last_page":1,"links":[{"url":null,"label":"&laquo; Previous","active":false},{"url":"\/?page=1","label":"1","active":true},{"url":null,"label":"Next &raquo;","active":false}],"path":"\/","per_page":10,"to":2,"total":2}}'
+        content: '{"data":[{"id":null,"name":"Mckenna Schamberger","barcode":null,"qty":1,"sort":1,"product_id":968,"creator_id":1,"created_at":null,"updated_at":null},{"id":null,"name":"Destiny Hudson","barcode":null,"qty":1,"sort":1,"product_id":969,"creator_id":1,"created_at":null,"updated_at":null}],"links":{"first":"\/?page=1","last":"\/?page=1","prev":null,"next":null},"meta":{"current_page":1,"from":1,"last_page":1,"links":[{"url":null,"label":"&laquo; Previous","page":null,"active":false},{"url":"\/?page=1","label":"1","page":1,"active":true},{"url":null,"label":"Next &raquo;","page":null,"active":false}],"path":"\/","per_page":10,"to":2,"total":2}}'
         headers: []
         description: ''
       -
@@ -4708,7 +4708,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -4728,7 +4728,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -4814,7 +4814,7 @@ endpoints:
       -
         custom: []
         status: 201
-        content: '{"data":{"id":1,"name":"Box","barcode":"BOX-01","qty":"10.0000","sort":null,"product_id":10,"creator_id":1,"created_at":"2025-04-10T08:44:18.000000Z","updated_at":"2025-04-10T08:44:18.000000Z"},"message":"Packaging created successfully."}'
+        content: '{"data":{"id":null,"name":"Ms. Audra Crooks II","barcode":null,"qty":1,"sort":1,"product_id":970,"creator_id":1,"created_at":null,"updated_at":null},"message":"Packaging created successfully."}'
         headers: []
         description: ''
       -
@@ -4833,7 +4833,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -4853,7 +4853,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -4891,7 +4891,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":1,"name":"Box","barcode":"BOX-01","qty":"10.0000","sort":null,"product_id":10,"creator_id":1,"created_at":"2025-04-10T08:44:18.000000Z","updated_at":"2025-04-10T08:44:18.000000Z"}}'
+        content: '{"data":{"id":null,"name":"Morgan Hirthe","barcode":null,"qty":1,"sort":1,"product_id":971,"creator_id":1,"created_at":null,"updated_at":null}}'
         headers: []
         description: ''
       -
@@ -4910,7 +4910,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -4931,7 +4931,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -5029,7 +5029,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":1,"name":"Box","barcode":"BOX-01","qty":"10.0000","sort":null,"product_id":10,"creator_id":1,"created_at":"2025-04-10T08:44:18.000000Z","updated_at":"2025-04-10T08:44:18.000000Z"},"message":"Packaging updated successfully."}'
+        content: '{"data":{"id":null,"name":"Ms. Audra Crooks II","barcode":null,"qty":1,"sort":1,"product_id":972,"creator_id":1,"created_at":null,"updated_at":null},"message":"Packaging updated successfully."}'
         headers: []
         description: ''
       -
@@ -5054,7 +5054,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -5074,7 +5074,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -5119,7 +5119,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null

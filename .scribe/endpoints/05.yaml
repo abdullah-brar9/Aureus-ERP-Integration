@@ -17,7 +17,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -146,7 +146,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":[{"id":null,"sort":933724,"delay":30,"product_name":"nostrum qui commodi","product_code":"SUP-4902","starts_at":"2026-02-15T00:00:00.000000Z","ends_at":"2026-08-07T00:00:00.000000Z","min_qty":35,"price":16.1,"discount":44.27,"product_id":299,"partner_id":1,"currency_id":782,"company_id":1385,"creator_id":1,"created_at":null,"updated_at":null},{"id":null,"sort":882526594,"delay":19,"product_name":"neque sit sunt","product_code":"SUP-4223","starts_at":"2026-02-25T00:00:00.000000Z","ends_at":"2026-04-08T00:00:00.000000Z","min_qty":27,"price":59.21,"discount":48.04,"product_id":300,"partner_id":1,"currency_id":783,"company_id":1387,"creator_id":1,"created_at":null,"updated_at":null}],"links":{"first":"\/?page=1","last":"\/?page=1","prev":null,"next":null},"meta":{"current_page":1,"from":1,"last_page":1,"links":[{"url":null,"label":"&laquo; Previous","active":false},{"url":"\/?page=1","label":"1","active":true},{"url":null,"label":"Next &raquo;","active":false}],"path":"\/","per_page":10,"to":2,"total":2}}'
+        content: '{"data":[{"id":null,"sort":933724,"delay":30,"product_name":"nostrum qui commodi","product_code":"SUP-4902","starts_at":"2026-07-23T00:00:00.000000Z","ends_at":"2027-01-02T00:00:00.000000Z","min_qty":35,"price":16.1,"discount":44.27,"product_id":973,"partner_id":1,"currency_id":1893,"company_id":2885,"creator_id":1,"created_at":null,"updated_at":null},{"id":null,"sort":31405425,"delay":1,"product_name":"facere possimus aliquam","product_code":"SUP-7201","starts_at":"2026-07-02T00:00:00.000000Z","ends_at":"2026-12-07T00:00:00.000000Z","min_qty":48,"price":393.37,"discount":19.08,"product_id":974,"partner_id":1,"currency_id":1894,"company_id":2887,"creator_id":1,"created_at":null,"updated_at":null}],"links":{"first":"\/?page=1","last":"\/?page=1","prev":null,"next":null},"meta":{"current_page":1,"from":1,"last_page":1,"links":[{"url":null,"label":"&laquo; Previous","page":null,"active":false},{"url":"\/?page=1","label":"1","page":1,"active":true},{"url":null,"label":"Next &raquo;","page":null,"active":false}],"path":"\/","per_page":10,"to":2,"total":2}}'
         headers: []
         description: ''
       -
@@ -159,7 +159,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -179,7 +179,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -337,7 +337,7 @@ endpoints:
       -
         custom: []
         status: 201
-        content: '{"data":{"id":null,"sort":7449171,"delay":7,"product_name":"animi quos velit","product_code":"SUP-9432","starts_at":"2026-02-15T00:00:00.000000Z","ends_at":"2026-05-24T00:00:00.000000Z","min_qty":30,"price":549.73,"discount":15.06,"product_id":301,"partner_id":1,"currency_id":784,"company_id":1389,"creator_id":1,"created_at":null,"updated_at":null},"message":"Vendor price list created successfully."}'
+        content: '{"data":{"id":null,"sort":7449171,"delay":7,"product_name":"animi quos velit","product_code":"SUP-9432","starts_at":"2026-07-03T00:00:00.000000Z","ends_at":"2026-10-20T00:00:00.000000Z","min_qty":30,"price":549.73,"discount":15.06,"product_id":975,"partner_id":1,"currency_id":1895,"company_id":2889,"creator_id":1,"created_at":null,"updated_at":null},"message":"Vendor price list created successfully."}'
         headers: []
         description: ''
       -
@@ -356,7 +356,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -376,7 +376,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -414,7 +414,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":null,"sort":933724,"delay":30,"product_name":"nostrum qui commodi","product_code":"SUP-4902","starts_at":"2026-02-15T00:00:00.000000Z","ends_at":"2026-08-07T00:00:00.000000Z","min_qty":35,"price":16.1,"discount":44.27,"product_id":302,"partner_id":1,"currency_id":785,"company_id":1391,"creator_id":1,"created_at":null,"updated_at":null}}'
+        content: '{"data":{"id":null,"sort":933724,"delay":30,"product_name":"nostrum qui commodi","product_code":"SUP-4902","starts_at":"2026-07-23T00:00:00.000000Z","ends_at":"2027-01-02T00:00:00.000000Z","min_qty":35,"price":16.1,"discount":44.27,"product_id":976,"partner_id":1,"currency_id":1896,"company_id":2891,"creator_id":1,"created_at":null,"updated_at":null}}'
         headers: []
         description: ''
       -
@@ -433,7 +433,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -454,7 +454,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -624,7 +624,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":null,"sort":7449171,"delay":7,"product_name":"animi quos velit","product_code":"SUP-9432","starts_at":"2026-02-15T00:00:00.000000Z","ends_at":"2026-05-24T00:00:00.000000Z","min_qty":30,"price":549.73,"discount":15.06,"product_id":303,"partner_id":1,"currency_id":786,"company_id":1393,"creator_id":1,"created_at":null,"updated_at":null},"message":"Vendor price list updated successfully."}'
+        content: '{"data":{"id":null,"sort":7449171,"delay":7,"product_name":"animi quos velit","product_code":"SUP-9432","starts_at":"2026-07-03T00:00:00.000000Z","ends_at":"2026-10-20T00:00:00.000000Z","min_qty":30,"price":549.73,"discount":15.06,"product_id":977,"partner_id":1,"currency_id":1897,"company_id":2893,"creator_id":1,"created_at":null,"updated_at":null},"message":"Vendor price list updated successfully."}'
         headers: []
         description: ''
       -
@@ -649,7 +649,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -669,7 +669,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -714,7 +714,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -734,7 +734,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -829,7 +829,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":[{"id":1,"name":"PO\/1","description":"<p><\/p>","priority":"0","origin":null,"partner_reference":"EH-1234","state":"purchase","invoice_status":"invoiced","receipt_status":"full","untaxed_amount":35000,"tax_amount":5250,"total_amount":40250,"total_cc_amount":40250,"currency_rate":0,"mail_reminder_confirmed":true,"mail_reception_confirmed":false,"mail_reception_declined":false,"invoice_count":0,"ordered_at":"2026-01-08T12:53:13.000000Z","approved_at":"2026-01-08T12:56:13.000000Z","planned_at":"2026-03-11T00:00:00.000000Z","calendar_start_at":"2026-01-08T12:53:13.000000Z","incoterm_location":null,"effective_date":null,"report_grids":false,"requisition_id":null,"purchases_group_id":null,"partner_id":41,"currency_id":1,"fiscal_position_id":null,"payment_term_id":null,"incoterm_id":null,"user_id":1,"company_id":1,"creator_id":1,"operation_type_id":1,"created_at":"2026-01-08T12:55:43.000000Z","updated_at":"2026-01-08T12:56:52.000000Z"},{"id":1,"name":"PO\/1","description":"<p><\/p>","priority":"0","origin":null,"partner_reference":"EH-1234","state":"purchase","invoice_status":"invoiced","receipt_status":"full","untaxed_amount":35000,"tax_amount":5250,"total_amount":40250,"total_cc_amount":40250,"currency_rate":0,"mail_reminder_confirmed":true,"mail_reception_confirmed":false,"mail_reception_declined":false,"invoice_count":0,"ordered_at":"2026-01-08T12:53:13.000000Z","approved_at":"2026-01-08T12:56:13.000000Z","planned_at":"2026-03-11T00:00:00.000000Z","calendar_start_at":"2026-01-08T12:53:13.000000Z","incoterm_location":null,"effective_date":null,"report_grids":false,"requisition_id":null,"purchases_group_id":null,"partner_id":41,"currency_id":1,"fiscal_position_id":null,"payment_term_id":null,"incoterm_id":null,"user_id":1,"company_id":1,"creator_id":1,"operation_type_id":1,"created_at":"2026-01-08T12:55:43.000000Z","updated_at":"2026-01-08T12:56:52.000000Z"}],"links":{"first":"\/?page=1","last":"\/?page=1","prev":null,"next":null},"meta":{"current_page":1,"from":1,"last_page":1,"links":[{"url":null,"label":"&laquo; Previous","active":false},{"url":"\/?page=1","label":"1","active":true},{"url":null,"label":"Next &raquo;","active":false}],"path":"\/","per_page":10,"to":2,"total":2}}'
+        content: '{"data":[{"id":null,"name":"PO-1616","description":null,"priority":null,"origin":null,"partner_reference":null,"state":"draft","invoice_status":null,"receipt_status":null,"untaxed_amount":0,"tax_amount":0,"total_amount":0,"total_cc_amount":0,"currency_rate":1,"mail_reminder_confirmed":false,"mail_reception_confirmed":false,"mail_reception_declined":false,"invoice_count":null,"ordered_at":"2026-07-29T11:41:56.000000Z","approved_at":null,"planned_at":null,"calendar_start_at":null,"incoterm_location":null,"effective_date":null,"report_grids":false,"requisition_id":null,"purchases_group_id":null,"partner_id":1,"currency_id":1898,"fiscal_position_id":null,"payment_term_id":null,"incoterm_id":null,"user_id":null,"company_id":2894,"creator_id":1,"operation_type_id":null,"created_at":null,"updated_at":null},{"id":null,"name":"PO-3578","description":null,"priority":null,"origin":null,"partner_reference":null,"state":"draft","invoice_status":null,"receipt_status":null,"untaxed_amount":0,"tax_amount":0,"total_amount":0,"total_cc_amount":0,"currency_rate":1,"mail_reminder_confirmed":false,"mail_reception_confirmed":false,"mail_reception_declined":false,"invoice_count":null,"ordered_at":"2026-07-29T11:41:56.000000Z","approved_at":null,"planned_at":null,"calendar_start_at":null,"incoterm_location":null,"effective_date":null,"report_grids":false,"requisition_id":null,"purchases_group_id":null,"partner_id":1,"currency_id":1899,"fiscal_position_id":null,"payment_term_id":null,"incoterm_id":null,"user_id":null,"company_id":2895,"creator_id":1,"operation_type_id":null,"created_at":null,"updated_at":null}],"links":{"first":"\/?page=1","last":"\/?page=1","prev":null,"next":null},"meta":{"current_page":1,"from":1,"last_page":1,"links":[{"url":null,"label":"&laquo; Previous","page":null,"active":false},{"url":"\/?page=1","label":"1","page":1,"active":true},{"url":null,"label":"Next &raquo;","page":null,"active":false}],"path":"\/","per_page":10,"to":2,"total":2}}'
         headers: []
         description: ''
       -
@@ -842,7 +842,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -862,7 +862,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -941,7 +941,7 @@ endpoints:
         name: planned_at
         description: 'Must be a valid date.'
         required: false
-        example: '2026-03-03T04:25:45'
+        example: '2026-07-29T11:41:56'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -1054,7 +1054,7 @@ endpoints:
         name: 'lines[].planned_at'
         description: 'Must be a valid date.'
         required: true
-        example: '2026-03-03T04:25:45'
+        example: '2026-07-29T11:41:56'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -1167,7 +1167,7 @@ endpoints:
       company_id: 1
       partner_reference: VEN-REF-009
       requisition_id: 5
-      planned_at: '2026-03-03T04:25:45'
+      planned_at: '2026-07-29T11:41:56'
       user_id: 2
       payment_term_id: 4
       incoterm_id: 3
@@ -1193,7 +1193,7 @@ endpoints:
       -
         custom: []
         status: 201
-        content: '{"data":{"id":1,"name":"PO\/1","description":"<p><\/p>","priority":"0","origin":null,"partner_reference":"EH-1234","state":"purchase","invoice_status":"invoiced","receipt_status":"full","untaxed_amount":35000,"tax_amount":5250,"total_amount":40250,"total_cc_amount":40250,"currency_rate":0,"mail_reminder_confirmed":true,"mail_reception_confirmed":false,"mail_reception_declined":false,"invoice_count":0,"ordered_at":"2026-01-08T12:53:13.000000Z","approved_at":"2026-01-08T12:56:13.000000Z","planned_at":"2026-03-11T00:00:00.000000Z","calendar_start_at":"2026-01-08T12:53:13.000000Z","incoterm_location":null,"effective_date":null,"report_grids":false,"requisition_id":null,"purchases_group_id":null,"partner_id":41,"currency_id":1,"fiscal_position_id":null,"payment_term_id":null,"incoterm_id":null,"user_id":1,"company_id":1,"creator_id":1,"operation_type_id":1,"created_at":"2026-01-08T12:55:43.000000Z","updated_at":"2026-01-08T12:56:52.000000Z"},"message":"Purchase order created successfully."}'
+        content: '{"data":{"id":null,"name":"PO-8316","description":null,"priority":null,"origin":null,"partner_reference":null,"state":"draft","invoice_status":null,"receipt_status":null,"untaxed_amount":0,"tax_amount":0,"total_amount":0,"total_cc_amount":0,"currency_rate":1,"mail_reminder_confirmed":false,"mail_reception_confirmed":false,"mail_reception_declined":false,"invoice_count":null,"ordered_at":"2026-07-29T11:41:56.000000Z","approved_at":null,"planned_at":null,"calendar_start_at":null,"incoterm_location":null,"effective_date":null,"report_grids":false,"requisition_id":null,"purchases_group_id":null,"partner_id":1,"currency_id":1900,"fiscal_position_id":null,"payment_term_id":null,"incoterm_id":null,"user_id":null,"company_id":2896,"creator_id":1,"operation_type_id":null,"created_at":null,"updated_at":null},"message":"Purchase order created successfully."}'
         headers: []
         description: ''
       -
@@ -1212,7 +1212,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -1232,7 +1232,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -1270,7 +1270,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":1,"name":"PO\/1","description":"<p><\/p>","priority":"0","origin":null,"partner_reference":"EH-1234","state":"purchase","invoice_status":"invoiced","receipt_status":"full","untaxed_amount":35000,"tax_amount":5250,"total_amount":40250,"total_cc_amount":40250,"currency_rate":0,"mail_reminder_confirmed":true,"mail_reception_confirmed":false,"mail_reception_declined":false,"invoice_count":0,"ordered_at":"2026-01-08T12:53:13.000000Z","approved_at":"2026-01-08T12:56:13.000000Z","planned_at":"2026-03-11T00:00:00.000000Z","calendar_start_at":"2026-01-08T12:53:13.000000Z","incoterm_location":null,"effective_date":null,"report_grids":false,"requisition_id":null,"purchases_group_id":null,"partner_id":41,"currency_id":1,"fiscal_position_id":null,"payment_term_id":null,"incoterm_id":null,"user_id":1,"company_id":1,"creator_id":1,"operation_type_id":1,"created_at":"2026-01-08T12:55:43.000000Z","updated_at":"2026-01-08T12:56:52.000000Z"}}'
+        content: '{"data":{"id":null,"name":"PO-2680","description":null,"priority":null,"origin":null,"partner_reference":null,"state":"draft","invoice_status":null,"receipt_status":null,"untaxed_amount":0,"tax_amount":0,"total_amount":0,"total_cc_amount":0,"currency_rate":1,"mail_reminder_confirmed":false,"mail_reception_confirmed":false,"mail_reception_declined":false,"invoice_count":null,"ordered_at":"2026-07-29T11:41:56.000000Z","approved_at":null,"planned_at":null,"calendar_start_at":null,"incoterm_location":null,"effective_date":null,"report_grids":false,"requisition_id":null,"purchases_group_id":null,"partner_id":1,"currency_id":1901,"fiscal_position_id":null,"payment_term_id":null,"incoterm_id":null,"user_id":null,"company_id":2897,"creator_id":1,"operation_type_id":null,"created_at":null,"updated_at":null}}'
         headers: []
         description: ''
       -
@@ -1289,7 +1289,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -1310,7 +1310,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -1401,7 +1401,7 @@ endpoints:
         name: planned_at
         description: 'Must be a valid date.'
         required: false
-        example: '2026-03-03T04:25:45'
+        example: '2026-07-29T11:41:56'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -1514,7 +1514,7 @@ endpoints:
         name: 'lines[].planned_at'
         description: 'Must be a valid date.'
         required: true
-        example: '2026-03-03T04:25:45'
+        example: '2026-07-29T11:41:56'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -1627,7 +1627,7 @@ endpoints:
       company_id: 1
       partner_reference: VEN-REF-009
       requisition_id: 5
-      planned_at: '2026-03-03T04:25:45'
+      planned_at: '2026-07-29T11:41:56'
       user_id: 2
       payment_term_id: 4
       incoterm_id: 3
@@ -1653,7 +1653,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":1,"name":"PO\/1","description":"<p><\/p>","priority":"0","origin":null,"partner_reference":"EH-1234","state":"purchase","invoice_status":"invoiced","receipt_status":"full","untaxed_amount":35000,"tax_amount":5250,"total_amount":40250,"total_cc_amount":40250,"currency_rate":0,"mail_reminder_confirmed":true,"mail_reception_confirmed":false,"mail_reception_declined":false,"invoice_count":0,"ordered_at":"2026-01-08T12:53:13.000000Z","approved_at":"2026-01-08T12:56:13.000000Z","planned_at":"2026-03-11T00:00:00.000000Z","calendar_start_at":"2026-01-08T12:53:13.000000Z","incoterm_location":null,"effective_date":null,"report_grids":false,"requisition_id":null,"purchases_group_id":null,"partner_id":41,"currency_id":1,"fiscal_position_id":null,"payment_term_id":null,"incoterm_id":null,"user_id":1,"company_id":1,"creator_id":1,"operation_type_id":1,"created_at":"2026-01-08T12:55:43.000000Z","updated_at":"2026-01-08T12:56:52.000000Z"},"message":"Purchase order updated successfully."}'
+        content: '{"data":{"id":null,"name":"PO-2564","description":null,"priority":null,"origin":null,"partner_reference":null,"state":"draft","invoice_status":null,"receipt_status":null,"untaxed_amount":0,"tax_amount":0,"total_amount":0,"total_cc_amount":0,"currency_rate":1,"mail_reminder_confirmed":false,"mail_reception_confirmed":false,"mail_reception_declined":false,"invoice_count":null,"ordered_at":"2026-07-29T11:41:56.000000Z","approved_at":null,"planned_at":null,"calendar_start_at":null,"incoterm_location":null,"effective_date":null,"report_grids":false,"requisition_id":null,"purchases_group_id":null,"partner_id":1,"currency_id":1902,"fiscal_position_id":null,"payment_term_id":null,"incoterm_id":null,"user_id":null,"company_id":2898,"creator_id":1,"operation_type_id":null,"created_at":null,"updated_at":null},"message":"Purchase order updated successfully."}'
         headers: []
         description: ''
       -
@@ -1678,7 +1678,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -1698,7 +1698,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -1743,7 +1743,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -1763,7 +1763,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -1789,7 +1789,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":1,"name":"PO\/1","description":"<p><\/p>","priority":"0","origin":null,"partner_reference":"EH-1234","state":"purchase","invoice_status":"invoiced","receipt_status":"full","untaxed_amount":35000,"tax_amount":5250,"total_amount":40250,"total_cc_amount":40250,"currency_rate":0,"mail_reminder_confirmed":true,"mail_reception_confirmed":false,"mail_reception_declined":false,"invoice_count":0,"ordered_at":"2026-01-08T12:53:13.000000Z","approved_at":"2026-01-08T12:56:13.000000Z","planned_at":"2026-03-11T00:00:00.000000Z","calendar_start_at":"2026-01-08T12:53:13.000000Z","incoterm_location":null,"effective_date":null,"report_grids":false,"requisition_id":null,"purchases_group_id":null,"partner_id":41,"currency_id":1,"fiscal_position_id":null,"payment_term_id":null,"incoterm_id":null,"user_id":1,"company_id":1,"creator_id":1,"operation_type_id":1,"created_at":"2026-01-08T12:55:43.000000Z","updated_at":"2026-01-08T12:56:52.000000Z"},"message":"Purchase order confirmed successfully."}'
+        content: '{"data":{"id":null,"name":"PO-9724","description":null,"priority":null,"origin":null,"partner_reference":null,"state":"draft","invoice_status":null,"receipt_status":null,"untaxed_amount":0,"tax_amount":0,"total_amount":0,"total_cc_amount":0,"currency_rate":1,"mail_reminder_confirmed":false,"mail_reception_confirmed":false,"mail_reception_declined":false,"invoice_count":null,"ordered_at":"2026-07-29T11:41:56.000000Z","approved_at":null,"planned_at":null,"calendar_start_at":null,"incoterm_location":null,"effective_date":null,"report_grids":false,"requisition_id":null,"purchases_group_id":null,"partner_id":1,"currency_id":1903,"fiscal_position_id":null,"payment_term_id":null,"incoterm_id":null,"user_id":null,"company_id":2899,"creator_id":1,"operation_type_id":null,"created_at":null,"updated_at":null},"message":"Purchase order confirmed successfully."}'
         headers: []
         description: ''
       -
@@ -1814,7 +1814,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -1834,7 +1834,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -1860,7 +1860,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":1,"name":"PO\/1","description":"<p><\/p>","priority":"0","origin":null,"partner_reference":"EH-1234","state":"purchase","invoice_status":"invoiced","receipt_status":"full","untaxed_amount":35000,"tax_amount":5250,"total_amount":40250,"total_cc_amount":40250,"currency_rate":0,"mail_reminder_confirmed":true,"mail_reception_confirmed":false,"mail_reception_declined":false,"invoice_count":0,"ordered_at":"2026-01-08T12:53:13.000000Z","approved_at":"2026-01-08T12:56:13.000000Z","planned_at":"2026-03-11T00:00:00.000000Z","calendar_start_at":"2026-01-08T12:53:13.000000Z","incoterm_location":null,"effective_date":null,"report_grids":false,"requisition_id":null,"purchases_group_id":null,"partner_id":41,"currency_id":1,"fiscal_position_id":null,"payment_term_id":null,"incoterm_id":null,"user_id":1,"company_id":1,"creator_id":1,"operation_type_id":1,"created_at":"2026-01-08T12:55:43.000000Z","updated_at":"2026-01-08T12:56:52.000000Z"},"message":"Purchase order canceled successfully."}'
+        content: '{"data":{"id":null,"name":"PO-2949","description":null,"priority":null,"origin":null,"partner_reference":null,"state":"draft","invoice_status":null,"receipt_status":null,"untaxed_amount":0,"tax_amount":0,"total_amount":0,"total_cc_amount":0,"currency_rate":1,"mail_reminder_confirmed":false,"mail_reception_confirmed":false,"mail_reception_declined":false,"invoice_count":null,"ordered_at":"2026-07-29T11:41:56.000000Z","approved_at":null,"planned_at":null,"calendar_start_at":null,"incoterm_location":null,"effective_date":null,"report_grids":false,"requisition_id":null,"purchases_group_id":null,"partner_id":1,"currency_id":1904,"fiscal_position_id":null,"payment_term_id":null,"incoterm_id":null,"user_id":null,"company_id":2900,"creator_id":1,"operation_type_id":null,"created_at":null,"updated_at":null},"message":"Purchase order canceled successfully."}'
         headers: []
         description: ''
       -
@@ -1885,7 +1885,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -1905,7 +1905,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -1931,7 +1931,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":1,"name":"PO\/1","description":"<p><\/p>","priority":"0","origin":null,"partner_reference":"EH-1234","state":"purchase","invoice_status":"invoiced","receipt_status":"full","untaxed_amount":35000,"tax_amount":5250,"total_amount":40250,"total_cc_amount":40250,"currency_rate":0,"mail_reminder_confirmed":true,"mail_reception_confirmed":false,"mail_reception_declined":false,"invoice_count":0,"ordered_at":"2026-01-08T12:53:13.000000Z","approved_at":"2026-01-08T12:56:13.000000Z","planned_at":"2026-03-11T00:00:00.000000Z","calendar_start_at":"2026-01-08T12:53:13.000000Z","incoterm_location":null,"effective_date":null,"report_grids":false,"requisition_id":null,"purchases_group_id":null,"partner_id":41,"currency_id":1,"fiscal_position_id":null,"payment_term_id":null,"incoterm_id":null,"user_id":1,"company_id":1,"creator_id":1,"operation_type_id":1,"created_at":"2026-01-08T12:55:43.000000Z","updated_at":"2026-01-08T12:56:52.000000Z"},"message":"Purchase order set to draft successfully."}'
+        content: '{"data":{"id":null,"name":"PO-7432","description":null,"priority":null,"origin":null,"partner_reference":null,"state":"draft","invoice_status":null,"receipt_status":null,"untaxed_amount":0,"tax_amount":0,"total_amount":0,"total_cc_amount":0,"currency_rate":1,"mail_reminder_confirmed":false,"mail_reception_confirmed":false,"mail_reception_declined":false,"invoice_count":null,"ordered_at":"2026-07-29T11:41:56.000000Z","approved_at":null,"planned_at":null,"calendar_start_at":null,"incoterm_location":null,"effective_date":null,"report_grids":false,"requisition_id":null,"purchases_group_id":null,"partner_id":1,"currency_id":1905,"fiscal_position_id":null,"payment_term_id":null,"incoterm_id":null,"user_id":null,"company_id":2901,"creator_id":1,"operation_type_id":null,"created_at":null,"updated_at":null},"message":"Purchase order set to draft successfully."}'
         headers: []
         description: ''
       -
@@ -1956,7 +1956,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -1976,7 +1976,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -2002,7 +2002,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":1,"name":"PO\/1","description":"<p><\/p>","priority":"0","origin":null,"partner_reference":"EH-1234","state":"purchase","invoice_status":"invoiced","receipt_status":"full","untaxed_amount":35000,"tax_amount":5250,"total_amount":40250,"total_cc_amount":40250,"currency_rate":0,"mail_reminder_confirmed":true,"mail_reception_confirmed":false,"mail_reception_declined":false,"invoice_count":0,"ordered_at":"2026-01-08T12:53:13.000000Z","approved_at":"2026-01-08T12:56:13.000000Z","planned_at":"2026-03-11T00:00:00.000000Z","calendar_start_at":"2026-01-08T12:53:13.000000Z","incoterm_location":null,"effective_date":null,"report_grids":false,"requisition_id":null,"purchases_group_id":null,"partner_id":41,"currency_id":1,"fiscal_position_id":null,"payment_term_id":null,"incoterm_id":null,"user_id":1,"company_id":1,"creator_id":1,"operation_type_id":1,"created_at":"2026-01-08T12:55:43.000000Z","updated_at":"2026-01-08T12:56:52.000000Z"},"message":"Purchase order lock state updated successfully."}'
+        content: '{"data":{"id":null,"name":"PO-6881","description":null,"priority":null,"origin":null,"partner_reference":null,"state":"draft","invoice_status":null,"receipt_status":null,"untaxed_amount":0,"tax_amount":0,"total_amount":0,"total_cc_amount":0,"currency_rate":1,"mail_reminder_confirmed":false,"mail_reception_confirmed":false,"mail_reception_declined":false,"invoice_count":null,"ordered_at":"2026-07-29T11:41:56.000000Z","approved_at":null,"planned_at":null,"calendar_start_at":null,"incoterm_location":null,"effective_date":null,"report_grids":false,"requisition_id":null,"purchases_group_id":null,"partner_id":1,"currency_id":1906,"fiscal_position_id":null,"payment_term_id":null,"incoterm_id":null,"user_id":null,"company_id":2902,"creator_id":1,"operation_type_id":null,"created_at":null,"updated_at":null},"message":"Purchase order lock state updated successfully."}'
         headers: []
         description: ''
       -
@@ -2027,7 +2027,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -2047,7 +2047,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -2073,7 +2073,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":1,"name":"PO\/1","description":"<p><\/p>","priority":"0","origin":null,"partner_reference":"EH-1234","state":"purchase","invoice_status":"invoiced","receipt_status":"full","untaxed_amount":35000,"tax_amount":5250,"total_amount":40250,"total_cc_amount":40250,"currency_rate":0,"mail_reminder_confirmed":true,"mail_reception_confirmed":false,"mail_reception_declined":false,"invoice_count":0,"ordered_at":"2026-01-08T12:53:13.000000Z","approved_at":"2026-01-08T12:56:13.000000Z","planned_at":"2026-03-11T00:00:00.000000Z","calendar_start_at":"2026-01-08T12:53:13.000000Z","incoterm_location":null,"effective_date":null,"report_grids":false,"requisition_id":null,"purchases_group_id":null,"partner_id":41,"currency_id":1,"fiscal_position_id":null,"payment_term_id":null,"incoterm_id":null,"user_id":1,"company_id":1,"creator_id":1,"operation_type_id":1,"created_at":"2026-01-08T12:55:43.000000Z","updated_at":"2026-01-08T12:56:52.000000Z"},"message":"Purchase order receipt date confirmed successfully."}'
+        content: '{"data":{"id":null,"name":"PO-5719","description":null,"priority":null,"origin":null,"partner_reference":null,"state":"draft","invoice_status":null,"receipt_status":null,"untaxed_amount":0,"tax_amount":0,"total_amount":0,"total_cc_amount":0,"currency_rate":1,"mail_reminder_confirmed":false,"mail_reception_confirmed":false,"mail_reception_declined":false,"invoice_count":null,"ordered_at":"2026-07-29T11:41:56.000000Z","approved_at":null,"planned_at":null,"calendar_start_at":null,"incoterm_location":null,"effective_date":null,"report_grids":false,"requisition_id":null,"purchases_group_id":null,"partner_id":1,"currency_id":1907,"fiscal_position_id":null,"payment_term_id":null,"incoterm_id":null,"user_id":null,"company_id":2903,"creator_id":1,"operation_type_id":null,"created_at":null,"updated_at":null},"message":"Purchase order receipt date confirmed successfully."}'
         headers: []
         description: ''
       -
@@ -2098,7 +2098,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -2118,7 +2118,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -2202,7 +2202,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":[{"id":1,"name":"Big Vision 4K Action Camera - Telephoto Lens","state":"purchase","sort":1,"qty_received_method":"stock_move","display_type":null,"product_qty":100,"product_uom_qty":100,"product_packaging_qty":0,"price_tax":1500,"discount":0,"price_unit":100,"price_subtotal":10000,"price_total":11500,"qty_invoiced":100,"qty_received":100,"qty_received_manual":0,"qty_to_invoice":0,"is_downpayment":false,"planned_at":"2026-01-08T12:53:43.000000Z","product_description_variants":null,"propagate_cancel":false,"price_total_cc":0,"uom_id":1,"product_id":4,"product_packaging_id":null,"order_id":1,"partner_id":41,"currency_id":1,"company_id":1,"creator_id":1,"final_location_id":12,"order_point_id":null,"created_at":"2026-01-08T12:55:43.000000Z","updated_at":"2026-01-08T12:56:47.000000Z"},{"id":1,"name":"Big Vision 4K Action Camera - Telephoto Lens","state":"purchase","sort":1,"qty_received_method":"stock_move","display_type":null,"product_qty":100,"product_uom_qty":100,"product_packaging_qty":0,"price_tax":1500,"discount":0,"price_unit":100,"price_subtotal":10000,"price_total":11500,"qty_invoiced":100,"qty_received":100,"qty_received_manual":0,"qty_to_invoice":0,"is_downpayment":false,"planned_at":"2026-01-08T12:53:43.000000Z","product_description_variants":null,"propagate_cancel":false,"price_total_cc":0,"uom_id":1,"product_id":4,"product_packaging_id":null,"order_id":1,"partner_id":41,"currency_id":1,"company_id":1,"creator_id":1,"final_location_id":12,"order_point_id":null,"created_at":"2026-01-08T12:55:43.000000Z","updated_at":"2026-01-08T12:56:47.000000Z"}],"links":{"first":"\/?page=1","last":"\/?page=1","prev":null,"next":null},"meta":{"current_page":1,"from":1,"last_page":1,"links":[{"url":null,"label":"&laquo; Previous","active":false},{"url":"\/?page=1","label":"1","active":true},{"url":null,"label":"Next &raquo;","active":false}],"path":"\/","per_page":10,"to":2,"total":2}}'
+        content: '{"data":[{"id":null,"name":"voluptatem dolorem vel","state":"draft","sort":null,"qty_received_method":"stock_move","display_type":null,"product_qty":76.61,"product_uom_qty":76.61,"product_packaging_qty":0,"price_tax":0,"discount":0,"price_unit":142.68,"price_subtotal":10930.71,"price_total":10930.71,"qty_invoiced":0,"qty_received":0,"qty_received_manual":0,"qty_to_invoice":0,"is_downpayment":false,"planned_at":"2026-08-05T11:41:56.000000Z","product_description_variants":null,"propagate_cancel":false,"price_total_cc":10930.71,"uom_id":null,"product_id":978,"product_packaging_id":null,"order_id":null,"partner_id":null,"currency_id":null,"company_id":null,"creator_id":1,"final_location_id":null,"order_point_id":null,"created_at":null,"updated_at":null},{"id":null,"name":"ut harum delectus","state":"draft","sort":null,"qty_received_method":"stock_move","display_type":null,"product_qty":56.25,"product_uom_qty":56.25,"product_packaging_qty":0,"price_tax":0,"discount":0,"price_unit":983.5,"price_subtotal":55321.88,"price_total":55321.88,"qty_invoiced":0,"qty_received":0,"qty_received_manual":0,"qty_to_invoice":0,"is_downpayment":false,"planned_at":"2026-08-05T11:41:56.000000Z","product_description_variants":null,"propagate_cancel":false,"price_total_cc":55321.88,"uom_id":null,"product_id":979,"product_packaging_id":null,"order_id":null,"partner_id":null,"currency_id":null,"company_id":null,"creator_id":1,"final_location_id":null,"order_point_id":null,"created_at":null,"updated_at":null}],"links":{"first":"\/?page=1","last":"\/?page=1","prev":null,"next":null},"meta":{"current_page":1,"from":1,"last_page":1,"links":[{"url":null,"label":"&laquo; Previous","page":null,"active":false},{"url":"\/?page=1","label":"1","page":1,"active":true},{"url":null,"label":"Next &raquo;","page":null,"active":false}],"path":"\/","per_page":10,"to":2,"total":2}}'
         headers: []
         description: ''
       -
@@ -2215,7 +2215,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -2235,7 +2235,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -2285,7 +2285,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":1,"name":"Big Vision 4K Action Camera - Telephoto Lens","state":"purchase","sort":1,"qty_received_method":"stock_move","display_type":null,"product_qty":100,"product_uom_qty":100,"product_packaging_qty":0,"price_tax":1500,"discount":0,"price_unit":100,"price_subtotal":10000,"price_total":11500,"qty_invoiced":100,"qty_received":100,"qty_received_manual":0,"qty_to_invoice":0,"is_downpayment":false,"planned_at":"2026-01-08T12:53:43.000000Z","product_description_variants":null,"propagate_cancel":false,"price_total_cc":0,"uom_id":1,"product_id":4,"product_packaging_id":null,"order_id":1,"partner_id":41,"currency_id":1,"company_id":1,"creator_id":1,"final_location_id":12,"order_point_id":null,"created_at":"2026-01-08T12:55:43.000000Z","updated_at":"2026-01-08T12:56:47.000000Z"}}'
+        content: '{"data":{"id":null,"name":"quidem nostrum qui","state":"draft","sort":null,"qty_received_method":"stock_move","display_type":null,"product_qty":1.2,"product_uom_qty":1.2,"product_packaging_qty":0,"price_tax":0,"discount":0,"price_unit":973.93,"price_subtotal":1168.72,"price_total":1168.72,"qty_invoiced":0,"qty_received":0,"qty_received_manual":0,"qty_to_invoice":0,"is_downpayment":false,"planned_at":"2026-08-05T11:41:56.000000Z","product_description_variants":null,"propagate_cancel":false,"price_total_cc":1168.72,"uom_id":null,"product_id":980,"product_packaging_id":null,"order_id":null,"partner_id":null,"currency_id":null,"company_id":null,"creator_id":1,"final_location_id":null,"order_point_id":null,"created_at":null,"updated_at":null}}'
         headers: []
         description: ''
       -
@@ -2304,7 +2304,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -2324,7 +2324,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -2421,7 +2421,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":[{"id":1,"name":"WH\/INT\/1","origin":null,"move_type":"direct","state":"draft","is_favorite":false,"description":null,"has_deadline_issue":false,"is_printed":false,"is_locked":false,"deadline":null,"scheduled_at":"2025-04-10T12:10:18.000000Z","closed_at":null,"created_at":"2025-04-10T12:11:32.000000Z","updated_at":"2025-04-10T12:11:32.000000Z"},{"id":1,"name":"WH\/INT\/1","origin":null,"move_type":"direct","state":"draft","is_favorite":false,"description":null,"has_deadline_issue":false,"is_printed":false,"is_locked":false,"deadline":null,"scheduled_at":"2025-04-10T12:10:18.000000Z","closed_at":null,"created_at":"2025-04-10T12:11:32.000000Z","updated_at":"2025-04-10T12:11:32.000000Z"}],"links":{"first":"\/?page=1","last":"\/?page=1","prev":null,"next":null},"meta":{"current_page":1,"from":1,"last_page":1,"links":[{"url":null,"label":"&laquo; Previous","active":false},{"url":"\/?page=1","label":"1","active":true},{"url":null,"label":"Next &raquo;","active":false}],"path":"\/","per_page":10,"to":2,"total":2}}'
+        content: '{"data":[{"id":548,"name":"MZ\/548","origin":null,"move_type":"direct","state":"draft","is_favorite":false,"description":null,"has_deadline_issue":false,"is_printed":false,"is_locked":false,"deadline":null,"scheduled_at":"2026-07-22T07:55:43.000000Z","closed_at":null,"created_at":"2026-07-22T07:55:43.000000Z","updated_at":"2026-07-22T07:55:43.000000Z"},{"id":548,"name":"MZ\/548","origin":null,"move_type":"direct","state":"draft","is_favorite":false,"description":null,"has_deadline_issue":false,"is_printed":false,"is_locked":false,"deadline":null,"scheduled_at":"2026-07-22T07:55:43.000000Z","closed_at":null,"created_at":"2026-07-22T07:55:43.000000Z","updated_at":"2026-07-22T07:55:43.000000Z"}],"links":{"first":"\/?page=1","last":"\/?page=1","prev":null,"next":null},"meta":{"current_page":1,"from":1,"last_page":1,"links":[{"url":null,"label":"&laquo; Previous","page":null,"active":false},{"url":"\/?page=1","label":"1","page":1,"active":true},{"url":null,"label":"Next &raquo;","page":null,"active":false}],"path":"\/","per_page":10,"to":2,"total":2}}'
         headers: []
         description: ''
       -
@@ -2434,7 +2434,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -2454,7 +2454,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -2551,7 +2551,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":[{"id":1,"sort":1,"journal_id":2,"company_id":1,"campaign_id":null,"tax_cash_basis_origin_move_id":null,"auto_post_origin_id":null,"origin_payment_id":null,"secure_sequence_number":null,"invoice_payment_term_id":null,"partner_id":41,"commercial_partner_id":41,"partner_shipping_id":41,"partner_bank_id":null,"fiscal_position_id":null,"currency_id":1,"reversed_entry_id":null,"invoice_user_id":null,"invoice_incoterm_id":null,"invoice_cash_rounding_id":null,"preferred_payment_method_line_id":null,"creator_id":1,"sequence_prefix":"BILL\/2026","access_token":null,"name":"BILL\/2026\/1","reference":null,"state":"draft","move_type":"in_invoice","auto_post":0,"inalterable_hash":null,"payment_reference":null,"qr_code_method":null,"payment_state":"not_paid","invoice_source_email":null,"invoice_partner_display_name":"Eden Hebert -Supplier","invoice_origin":"PO\/1","incoterm_location":null,"date":"2026-01-08T00:00:00.000000Z","auto_post_until":null,"invoice_date":null,"invoice_date_due":null,"delivery_date":null,"sending_data":null,"narration":null,"invoice_currency_rate":"1.0000","amount_untaxed":"35000.0000","amount_tax":"0.0000","amount_total":"35000.0000","amount_residual":"35000.0000","amount_untaxed_signed":"-35000.0000","amount_untaxed_in_currency_signed":"-35000.0000","amount_tax_signed":"0.0000","amount_total_signed":"-35000.0000","amount_total_in_currency_signed":"-35000.0000","amount_residual_signed":"-35000.0000","quick_edit_total_amount":null,"is_storno":0,"always_tax_exigible":0,"checked":false,"posted_before":0,"made_sequence_gap":0,"is_manually_modified":0,"is_move_sent":0,"source_id":null,"medium_id":null,"created_at":"2026-01-08T12:56:46.000000Z","updated_at":"2026-01-08T12:56:47.000000Z"},{"id":1,"sort":1,"journal_id":2,"company_id":1,"campaign_id":null,"tax_cash_basis_origin_move_id":null,"auto_post_origin_id":null,"origin_payment_id":null,"secure_sequence_number":null,"invoice_payment_term_id":null,"partner_id":41,"commercial_partner_id":41,"partner_shipping_id":41,"partner_bank_id":null,"fiscal_position_id":null,"currency_id":1,"reversed_entry_id":null,"invoice_user_id":null,"invoice_incoterm_id":null,"invoice_cash_rounding_id":null,"preferred_payment_method_line_id":null,"creator_id":1,"sequence_prefix":"BILL\/2026","access_token":null,"name":"BILL\/2026\/1","reference":null,"state":"draft","move_type":"in_invoice","auto_post":0,"inalterable_hash":null,"payment_reference":null,"qr_code_method":null,"payment_state":"not_paid","invoice_source_email":null,"invoice_partner_display_name":"Eden Hebert -Supplier","invoice_origin":"PO\/1","incoterm_location":null,"date":"2026-01-08T00:00:00.000000Z","auto_post_until":null,"invoice_date":null,"invoice_date_due":null,"delivery_date":null,"sending_data":null,"narration":null,"invoice_currency_rate":"1.0000","amount_untaxed":"35000.0000","amount_tax":"0.0000","amount_total":"35000.0000","amount_residual":"35000.0000","amount_untaxed_signed":"-35000.0000","amount_untaxed_in_currency_signed":"-35000.0000","amount_tax_signed":"0.0000","amount_total_signed":"-35000.0000","amount_total_in_currency_signed":"-35000.0000","amount_residual_signed":"-35000.0000","quick_edit_total_amount":null,"is_storno":0,"always_tax_exigible":0,"checked":false,"posted_before":0,"made_sequence_gap":0,"is_manually_modified":0,"is_move_sent":0,"source_id":null,"medium_id":null,"created_at":"2026-01-08T12:56:46.000000Z","updated_at":"2026-01-08T12:56:47.000000Z"}],"links":{"first":"\/?page=1","last":"\/?page=1","prev":null,"next":null},"meta":{"current_page":1,"from":1,"last_page":1,"links":[{"url":null,"label":"&laquo; Previous","active":false},{"url":"\/?page=1","label":"1","active":true},{"url":null,"label":"Next &raquo;","active":false}],"path":"\/","per_page":10,"to":2,"total":2}}'
+        content: '{"data":[{"id":267,"sort":null,"journal_id":3,"company_id":1,"campaign_id":null,"tax_cash_basis_origin_move_id":null,"auto_post_origin_id":null,"origin_payment_id":null,"secure_sequence_number":null,"invoice_payment_term_id":null,"partner_id":null,"commercial_partner_id":null,"partner_shipping_id":null,"partner_bank_id":null,"fiscal_position_id":null,"currency_id":1,"reversed_entry_id":null,"invoice_user_id":null,"invoice_incoterm_id":null,"invoice_cash_rounding_id":null,"preferred_payment_method_line_id":null,"creator_id":null,"sequence_prefix":null,"access_token":null,"name":"Opening Balances (migration)","reference":null,"state":"posted","move_type":"entry","auto_post":0,"inalterable_hash":null,"payment_reference":null,"qr_code_method":null,"payment_state":"not_paid","invoice_source_email":null,"invoice_partner_display_name":null,"invoice_origin":null,"incoterm_location":null,"date":"2026-07-01T00:00:00.000000Z","auto_post_until":null,"invoice_date":null,"invoice_date_due":null,"delivery_date":null,"sending_data":null,"narration":null,"invoice_currency_rate":null,"amount_untaxed":null,"amount_tax":null,"amount_total":null,"amount_residual":null,"amount_untaxed_signed":null,"amount_untaxed_in_currency_signed":null,"amount_tax_signed":null,"amount_total_signed":null,"amount_total_in_currency_signed":null,"amount_residual_signed":null,"quick_edit_total_amount":null,"is_storno":0,"always_tax_exigible":0,"checked":false,"posted_before":0,"made_sequence_gap":0,"is_manually_modified":0,"is_move_sent":0,"source_id":null,"medium_id":null,"created_at":"2026-07-22T10:15:14.000000Z","updated_at":"2026-07-22T10:15:14.000000Z"},{"id":267,"sort":null,"journal_id":3,"company_id":1,"campaign_id":null,"tax_cash_basis_origin_move_id":null,"auto_post_origin_id":null,"origin_payment_id":null,"secure_sequence_number":null,"invoice_payment_term_id":null,"partner_id":null,"commercial_partner_id":null,"partner_shipping_id":null,"partner_bank_id":null,"fiscal_position_id":null,"currency_id":1,"reversed_entry_id":null,"invoice_user_id":null,"invoice_incoterm_id":null,"invoice_cash_rounding_id":null,"preferred_payment_method_line_id":null,"creator_id":null,"sequence_prefix":null,"access_token":null,"name":"Opening Balances (migration)","reference":null,"state":"posted","move_type":"entry","auto_post":0,"inalterable_hash":null,"payment_reference":null,"qr_code_method":null,"payment_state":"not_paid","invoice_source_email":null,"invoice_partner_display_name":null,"invoice_origin":null,"incoterm_location":null,"date":"2026-07-01T00:00:00.000000Z","auto_post_until":null,"invoice_date":null,"invoice_date_due":null,"delivery_date":null,"sending_data":null,"narration":null,"invoice_currency_rate":null,"amount_untaxed":null,"amount_tax":null,"amount_total":null,"amount_residual":null,"amount_untaxed_signed":null,"amount_untaxed_in_currency_signed":null,"amount_tax_signed":null,"amount_total_signed":null,"amount_total_in_currency_signed":null,"amount_residual_signed":null,"quick_edit_total_amount":null,"is_storno":0,"always_tax_exigible":0,"checked":false,"posted_before":0,"made_sequence_gap":0,"is_manually_modified":0,"is_move_sent":0,"source_id":null,"medium_id":null,"created_at":"2026-07-22T10:15:14.000000Z","updated_at":"2026-07-22T10:15:14.000000Z"}],"links":{"first":"\/?page=1","last":"\/?page=1","prev":null,"next":null},"meta":{"current_page":1,"from":1,"last_page":1,"links":[{"url":null,"label":"&laquo; Previous","page":null,"active":false},{"url":"\/?page=1","label":"1","page":1,"active":true},{"url":null,"label":"Next &raquo;","page":null,"active":false}],"path":"\/","per_page":10,"to":2,"total":2}}'
         headers: []
         description: ''
       -
@@ -2564,7 +2564,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -2584,7 +2584,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -2692,7 +2692,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":[{"id":null,"name":"PA-3683","type":"blanket_order","state":"draft","reference":null,"starts_at":null,"ends_at":null,"description":null,"currency_id":787,"partner_id":1,"user_id":null,"company_id":1394,"creator_id":1,"created_at":null,"updated_at":null,"deleted_at":null},{"id":null,"name":"PA-5307","type":"blanket_order","state":"draft","reference":null,"starts_at":null,"ends_at":null,"description":null,"currency_id":788,"partner_id":1,"user_id":null,"company_id":1395,"creator_id":1,"created_at":null,"updated_at":null,"deleted_at":null}],"links":{"first":"\/?page=1","last":"\/?page=1","prev":null,"next":null},"meta":{"current_page":1,"from":1,"last_page":1,"links":[{"url":null,"label":"&laquo; Previous","active":false},{"url":"\/?page=1","label":"1","active":true},{"url":null,"label":"Next &raquo;","active":false}],"path":"\/","per_page":10,"to":2,"total":2}}'
+        content: '{"data":[{"id":1,"name":"BO\/1","type":"blanket_order","state":"draft","reference":null,"starts_at":null,"ends_at":null,"description":null,"currency_id":985,"partner_id":1,"user_id":null,"company_id":685,"creator_id":1,"created_at":"2026-07-22T07:30:27.000000Z","updated_at":"2026-07-22T07:30:27.000000Z","deleted_at":null},{"id":1,"name":"BO\/1","type":"blanket_order","state":"draft","reference":null,"starts_at":null,"ends_at":null,"description":null,"currency_id":985,"partner_id":1,"user_id":null,"company_id":685,"creator_id":1,"created_at":"2026-07-22T07:30:27.000000Z","updated_at":"2026-07-22T07:30:27.000000Z","deleted_at":null}],"links":{"first":"\/?page=1","last":"\/?page=1","prev":null,"next":null},"meta":{"current_page":1,"from":1,"last_page":1,"links":[{"url":null,"label":"&laquo; Previous","page":null,"active":false},{"url":"\/?page=1","label":"1","page":1,"active":true},{"url":null,"label":"Next &raquo;","page":null,"active":false}],"path":"\/","per_page":10,"to":2,"total":2}}'
         headers: []
         description: ''
       -
@@ -2705,7 +2705,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -2725,7 +2725,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -2926,7 +2926,7 @@ endpoints:
       -
         custom: []
         status: 201
-        content: '{"data":{"id":null,"name":"PA-8806","type":"blanket_order","state":"draft","reference":null,"starts_at":null,"ends_at":null,"description":null,"currency_id":789,"partner_id":1,"user_id":null,"company_id":1396,"creator_id":1,"created_at":null,"updated_at":null,"deleted_at":null},"message":"Purchase agreement created successfully."}'
+        content: '{"data":{"id":1,"name":"BO\/1","type":"blanket_order","state":"draft","reference":null,"starts_at":null,"ends_at":null,"description":null,"currency_id":985,"partner_id":1,"user_id":null,"company_id":685,"creator_id":1,"created_at":"2026-07-22T07:30:27.000000Z","updated_at":"2026-07-22T07:30:27.000000Z","deleted_at":null},"message":"Purchase agreement created successfully."}'
         headers: []
         description: ''
       -
@@ -2945,7 +2945,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -2965,7 +2965,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -3003,7 +3003,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":null,"name":"PA-2680","type":"blanket_order","state":"draft","reference":null,"starts_at":null,"ends_at":null,"description":null,"currency_id":790,"partner_id":1,"user_id":null,"company_id":1397,"creator_id":1,"created_at":null,"updated_at":null,"deleted_at":null}}'
+        content: '{"data":{"id":1,"name":"BO\/1","type":"blanket_order","state":"draft","reference":null,"starts_at":null,"ends_at":null,"description":null,"currency_id":985,"partner_id":1,"user_id":null,"company_id":685,"creator_id":1,"created_at":"2026-07-22T07:30:27.000000Z","updated_at":"2026-07-22T07:30:27.000000Z","deleted_at":null}}'
         headers: []
         description: ''
       -
@@ -3022,7 +3022,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -3043,7 +3043,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -3256,7 +3256,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":null,"name":"PA-7365","type":"blanket_order","state":"draft","reference":null,"starts_at":null,"ends_at":null,"description":null,"currency_id":791,"partner_id":1,"user_id":null,"company_id":1398,"creator_id":1,"created_at":null,"updated_at":null,"deleted_at":null},"message":"Purchase agreement updated successfully."}'
+        content: '{"data":{"id":1,"name":"BO\/1","type":"blanket_order","state":"draft","reference":null,"starts_at":null,"ends_at":null,"description":null,"currency_id":985,"partner_id":1,"user_id":null,"company_id":685,"creator_id":1,"created_at":"2026-07-22T07:30:27.000000Z","updated_at":"2026-07-22T07:30:27.000000Z","deleted_at":null},"message":"Purchase agreement updated successfully."}'
         headers: []
         description: ''
       -
@@ -3281,7 +3281,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -3301,7 +3301,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -3346,7 +3346,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -3366,7 +3366,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -3392,7 +3392,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":null,"name":"PA-9724","type":"blanket_order","state":"draft","reference":null,"starts_at":null,"ends_at":null,"description":null,"currency_id":792,"partner_id":1,"user_id":null,"company_id":1399,"creator_id":1,"created_at":null,"updated_at":null,"deleted_at":null},"message":"Purchase agreement restored successfully."}'
+        content: '{"data":{"id":1,"name":"BO\/1","type":"blanket_order","state":"draft","reference":null,"starts_at":null,"ends_at":null,"description":null,"currency_id":985,"partner_id":1,"user_id":null,"company_id":685,"creator_id":1,"created_at":"2026-07-22T07:30:27.000000Z","updated_at":"2026-07-22T07:30:27.000000Z","deleted_at":null},"message":"Purchase agreement restored successfully."}'
         headers: []
         description: ''
       -
@@ -3411,7 +3411,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -3431,7 +3431,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -3476,7 +3476,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -3496,7 +3496,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -3522,7 +3522,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":null,"name":"PA-2949","type":"blanket_order","state":"draft","reference":null,"starts_at":null,"ends_at":null,"description":null,"currency_id":793,"partner_id":1,"user_id":null,"company_id":1400,"creator_id":1,"created_at":null,"updated_at":null,"deleted_at":null},"message":"Purchase agreement confirmed successfully."}'
+        content: '{"data":{"id":1,"name":"BO\/1","type":"blanket_order","state":"draft","reference":null,"starts_at":null,"ends_at":null,"description":null,"currency_id":985,"partner_id":1,"user_id":null,"company_id":685,"creator_id":1,"created_at":"2026-07-22T07:30:27.000000Z","updated_at":"2026-07-22T07:30:27.000000Z","deleted_at":null},"message":"Purchase agreement confirmed successfully."}'
         headers: []
         description: ''
       -
@@ -3547,7 +3547,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -3567,7 +3567,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -3593,7 +3593,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":null,"name":"PA-7432","type":"blanket_order","state":"draft","reference":null,"starts_at":null,"ends_at":null,"description":null,"currency_id":794,"partner_id":1,"user_id":null,"company_id":1401,"creator_id":1,"created_at":null,"updated_at":null,"deleted_at":null},"message":"Purchase agreement closed successfully."}'
+        content: '{"data":{"id":1,"name":"BO\/1","type":"blanket_order","state":"draft","reference":null,"starts_at":null,"ends_at":null,"description":null,"currency_id":985,"partner_id":1,"user_id":null,"company_id":685,"creator_id":1,"created_at":"2026-07-22T07:30:27.000000Z","updated_at":"2026-07-22T07:30:27.000000Z","deleted_at":null},"message":"Purchase agreement closed successfully."}'
         headers: []
         description: ''
       -
@@ -3618,7 +3618,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -3638,7 +3638,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -3664,7 +3664,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":null,"name":"PA-6881","type":"blanket_order","state":"draft","reference":null,"starts_at":null,"ends_at":null,"description":null,"currency_id":795,"partner_id":1,"user_id":null,"company_id":1402,"creator_id":1,"created_at":null,"updated_at":null,"deleted_at":null},"message":"Purchase agreement canceled successfully."}'
+        content: '{"data":{"id":1,"name":"BO\/1","type":"blanket_order","state":"draft","reference":null,"starts_at":null,"ends_at":null,"description":null,"currency_id":985,"partner_id":1,"user_id":null,"company_id":685,"creator_id":1,"created_at":"2026-07-22T07:30:27.000000Z","updated_at":"2026-07-22T07:30:27.000000Z","deleted_at":null},"message":"Purchase agreement canceled successfully."}'
         headers: []
         description: ''
       -
@@ -3689,7 +3689,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -3709,7 +3709,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -3793,7 +3793,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":[{"id":null,"qty":81,"price_unit":973.93,"requisition_id":null,"product_id":304,"uom_id":null,"company_id":null,"creator_id":1,"created_at":null,"updated_at":null},{"id":null,"qty":25,"price_unit":766.99,"requisition_id":null,"product_id":305,"uom_id":null,"company_id":null,"creator_id":1,"created_at":null,"updated_at":null}],"links":{"first":"\/?page=1","last":"\/?page=1","prev":null,"next":null},"meta":{"current_page":1,"from":1,"last_page":1,"links":[{"url":null,"label":"&laquo; Previous","active":false},{"url":"\/?page=1","label":"1","active":true},{"url":null,"label":"Next &raquo;","active":false}],"path":"\/","per_page":10,"to":2,"total":2}}'
+        content: '{"data":[{"id":1,"qty":72,"price_unit":62.45,"requisition_id":1,"product_id":190,"uom_id":null,"company_id":685,"creator_id":1,"created_at":"2026-07-22T07:30:27.000000Z","updated_at":"2026-07-22T07:30:27.000000Z"},{"id":1,"qty":72,"price_unit":62.45,"requisition_id":1,"product_id":190,"uom_id":null,"company_id":685,"creator_id":1,"created_at":"2026-07-22T07:30:27.000000Z","updated_at":"2026-07-22T07:30:27.000000Z"}],"links":{"first":"\/?page=1","last":"\/?page=1","prev":null,"next":null},"meta":{"current_page":1,"from":1,"last_page":1,"links":[{"url":null,"label":"&laquo; Previous","page":null,"active":false},{"url":"\/?page=1","label":"1","page":1,"active":true},{"url":null,"label":"Next &raquo;","page":null,"active":false}],"path":"\/","per_page":10,"to":2,"total":2}}'
         headers: []
         description: ''
       -
@@ -3806,7 +3806,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
@@ -3826,7 +3826,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
-      Authorization: 'Bearer Bearer {YOUR_AUTH_TOKEN}'
+      Authorization: 'Bearer {YOUR_AUTH_TOKEN}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -3876,7 +3876,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"data":{"id":null,"qty":81,"price_unit":973.93,"requisition_id":null,"product_id":306,"uom_id":null,"company_id":null,"creator_id":1,"created_at":null,"updated_at":null}}'
+        content: '{"data":{"id":1,"qty":72,"price_unit":62.45,"requisition_id":1,"product_id":190,"uom_id":null,"company_id":685,"creator_id":1,"created_at":"2026-07-22T07:30:27.000000Z","updated_at":"2026-07-22T07:30:27.000000Z"}}'
         headers: []
         description: ''
       -
@@ -3895,7 +3895,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+      - 'Bearer {YOUR_AUTH_TOKEN}'
     controller: null
     method: null
     route: null
