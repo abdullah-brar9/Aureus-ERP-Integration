@@ -9,6 +9,7 @@ use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
 use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
@@ -31,7 +32,9 @@ use Filament\Tables\Filters\QueryBuilder;
 use Filament\Tables\Filters\QueryBuilder\Constraints\RelationshipConstraint;
 use Filament\Tables\Filters\QueryBuilder\Constraints\RelationshipConstraint\Operators\IsRelatedToOperator;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\HtmlString;
 use Webkul\Chatter\Filament\Actions\ActivityTableAction;
 use Webkul\Recruitment\Filament\Clusters\Applications;
@@ -111,6 +114,19 @@ class CandidateResource extends Resource
                                     ->label(__('recruitments::filament/clusters/applications/resources/candidate.form.sections.basic-information.fields.linkedin'))
                                     ->url()
                                     ->maxLength(255),
+                                TextInput::make('portfolio_url')
+                                    ->label('Portfolio URL')
+                                    ->url()
+                                    ->maxLength(255),
+                                TextInput::make('source_reference')
+                                    ->label('Source reference')
+                                    ->maxLength(255),
+                                FileUpload::make('resume_path')
+                                    ->label('CV / résumé')
+                                    ->acceptedFileTypes(['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'])
+                                    ->directory('recruitment/cv')
+                                    ->visibility('private')
+                                    ->columnSpanFull(),
                             ])
                             ->columns(2),
                         Section::make(__('recruitments::filament/clusters/applications/resources/candidate.form.sections.additional-details.title'))
@@ -312,6 +328,11 @@ class CandidateResource extends Resource
                     ),
             ])
             ->defaultSort('created_at', 'desc');
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()->where('company_id', Auth::user()?->default_company_id);
     }
 
     public static function infolist(Schema $schema): Schema

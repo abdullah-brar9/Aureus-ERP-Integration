@@ -39,6 +39,7 @@ use Filament\Tables\Filters\QueryBuilder\Constraints\TextConstraint;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 use Webkul\Employee\Filament\Resources\DepartmentResource\Pages\CreateDepartment;
 use Webkul\Employee\Filament\Resources\DepartmentResource\Pages\EditDepartment;
 use Webkul\Employee\Filament\Resources\DepartmentResource\Pages\ListDepartments;
@@ -63,7 +64,7 @@ class DepartmentResource extends Resource
         return __('employees::filament/resources/department.navigation.title');
     }
 
-    public static function getNavigationGroup(): string | \UnitEnum
+    public static function getNavigationGroup(): string|\UnitEnum
     {
         return NavigationGroup::Employee;
     }
@@ -103,7 +104,9 @@ class DepartmentResource extends Resource
                                             ->relationship(
                                                 name: 'parent',
                                                 titleAttribute: 'complete_name',
-                                                modifyQueryUsing: fn (Builder $query) => $query->withTrashed(),
+                                                modifyQueryUsing: fn (Builder $query) => $query
+                                                    ->withTrashed()
+                                                    ->where('company_id', Auth::user()?->default_company_id),
                                             )
                                             ->getOptionLabelFromRecordUsing(
                                                 fn (Model $record): string => $record->complete_name.($record->trashed() ? ' (Deleted)' : ''),
@@ -116,14 +119,16 @@ class DepartmentResource extends Resource
                                             ->live(),
                                         Select::make('manager_id')
                                             ->label(__('employees::filament/resources/department.form.sections.general.fields.manager'))
-                                            ->relationship('manager', 'name')
+                                            ->relationship('manager', 'name', modifyQueryUsing: fn (Builder $query) => $query->where('company_id', Auth::user()?->default_company_id))
                                             ->searchable()
                                             ->preload()
                                             ->placeholder(__('employees::filament/resources/department.form.sections.general.fields.manager-placeholder'))
                                             ->nullable(),
                                         Select::make('company_id')
                                             ->label(__('employees::filament/resources/department.form.sections.general.fields.company'))
-                                            ->relationship('company', 'name', modifyQueryUsing: fn (Builder $query) => $query->withTrashed())
+                                            ->relationship('company', 'name', modifyQueryUsing: fn (Builder $query) => $query
+                                                ->withTrashed()
+                                                ->whereKey(Auth::user()?->default_company_id))
                                             ->getOptionLabelFromRecordUsing(function (Model $record): string {
                                                 return $record->name.($record->trashed() ? ' (Deleted)' : '');
                                             })
@@ -133,7 +138,8 @@ class DepartmentResource extends Resource
                                             ->preload()
                                             ->searchable()
                                             ->placeholder(__('employees::filament/resources/department.form.sections.general.fields.company-placeholder'))
-                                            ->nullable(),
+                                            ->default(fn (): ?int => Auth::user()?->default_company_id)
+                                            ->required(),
                                         ColorPicker::make('color')
                                             ->label(__('employees::filament/resources/department.form.sections.general.fields.color'))
                                             ->hexColor(),
@@ -295,6 +301,11 @@ class DepartmentResource extends Resource
                         ),
                 ]),
             ]);
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()->where('company_id', Auth::user()?->default_company_id);
     }
 
     public static function infolist(Schema $schema): Schema

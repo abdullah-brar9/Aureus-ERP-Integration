@@ -7,6 +7,7 @@ use Filament\Widgets\Concerns\InteractsWithPageFilters;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Webkul\Employee\Models\EmployeeJobPosition;
 use Webkul\Recruitment\Models\Applicant;
 
@@ -28,8 +29,9 @@ class JobPositionStatsWidget extends BaseWidget
 
     protected function getData(): array
     {
-        $query = EmployeeJobPosition::query();
-        $applicantQuery = Applicant::query();
+        $companyId = Auth::user()?->default_company_id;
+        $query = EmployeeJobPosition::query()->where('company_id', $companyId);
+        $applicantQuery = Applicant::query()->where('company_id', $companyId);
 
         if (! empty($this->pageFilters['selectedDepartments'])) {
             $query->whereIn('department_id', $this->pageFilters['selectedDepartments']);

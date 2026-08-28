@@ -14,7 +14,9 @@ use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Components\Utilities\Set;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
+use RuntimeException;
 use Webkul\Employee\Models\Employee;
 use Webkul\TimeOff\Enums\RequestDateFromPeriod;
 use Webkul\TimeOff\Enums\State;
@@ -47,7 +49,11 @@ trait TimeOffHelper
             Section::make()
                 ->schema([
                     Select::make('employee_id')
-                        ->relationship('employee', 'name')
+                        ->relationship(
+                            'employee',
+                            'name',
+                            modifyQueryUsing: fn (Builder $query): Builder => $query->where('company_id', Auth::user()?->default_company_id),
+                        )
                         ->searchable()
                         ->preload()
                         ->live()
@@ -66,7 +72,11 @@ trait TimeOffHelper
                         ->label(__('time-off::filament/clusters/management/resources/time-off.form.fields.employee-name'))
                         ->required(),
                     Select::make('department_id')
-                        ->relationship('department', 'name')
+                        ->relationship(
+                            'department',
+                            'name',
+                            modifyQueryUsing: fn (Builder $query): Builder => $query->where('company_id', Auth::user()?->default_company_id),
+                        )
                         ->label(__('time-off::filament/clusters/management/resources/time-off.form.fields.department-name'))
                         ->searchable()
                         ->visible(fn (Get $get) => $isVisible ?? false)
@@ -75,7 +85,16 @@ trait TimeOffHelper
 
                     Select::make('holiday_status_id')
                         ->label(__('time-off::filament/widgets/calendar-widget.form.fields.time-off-type'))
-                        ->relationship('holidayStatus', 'name')
+                        ->relationship(
+                            'holidayStatus',
+                            'name',
+                            modifyQueryUsing: fn (Builder $query): Builder => $query
+                                ->where('is_active', true)
+                                ->where(function (Builder $query): void {
+                                    $query->whereNull('company_id')
+                                        ->orWhere('company_id', Auth::user()?->default_company_id);
+                                }),
+                        )
                         ->required()
                         ->columnSpanFull()
                         ->placeholder(__('time-off::filament/widgets/calendar-widget.form.fields.time-off-type-placeholder'))
@@ -419,7 +438,10 @@ trait TimeOffHelper
 
         if (! empty($data['employee_id'])) {
             $employee = Employee::find($data['employee_id']);
-            $user = $employee->user;
+            if ($employee && (int) $employee->company_id !== (int) Auth::user()?->default_company_id) {
+                throw new RuntimeException('The selected employee is outside the active company.');
+            }
+            $user = $employee?->user;
         } else {
             $user = Auth::user();
             $employee = $user->employee;
@@ -427,6 +449,8 @@ trait TimeOffHelper
 
         if ($employee) {
             $data['employee_id'] = $employee->id;
+            $data['company_id'] = $employee->company_id;
+            $data['employee_company_id'] = $employee->company_id;
 
             if (! empty($data['department_id'])) {
                 $data['department_id'] = $data['department_id'];
@@ -444,8 +468,6 @@ trait TimeOffHelper
 
         if ($user) {
             $data['user_id'] = $user->id;
-            $data['company_id'] = $user->default_company_id;
-            $data['employee_company_id'] = $user->default_company_id;
         }
     }
 }

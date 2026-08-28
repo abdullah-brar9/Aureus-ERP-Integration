@@ -8,6 +8,7 @@ use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
+use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
@@ -29,7 +30,9 @@ use Filament\Tables\Filters\QueryBuilder\Constraints\DateConstraint;
 use Filament\Tables\Filters\QueryBuilder\Constraints\RelationshipConstraint;
 use Filament\Tables\Filters\QueryBuilder\Constraints\RelationshipConstraint\Operators\IsRelatedToOperator;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Auth;
 use Webkul\Recruitment\Filament\Clusters\Configurations;
 use Webkul\Recruitment\Filament\Clusters\Configurations\Resources\StageResource\Pages\CreateStage;
 use Webkul\Recruitment\Filament\Clusters\Configurations\Resources\StageResource\Pages\EditStage;
@@ -65,6 +68,8 @@ class StageResource extends Resource
     public static function form(Schema $schema): Schema
     {
         return $schema->components([
+            Hidden::make('company_id')
+                ->default(fn (): ?int => Auth::user()?->default_company_id),
             Group::make()
                 ->schema([
                     Group::make()
@@ -76,6 +81,9 @@ class StageResource extends Resource
                                             TextInput::make('name')
                                                 ->label(__('recruitments::filament/clusters/configurations/resources/stage.form.sections.general-information.fields.stage-name'))
                                                 ->required(),
+                                            TextInput::make('pipeline_code')
+                                                ->label('Pipeline code')
+                                                ->maxLength(40),
                                             RichEditor::make('requirements')
                                                 ->label(__('recruitments::filament/clusters/configurations/resources/stage.form.sections.general-information.fields.requirements'))
                                                 ->maxLength(255)
@@ -110,7 +118,11 @@ class StageResource extends Resource
                             Section::make(__('recruitments::filament/clusters/configurations/resources/stage.form.sections.additional-information.title'))
                                 ->schema([
                                     Select::make('recruitments_job_positions')
-                                        ->relationship('jobs', 'name')
+                                        ->relationship(
+                                            'jobs',
+                                            'name',
+                                            modifyQueryUsing: fn (Builder $query): Builder => $query->where('company_id', Auth::user()?->default_company_id),
+                                        )
                                         ->multiple()
                                         ->preload()
                                         ->label(__('recruitments::filament/clusters/configurations/resources/stage.form.sections.additional-information.fields.job-positions')),
@@ -143,6 +155,10 @@ class StageResource extends Resource
                     ->label(__('recruitments::filament/clusters/configurations/resources/stage.table.columns.name'))
                     ->sortable()
                     ->searchable(),
+                TextColumn::make('pipeline_code')
+                    ->label('Pipeline code')
+                    ->searchable()
+                    ->toggleable(),
                 TextColumn::make('jobs.name')
                     ->placeholder('-')
                     ->badge()
@@ -368,5 +384,14 @@ class StageResource extends Resource
             'edit'   => EditStage::route('/{record}/edit'),
             'view'   => ViewStages::route('/{record}'),
         ];
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+            ->where(function (Builder $query): void {
+                $query->whereNull('company_id')
+                    ->orWhere('company_id', Auth::user()?->default_company_id);
+            });
     }
 }

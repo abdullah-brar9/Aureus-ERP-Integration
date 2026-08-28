@@ -64,6 +64,8 @@ class ApprovalWorkflowResource extends Resource
                     'journal_posting', 'manual_mapping', 'account_master_change', 'party_master_change',
                     'exchange_rate_change', 'credit_note', 'write_off', 'reversal', 'import_deletion',
                     'employee_request', 'expense_claim', 'payroll_run',
+                    'employee_sensitive_change', 'timesheet_submission', 'employee_expense_claim',
+                    'employee_reimbursement', 'employee_travel', 'employee_loan', 'employee_salary_advance',
                 ]),
                 TextInput::make('priority')->numeric()->default(100)->required(),
                 TextInput::make('minimum_amount')->numeric()->minValue(0),
@@ -107,6 +109,7 @@ class ApprovalWorkflowResource extends Resource
                         Select::make('hierarchy_route')->options([
                             'requester_manager'  => 'Requester manager',
                             'department_manager' => 'Department manager',
+                            'team_manager'       => 'Team manager',
                         ]),
                         TextInput::make('sla_hours')->numeric()->minValue(1),
                         Repeater::make('conditions')->columns(3)->columnSpanFull()->schema([

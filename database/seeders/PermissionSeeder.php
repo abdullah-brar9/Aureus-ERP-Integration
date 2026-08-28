@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Artisan;
 use RuntimeException;
 use Spatie\Permission\PermissionRegistrar;
 use Webkul\Accounting\Services\Security\AccountingPermissionRegistrar;
+use Webkul\Employee\Services\Security\HrPermissionRegistrar;
 use Webkul\Security\Models\Permission;
 use Webkul\Security\Models\Role;
 
@@ -28,6 +29,7 @@ class PermissionSeeder extends Seeder
         }
 
         app(AccountingPermissionRegistrar::class)->synchronize();
+        app(HrPermissionRegistrar::class)->synchronize();
 
         $adminRole = Role::query()->firstOrCreate(
             ['name' => 'Admin', 'guard_name' => 'web'],

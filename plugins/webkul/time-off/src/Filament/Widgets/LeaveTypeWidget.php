@@ -6,6 +6,7 @@ use BezhanSalleh\FilamentShield\Traits\HasWidgetShield;
 use Carbon\Carbon;
 use Filament\Widgets\ChartWidget;
 use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Support\Facades\Auth;
 use Webkul\TimeOff\Models\Leave;
 
 class LeaveTypeWidget extends ChartWidget
@@ -30,7 +31,8 @@ class LeaveTypeWidget extends ChartWidget
 
     protected function getData(): array
     {
-        $query = Leave::query();
+        $query = Leave::query()
+            ->where('company_id', Auth::user()?->default_company_id);
 
         if ($this->pageFilters['selectedCompanies'] ?? null) {
             $query->whereIn('company_id', $this->pageFilters['selectedCompanies']);

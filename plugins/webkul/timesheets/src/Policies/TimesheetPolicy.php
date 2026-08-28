@@ -32,6 +32,9 @@ class TimesheetPolicy
      */
     public function update(User $user, Timesheet $timesheet): bool
     {
+        if (! in_array($timesheet->workflow_status, ['draft', 'rejected'], true)) {
+            return false;
+        }
         if (! $user->can('update_timesheet_timesheet')) {
             return false;
         }
@@ -44,6 +47,9 @@ class TimesheetPolicy
      */
     public function delete(User $user, Timesheet $timesheet): bool
     {
+        if (! in_array($timesheet->workflow_status, ['draft', 'rejected'], true)) {
+            return false;
+        }
         if (! $user->can('delete_timesheet_timesheet')) {
             return false;
         }

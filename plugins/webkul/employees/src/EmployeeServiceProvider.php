@@ -12,9 +12,12 @@ class EmployeeServiceProvider extends PackageServiceProvider
 {
     public static string $name = 'employees';
 
+    public static string $viewNamespace = 'employees';
+
     public function configureCustomPackage(Package $package): void
     {
         $package->name(static::$name)
+            ->hasViews()
             ->hasTranslations()
             ->hasMigrations([
                 '2024_12_11_045350_create_employees_work_locations_table',
@@ -38,6 +41,8 @@ class EmployeeServiceProvider extends PackageServiceProvider
                 '2025_01_15_045708_create_job_position_skills_table',
                 '2025_01_24_052852_add_department_id_to_activity_plans_table',
                 '2025_08_20_082638_add_unique_user_id_to_employees_employees_table',
+                '2026_08_25_000010_extend_hr_master_and_hierarchy',
+                '2026_08_25_000011_create_hr_operations_tables',
             ])
             ->runsMigrations()
             ->hasSeeder('Webkul\\Employee\\Database\Seeders\\DatabaseSeeder')

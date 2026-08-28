@@ -11,10 +11,12 @@ use Webkul\Chatter\Traits\HasLogActivity;
 use Webkul\Employee\Models\Department;
 use Webkul\Employee\Models\Employee;
 use Webkul\Security\Models\User;
+use Webkul\Support\Models\ApprovalRequest;
 use Webkul\Support\Models\Calendar;
 use Webkul\Support\Models\Company;
 use Webkul\TimeOff\Enums\RequestDateFromPeriod;
 use Webkul\TimeOff\Enums\State;
+use Webkul\TimeOff\Services\LeaveApprovalService;
 
 class Leave extends Model
 {
@@ -23,6 +25,10 @@ class Leave extends Model
     public const ACTIVITY_PLAN_PLUGIN = 'time-off';
 
     protected $table = 'time_off_leaves';
+
+    protected $attributes = [
+        'state' => 'confirm',
+    ];
 
     public function getModelTitle(): string
     {
@@ -41,10 +47,15 @@ class Leave extends Model
         'meeting_id',
         'first_approver_id',
         'second_approver_id',
+        'approval_request_id',
         'creator_id',
         'private_name',
         'attachment',
         'state',
+        'submitted_at',
+        'approved_at',
+        'rejected_at',
+        'rejection_reason',
         'duration_display',
         'request_date_from_period',
         'request_date_from',
@@ -97,6 +108,9 @@ class Leave extends Model
         'date_from'                => 'date',
         'request_unit_half'        => 'boolean',
         'number_of_hours'          => 'decimal:4',
+        'submitted_at'             => 'datetime',
+        'approved_at'              => 'datetime',
+        'rejected_at'              => 'datetime',
     ];
 
     public function user(): BelongsTo
@@ -147,6 +161,18 @@ class Leave extends Model
     public function secondApprover(): BelongsTo
     {
         return $this->belongsTo(Employee::class, 'second_approver_id');
+    }
+
+    public function approvalRequest(): BelongsTo
+    {
+        return $this->belongsTo(ApprovalRequest::class);
+    }
+
+    public function synchronizeApprovalState(ApprovalRequest $request): void
+    {
+        if ((int) $this->approval_request_id === (int) $request->id) {
+            app(LeaveApprovalService::class)->synchronize($this);
+        }
     }
 
     public function creator(): BelongsTo

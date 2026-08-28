@@ -5,6 +5,7 @@ namespace Webkul\TimeOff\Policies;
 use Illuminate\Auth\Access\HandlesAuthorization;
 use Webkul\Security\Models\User;
 use Webkul\Security\Traits\HasScopedPermissions;
+use Webkul\TimeOff\Enums\State;
 use Webkul\TimeOff\Models\Leave;
 
 class LeavePolicy
@@ -44,7 +45,9 @@ class LeavePolicy
             return false;
         }
 
-        return $this->hasAccess($user, $leave, 'employee');
+        return $leave->approvalRequest?->status !== 'pending'
+            && $leave->state !== State::VALIDATE_TWO
+            && $this->hasAccess($user, $leave, 'employee');
     }
 
     /**
@@ -56,7 +59,9 @@ class LeavePolicy
             return false;
         }
 
-        return $this->hasAccess($user, $leave, 'employee');
+        return $leave->approvalRequest?->status !== 'pending'
+            && $leave->state !== State::VALIDATE_TWO
+            && $this->hasAccess($user, $leave, 'employee');
     }
 
     /**

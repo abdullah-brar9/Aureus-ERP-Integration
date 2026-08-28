@@ -58,7 +58,7 @@ final class ApprovalEngine
                 ->where('request_type', $requestType)
                 ->where('subject_type', $subject->getMorphClass())
                 ->where('subject_id', $subject->getKey())
-                ->whereIn('status', ['pending', 'approved'])
+                ->where('status', 'pending')
                 ->latest('id')
                 ->first();
             if ($existing) {
@@ -87,7 +87,12 @@ final class ApprovalEngine
             return false;
         }
 
-        $request->loadMissing(['workflow.steps', 'requester.employee.parent.user', 'requester.employee.department.manager.user']);
+        $request->loadMissing([
+            'workflow.steps',
+            'requester.employee.parent.user',
+            'requester.employee.department.manager.user',
+            'requester.employee.team.manager.user',
+        ]);
         $step = $request->currentStep();
         if (! $step) {
             return false;
@@ -102,6 +107,7 @@ final class ApprovalEngine
         return match ($step->hierarchy_route) {
             'requester_manager'  => (int) $request->requester?->employee?->parent?->user_id === (int) $actor->id,
             'department_manager' => (int) $request->requester?->employee?->department?->manager?->user_id === (int) $actor->id,
+            'team_manager'       => (int) $request->requester?->employee?->team?->manager?->user_id === (int) $actor->id,
             default              => false,
         };
     }
@@ -141,7 +147,7 @@ final class ApprovalEngine
         array $previousValues,
         array $newValues,
     ): ApprovalRequest {
-        return DB::transaction(function () use ($request, $actor, $decision, $reason, $previousValues, $newValues): ApprovalRequest {
+        $request = DB::transaction(function () use ($request, $actor, $decision, $reason, $previousValues, $newValues): ApprovalRequest {
             $request = ApprovalRequest::query()->whereKey($request->id)->lockForUpdate()->firstOrFail();
             $request->loadMissing('workflow.steps');
             if (! $this->canAct($request, $actor)) {
@@ -194,6 +200,9 @@ final class ApprovalEngine
 
             return $request->fresh(['workflow.steps', 'decisions.actor']);
         });
+        app(ApprovalSubjectSynchronizer::class)->synchronize($request);
+
+        return $request->fresh(['workflow.steps', 'decisions.actor']);
     }
 
     private function amountMatches(ApprovalWorkflow $workflow, ?string $amount): bool

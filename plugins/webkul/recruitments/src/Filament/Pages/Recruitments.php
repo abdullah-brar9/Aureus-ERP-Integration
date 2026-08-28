@@ -12,13 +12,14 @@ use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
 use Filament\View\LegacyComponents\Widget;
 use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Support\Facades\Auth;
 use Webkul\Employee\Models\Department;
 use Webkul\Employee\Models\EmployeeJobPosition;
 use Webkul\Recruitment\Filament\Widgets\ApplicantChartWidget;
 use Webkul\Recruitment\Filament\Widgets\JobPositionStatsWidget;
 use Webkul\Recruitment\Models\Stage;
-use Webkul\Support\Models\Company;
 use Webkul\Support\Enums\NavigationGroup;
+use Webkul\Support\Models\Company;
 
 class Recruitments extends BaseDashboard
 {
@@ -37,7 +38,7 @@ class Recruitments extends BaseDashboard
         return __('recruitments::filament/pages/recruitment.navigation.title');
     }
 
-    public static function getNavigationGroup(): string | \UnitEnum
+    public static function getNavigationGroup(): string|\UnitEnum
     {
         return NavigationGroup::Dashboard;
     }
@@ -58,28 +59,40 @@ class Recruitments extends BaseDashboard
                             ->multiple()
                             ->searchable()
                             ->preload()
-                            ->options(fn () => EmployeeJobPosition::where('is_active', true)->pluck('name', 'id'))
+                            ->options(fn () => EmployeeJobPosition::query()
+                                ->where('company_id', Auth::user()?->default_company_id)
+                                ->where('is_active', true)
+                                ->pluck('name', 'id'))
                             ->reactive(),
                         Select::make('selectedDepartments')
                             ->label(__('recruitments::filament/pages/recruitment.filters-form.departments'))
                             ->multiple()
                             ->searchable()
                             ->preload()
-                            ->options(fn () => Department::pluck('name', 'id'))
+                            ->options(fn () => Department::query()
+                                ->where('company_id', Auth::user()?->default_company_id)
+                                ->pluck('name', 'id'))
                             ->reactive(),
                         Select::make('selectedCompanies')
                             ->label(__('recruitments::filament/pages/recruitment.filters-form.companies'))
                             ->multiple()
                             ->searchable()
                             ->preload()
-                            ->options(fn () => Company::pluck('name', 'id'))
+                            ->options(fn () => Company::query()
+                                ->whereKey(Auth::user()?->default_company_id)
+                                ->pluck('name', 'id'))
                             ->reactive(),
                         Select::make('selectedStages')
                             ->label(__('recruitments::filament/pages/recruitment.filters-form.stages'))
                             ->multiple()
                             ->searchable()
                             ->preload()
-                            ->options(fn () => Stage::pluck('name', 'id'))
+                            ->options(fn () => Stage::query()
+                                ->where(function ($query): void {
+                                    $query->whereNull('company_id')
+                                        ->orWhere('company_id', Auth::user()?->default_company_id);
+                                })
+                                ->pluck('name', 'id'))
                             ->reactive(),
                         Select::make('status')
                             ->label(__('recruitments::filament/pages/recruitment.filters-form.status.title'))

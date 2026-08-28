@@ -11,12 +11,16 @@ use Illuminate\Support\Facades\Auth;
 use Webkul\Chatter\Traits\HasChatter;
 use Webkul\Chatter\Traits\HasLogActivity;
 use Webkul\Employee\Database\Factories\EmployeeFactory;
+use Webkul\Employee\Services\EmployeeSensitiveChangeService;
 use Webkul\Field\Traits\HasCustomFields;
 use Webkul\Partner\Models\BankAccount;
 use Webkul\Partner\Models\Partner;
+use Webkul\Security\Models\Team;
 use Webkul\Security\Models\User;
+use Webkul\Support\Models\ApprovalRequest;
 use Webkul\Support\Models\Company;
 use Webkul\Support\Models\Country;
+use Webkul\Support\Models\Currency;
 use Webkul\Support\Models\State;
 
 class Employee extends Model
@@ -33,6 +37,7 @@ class Employee extends Model
         'creator_id',
         'calendar_id',
         'department_id',
+        'team_id',
         'job_id',
         'attendance_manager_id',
         'partner_id',
@@ -43,8 +48,10 @@ class Employee extends Model
         'state_id',
         'country_of_birth',
         'bank_account_id',
+        'salary_currency_id',
         'departure_reason_id',
         'name',
+        'employee_number',
         'job_title',
         'work_phone',
         'mobile_phone',
@@ -66,6 +73,8 @@ class Employee extends Model
         'lang',
         'gender',
         'birthday',
+        'joining_date',
+        'leaving_date',
         'marital',
         'spouse_complete_name',
         'spouse_birthdate',
@@ -80,8 +89,12 @@ class Employee extends Model
         'study_field',
         'study_school',
         'emergency_contact',
+        'emergency_relationship',
         'emergency_phone',
         'employee_type',
+        'employment_status',
+        'salary_grade',
+        'base_salary',
         'barcode',
         'pin',
         'address_id',
@@ -93,6 +106,7 @@ class Employee extends Model
         'departure_date',
         'departure_description',
         'additional_note',
+        'document_metadata',
         'notes',
         'is_active',
         'is_flexible',
@@ -105,6 +119,10 @@ class Employee extends Model
         'is_flexible'                    => 'boolean',
         'is_fully_flexible'              => 'boolean',
         'work_permit_scheduled_activity' => 'boolean',
+        'joining_date'                   => 'date',
+        'leaving_date'                   => 'date',
+        'base_salary'                    => 'decimal:4',
+        'document_metadata'              => 'array',
     ];
 
     public function getModelTitle(): string
@@ -145,6 +163,11 @@ class Employee extends Model
     public function department(): BelongsTo
     {
         return $this->belongsTo(Department::class, 'department_id');
+    }
+
+    public function team(): BelongsTo
+    {
+        return $this->belongsTo(Team::class);
     }
 
     public function job(): BelongsTo
@@ -192,6 +215,11 @@ class Employee extends Model
         return $this->belongsTo(BankAccount::class, 'bank_account_id');
     }
 
+    public function salaryCurrency(): BelongsTo
+    {
+        return $this->belongsTo(Currency::class, 'salary_currency_id');
+    }
+
     public function departureReason(): BelongsTo
     {
         return $this->belongsTo(DepartureReason::class, 'departure_reason_id');
@@ -215,6 +243,38 @@ class Employee extends Model
     public function resumes()
     {
         return $this->hasMany(EmployeeResume::class, 'employee_id');
+    }
+
+    public function directReports(): HasMany
+    {
+        return $this->hasMany(self::class, 'parent_id');
+    }
+
+    public function statusHistory(): HasMany
+    {
+        return $this->hasMany(EmployeeStatusHistory::class)->latest('effective_date');
+    }
+
+    public function attendanceRecords(): HasMany
+    {
+        return $this->hasMany(AttendanceRecord::class);
+    }
+
+    public function performanceReviews(): HasMany
+    {
+        return $this->hasMany(PerformanceReview::class);
+    }
+
+    public function requests(): HasMany
+    {
+        return $this->hasMany(EmployeeRequest::class);
+    }
+
+    public function synchronizeApprovalState(ApprovalRequest $request): void
+    {
+        if ($request->request_type === 'employee_sensitive_change' && $request->status === 'approved') {
+            app(EmployeeSensitiveChangeService::class)->applyApproved($request);
+        }
     }
 
     protected static function newFactory(): EmployeeFactory
@@ -250,6 +310,31 @@ class Employee extends Model
                 $employee->handlePartnerUpdation($employee);
             }
         });
+
+        static::created(function (self $employee): void {
+            if ($employee->company_id) {
+                $employee->statusHistory()->create([
+                    'company_id'     => $employee->company_id,
+                    'changed_by'     => Auth::id(),
+                    'status'         => $employee->employment_status ?? ($employee->is_active ? 'active' : 'inactive'),
+                    'effective_date' => $employee->joining_date ?? now()->toDateString(),
+                    'new_values'     => ['employment_status' => $employee->employment_status],
+                ]);
+            }
+        });
+
+        static::updated(function (self $employee): void {
+            if ($employee->wasChanged('employment_status') && $employee->company_id) {
+                $employee->statusHistory()->create([
+                    'company_id'     => $employee->company_id,
+                    'changed_by'     => Auth::id(),
+                    'status'         => $employee->employment_status,
+                    'effective_date' => $employee->leaving_date ?? now()->toDateString(),
+                    'previous_values'=> ['employment_status' => $employee->getOriginal('employment_status')],
+                    'new_values'     => ['employment_status' => $employee->employment_status],
+                ]);
+            }
+        });
     }
 
     private function handlePartnerCreation(self $employee): void
@@ -264,7 +349,7 @@ class Employee extends Model
             'phone'        => $employee?->work_phone,
             'mobile'       => $employee?->mobile_phone,
             'color'        => $employee?->color,
-            'parent_id'    => $employee?->parent_id,
+            'parent_id'    => $employee?->parent?->partner_id,
             'company_id'   => $employee?->company_id,
             'user_id'      => $employee?->user_id,
         ]);
@@ -287,7 +372,7 @@ class Employee extends Model
                 'phone'        => $employee?->work_phone,
                 'mobile'       => $employee?->mobile_phone,
                 'color'        => $employee?->color,
-                'parent_id'    => $employee?->parent_id,
+                'parent_id'    => $employee?->parent?->partner_id,
                 'company_id'   => $employee?->company_id,
                 'user_id'      => $employee?->user_id,
             ]

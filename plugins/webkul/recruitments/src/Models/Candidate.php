@@ -11,6 +11,7 @@ use Webkul\Chatter\Traits\HasChatter;
 use Webkul\Chatter\Traits\HasLogActivity;
 use Webkul\Employee\Models\Employee;
 use Webkul\Partner\Models\Partner;
+use Webkul\Recruitment\Services\CandidateConversionService;
 use Webkul\Security\Models\User;
 use Webkul\Support\Models\Company;
 
@@ -36,6 +37,9 @@ class Candidate extends Model
         'priority',
         'phone',
         'linkedin_profile',
+        'resume_path',
+        'portfolio_url',
+        'source_reference',
         'availability_date',
         'candidate_properties',
         'is_active',
@@ -112,25 +116,16 @@ class Candidate extends Model
         return $this->hasMany(CandidateSkill::class, 'candidate_id');
     }
 
-    public function createEmployee()
+    public function createEmployee(): ?Employee
     {
-        $employee = $this->employee()->create([
-            'name'          => $this->name,
-            'user_id'       => $this->user_id,
-            'department_id' => $this->department_id,
-            'company_id'    => $this->company_id,
-            'partner_id'    => $this->partner_id,
-            'company_id'    => $this->company_id,
-            'work_email'    => $this->email_from,
-            'mobile_phone'  => $this->phone,
-            'is_active'     => true,
-        ]);
+        $application = Applicant::query()
+            ->where('candidate_id', $this->id)
+            ->latest('id')
+            ->first();
 
-        $this->update([
-            'employee_id' => $employee->id,
-        ]);
-
-        return $employee;
+        return $application
+            ? app(CandidateConversionService::class)->convert($application)
+            : null;
     }
 
     protected static function boot()

@@ -7,6 +7,7 @@ use Webkul\PluginManager\Console\Commands\InstallCommand;
 use Webkul\PluginManager\Console\Commands\UninstallCommand;
 use Webkul\PluginManager\Package;
 use Webkul\PluginManager\PackageServiceProvider;
+use Webkul\Recruitment\Services\ApplicantSourceRegistry;
 
 class RecruitmentServiceProvider extends PackageServiceProvider
 {
@@ -34,6 +35,7 @@ class RecruitmentServiceProvider extends PackageServiceProvider
                 '2025_01_14_080159_add_is_default_column_stages_table',
                 '2025_01_14_143102_add_columns_to_employees_job_positions_table',
                 '2025_01_16_081327_create_recruitments_job_position_interviewers_table',
+                '2026_08_25_000013_extend_recruitment_pipeline',
             ])
             ->runsMigrations()
             ->hasDependencies([
@@ -52,6 +54,8 @@ class RecruitmentServiceProvider extends PackageServiceProvider
 
     public function packageRegistered(): void
     {
+        $this->app->singleton(ApplicantSourceRegistry::class);
+
         Panel::configureUsing(function (Panel $panel): void {
             $panel->plugin(RecruitmentPlugin::make());
         });
