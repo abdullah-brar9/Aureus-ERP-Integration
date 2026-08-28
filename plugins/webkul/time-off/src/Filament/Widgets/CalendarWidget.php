@@ -147,7 +147,7 @@ class CalendarWidget extends FullCalendarWidget
                             ->send();
 
                         $action->cancel();
-                    } catch (Halt | Cancel $exception) {
+                    } catch (Halt|Cancel $exception) {
                         throw $exception;
                     } catch (Throwable $exception) {
                         report($exception);
@@ -229,7 +229,7 @@ class CalendarWidget extends FullCalendarWidget
                             ->send();
 
                         $action->cancel();
-                    } catch (Halt | Cancel $exception) {
+                    } catch (Halt|Cancel $exception) {
                         throw $exception;
                     } catch (Throwable $exception) {
                         report($exception);
@@ -333,8 +333,11 @@ class CalendarWidget extends FullCalendarWidget
         $user = Auth::user();
 
         return Leave::query()
-            ->where('user_id', $user->id)
-            ->orWhere('employee_id', $user?->employee?->id)
+            ->where('company_id', $user?->default_company_id)
+            ->where(function ($query) use ($user): void {
+                $query->where('user_id', $user->id)
+                    ->orWhere('employee_id', $user?->employee?->id);
+            })
             ->where('request_date_from', '>=', $fetchInfo['start'])
             ->where('request_date_to', '<=', $fetchInfo['end'])
             ->with('holidayStatus', 'user')

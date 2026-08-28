@@ -12,6 +12,8 @@ use Filament\Support\Enums\Size;
 use Filament\Tables\Columns\Layout\Stack;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Auth;
 use Webkul\Employee\Filament\Clusters\Configurations\Resources\JobPositionResource;
 use Webkul\Recruitment\Filament\Clusters\Applications;
 use Webkul\Recruitment\Filament\Clusters\Applications\Resources\JobByPositionResource\Pages\ListJobByPositions;
@@ -176,5 +178,11 @@ class JobByPositionResource extends Resource
         return [
             'index' => ListJobByPositions::route('/'),
         ];
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+            ->where('company_id', Auth::user()?->default_company_id);
     }
 }

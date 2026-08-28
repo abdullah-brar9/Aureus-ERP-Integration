@@ -13,6 +13,7 @@ use Filament\Actions\RestoreAction;
 use Filament\Actions\RestoreBulkAction;
 use Filament\Actions\ViewAction;
 use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
@@ -38,7 +39,9 @@ use Filament\Tables\Filters\QueryBuilder\Constraints\TextConstraint;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 use Webkul\Employee\Filament\Resources\DepartmentResource;
 use Webkul\Employee\Models\Department;
 use Webkul\Partner\Filament\Resources\AddressResource;
@@ -96,7 +99,11 @@ class JobPositionResource extends Resource
                                             ->hintIcon('heroicon-o-question-mark-circle', tooltip: __('recruitments::filament/clusters/configurations/resources/job-position.form.sections.employment-information.fields.job-position-title-tooltip')),
                                         Select::make('department_id')
                                             ->label(__('recruitments::filament/clusters/configurations/resources/job-position.form.sections.employment-information.fields.department'))
-                                            ->relationship(name: 'department', titleAttribute: 'name')
+                                            ->relationship(
+                                                name: 'department',
+                                                titleAttribute: 'name',
+                                                modifyQueryUsing: fn (Builder $query): Builder => $query->where('company_id', Auth::user()?->default_company_id),
+                                            )
                                             ->searchable()
                                             ->preload()
                                             ->live()
@@ -125,7 +132,11 @@ class JobPositionResource extends Resource
                                             }),
                                         Select::make('manager_id')
                                             ->label(__('recruitments::filament/clusters/configurations/resources/job-position.form.sections.employment-information.fields.manager'))
-                                            ->relationship(name: 'manager', titleAttribute: 'name')
+                                            ->relationship(
+                                                name: 'manager',
+                                                titleAttribute: 'name',
+                                                modifyQueryUsing: fn (Builder $query): Builder => $query->where('company_id', Auth::user()?->default_company_id),
+                                            )
                                             ->searchable()
                                             ->preload()
                                             ->reactive()
@@ -135,6 +146,9 @@ class JobPositionResource extends Resource
                                             ->relationship(name: 'company', titleAttribute: 'name')
                                             ->searchable()
                                             ->preload()
+                                            ->default(fn (): ?int => Auth::user()?->default_company_id)
+                                            ->disabled()
+                                            ->dehydrated()
                                             ->live()
                                             ->createOptionForm(fn (Schema $schema) => CompanyResource::form($schema))
                                             ->createOptionAction(function (Action $action) {
@@ -144,7 +158,14 @@ class JobPositionResource extends Resource
                                             }),
                                         Select::make('recruiter_id')
                                             ->label(__('recruitments::filament/clusters/configurations/resources/job-position.form.sections.employment-information.fields.recruiter'))
-                                            ->relationship(name: 'recruiter', titleAttribute: 'name')
+                                            ->relationship(
+                                                name: 'recruiter',
+                                                titleAttribute: 'name',
+                                                modifyQueryUsing: fn (Builder $query): Builder => $query->where(function (Builder $query): void {
+                                                    $query->where('default_company_id', Auth::user()?->default_company_id)
+                                                        ->orWhereHas('allowedCompanies', fn (Builder $companyQuery): Builder => $companyQuery->whereKey(Auth::user()?->default_company_id));
+                                                }),
+                                            )
                                             ->searchable()
                                             ->preload()
                                             ->live()
@@ -156,7 +177,14 @@ class JobPositionResource extends Resource
                                             }),
                                         Select::make('recruitments_job_position_interviewers')
                                             ->label(__('recruitments::filament/clusters/configurations/resources/job-position.form.sections.employment-information.fields.interviewers'))
-                                            ->relationship(name: 'interviewers', titleAttribute: 'name')
+                                            ->relationship(
+                                                name: 'interviewers',
+                                                titleAttribute: 'name',
+                                                modifyQueryUsing: fn (Builder $query): Builder => $query->where(function (Builder $query): void {
+                                                    $query->where('default_company_id', Auth::user()?->default_company_id)
+                                                        ->orWhereHas('allowedCompanies', fn (Builder $companyQuery): Builder => $companyQuery->whereKey(Auth::user()?->default_company_id));
+                                                }),
+                                            )
                                             ->searchable()
                                             ->multiple()
                                             ->preload()
@@ -236,6 +264,35 @@ class JobPositionResource extends Resource
                                         Toggle::make('is_active')
                                             ->label(__('recruitments::filament/clusters/configurations/resources/job-position.form.sections.workforce-planning.fields.status'))
                                             ->inline(false),
+                                        Select::make('posting_status')
+                                            ->label('Posting status')
+                                            ->options([
+                                                'draft'     => 'Draft',
+                                                'published' => 'Published',
+                                                'paused'    => 'Paused',
+                                                'closed'    => 'Closed',
+                                            ])
+                                            ->default('draft')
+                                            ->required()
+                                            ->live(),
+                                        DateTimePicker::make('published_at')
+                                            ->label('Published at')
+                                            ->native(false)
+                                            ->visible(fn (Get $get): bool => $get('posting_status') === 'published'),
+                                        Select::make('posting_channels')
+                                            ->label('Source / channels')
+                                            ->options([
+                                                'company_website' => 'Company website',
+                                                'linkedin'        => 'LinkedIn',
+                                                'indeed'          => 'Indeed',
+                                                'referral'        => 'Referral',
+                                                'recruiter'       => 'Recruiter',
+                                                'manual_import'   => 'Manual import',
+                                                'api'             => 'API',
+                                                'other'           => 'Other',
+                                            ])
+                                            ->multiple()
+                                            ->searchable(),
                                     ]),
                             ])
                             ->columnSpan(['lg' => 1]),
@@ -266,6 +323,14 @@ class JobPositionResource extends Resource
                     ->label(__('recruitments::filament/clusters/configurations/resources/job-position.table.columns.company'))
                     ->searchable()
                     ->sortable(),
+                TextColumn::make('posting_status')
+                    ->label('Posting status')
+                    ->badge()
+                    ->sortable(),
+                TextColumn::make('posting_channels')
+                    ->label('Channels')
+                    ->badge()
+                    ->toggleable(),
                 TextColumn::make('expected_employees')
                     ->label(__('recruitments::filament/clusters/configurations/resources/job-position.table.columns.expected-employees'))
                     ->numeric()
@@ -562,5 +627,11 @@ class JobPositionResource extends Resource
             'edit'   => EditJobPosition::route('/{record}/edit'),
             'view'   => ViewJobPosition::route('/{record}'),
         ];
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+            ->where('company_id', Auth::user()?->default_company_id);
     }
 }

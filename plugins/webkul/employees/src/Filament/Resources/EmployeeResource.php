@@ -57,6 +57,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Auth;
 use Webkul\Chatter\Filament\Actions\ActivityTableAction;
 use Webkul\Employee\Enums\DistanceUnit;
 use Webkul\Employee\Enums\Gender;
@@ -74,13 +75,15 @@ use Webkul\Employee\Filament\Resources\EmployeeResource\Pages\ViewEmployee;
 use Webkul\Employee\Filament\Resources\EmployeeResource\RelationManagers\ResumeRelationManager;
 use Webkul\Employee\Filament\Resources\EmployeeResource\RelationManagers\SkillsRelationManager;
 use Webkul\Employee\Models\Employee;
+use Webkul\Employee\Services\EmployeeSensitiveChangeService;
+use Webkul\Employee\Services\HrHierarchyService;
 use Webkul\Field\Filament\Traits\HasCustomFields;
 use Webkul\Security\Filament\Resources\CompanyResource;
 use Webkul\Security\Filament\Resources\UserResource;
 use Webkul\Security\Models\User;
+use Webkul\Support\Enums\NavigationGroup;
 use Webkul\Support\Models\Calendar;
 use Webkul\Support\Models\Country;
-use Webkul\Support\Enums\NavigationGroup;
 
 class EmployeeResource extends Resource
 {
@@ -104,7 +107,7 @@ class EmployeeResource extends Resource
         return __('employees::filament/resources/employee.navigation.title');
     }
 
-    public static function getNavigationGroup(): string | \UnitEnum
+    public static function getNavigationGroup(): string|\UnitEnum
     {
         return NavigationGroup::Employee;
     }
@@ -144,6 +147,9 @@ class EmployeeResource extends Resource
                                             ->maxLength(255)
                                             ->extraInputAttributes(['style' => 'font-size: 1.5rem;height: 3rem;'])
                                             ->columnSpan(1),
+                                        TextInput::make('employee_number')
+                                            ->label('Employee ID')
+                                            ->maxLength(80),
                                         TextInput::make('job_title')
                                             ->label(__('employees::filament/resources/employee.form.sections.fields.job-title'))
                                             ->maxLength(255)
@@ -184,7 +190,9 @@ class EmployeeResource extends Resource
                                     ->relationship(
                                         name: 'department',
                                         titleAttribute: 'complete_name',
-                                        modifyQueryUsing: fn (Builder $query) => $query->withTrashed(),
+                                        modifyQueryUsing: fn (Builder $query) => $query
+                                            ->withTrashed()
+                                            ->where('company_id', Auth::user()?->default_company_id),
                                     )
                                     ->getOptionLabelFromRecordUsing(function ($record): string {
                                         return $record->name.($record->trashed() ? ' (Deleted)' : '');
@@ -193,6 +201,17 @@ class EmployeeResource extends Resource
                                     ->searchable()
                                     ->preload()
                                     ->createOptionForm(fn (Schema $schema) => DepartmentResource::form($schema)),
+                                Select::make('team_id')
+                                    ->label('Team')
+                                    ->relationship(
+                                        name: 'team',
+                                        titleAttribute: 'name',
+                                        modifyQueryUsing: fn (Builder $query) => $query
+                                            ->where('company_id', Auth::user()?->default_company_id)
+                                            ->where('is_active', true),
+                                    )
+                                    ->searchable()
+                                    ->preload(),
                                 TextInput::make('mobile_phone')
                                     ->label(__('employees::filament/resources/employee.form.sections.fields.work-mobile'))
                                     ->suffixAction(
@@ -224,7 +243,7 @@ class EmployeeResource extends Resource
                                     )
                                     ->tel(),
                                 Select::make('parent_id')
-                                    ->relationship('parent', 'name')
+                                    ->relationship('parent', 'name', modifyQueryUsing: fn (Builder $query) => $query->where('company_id', Auth::user()?->default_company_id))
                                     ->searchable()
                                     ->preload()
                                     ->suffixIcon('heroicon-o-user')
@@ -239,8 +258,45 @@ class EmployeeResource extends Resource
                                 Select::make('coach_id')
                                     ->searchable()
                                     ->preload()
-                                    ->relationship('coach', 'name')
+                                    ->relationship('coach', 'name', modifyQueryUsing: fn (Builder $query) => $query->where('company_id', Auth::user()?->default_company_id))
                                     ->label(__('employees::filament/resources/employee.form.sections.fields.coach')),
+                                DatePicker::make('joining_date')
+                                    ->label('Joining date')
+                                    ->native(false),
+                                DatePicker::make('leaving_date')
+                                    ->label('Leaving date')
+                                    ->native(false)
+                                    ->afterOrEqual('joining_date'),
+                                Select::make('employment_status')
+                                    ->label('Employment status')
+                                    ->options([
+                                        'active'     => 'Active',
+                                        'probation'  => 'Probation',
+                                        'notice'     => 'Notice period',
+                                        'suspended'  => 'Suspended',
+                                        'terminated' => 'Terminated',
+                                        'resigned'   => 'Resigned',
+                                        'inactive'   => 'Inactive',
+                                    ])
+                                    ->default('active')
+                                    ->required(),
+                                TextInput::make('salary_grade')
+                                    ->label('Salary grade')
+                                    ->visible(fn (): bool => Auth::user()?->can('hr_view_sensitive_employee_data') ?? false)
+                                    ->disabled(fn (?Employee $record): bool => $record !== null),
+                                TextInput::make('base_salary')
+                                    ->label('Base salary')
+                                    ->numeric()
+                                    ->minValue(0)
+                                    ->visible(fn (): bool => Auth::user()?->can('hr_view_sensitive_employee_data') ?? false)
+                                    ->disabled(fn (?Employee $record): bool => $record !== null),
+                                Select::make('salary_currency_id')
+                                    ->label('Salary currency')
+                                    ->relationship('salaryCurrency', 'name')
+                                    ->searchable()
+                                    ->preload()
+                                    ->visible(fn (): bool => Auth::user()?->can('hr_view_sensitive_employee_data') ?? false)
+                                    ->disabled(fn (?Employee $record): bool => $record !== null),
                             ])
                             ->columns(2),
 
@@ -455,7 +511,9 @@ class EmployeeResource extends Resource
                                                                             ->modalSubmitActionLabel(__('employees::filament/resources/employee.form.tabs.private-information.fields.create-bank-account'))
                                                                     )
                                                                     ->disabled(fn ($livewire) => ! $livewire->record?->user)
-                                                                    ->label(__('employees::filament/resources/employee.form.tabs.private-information.fields.bank-account')),
+                                                                    ->label(__('employees::filament/resources/employee.form.tabs.private-information.fields.bank-account'))
+                                                                    ->visible(fn (): bool => Auth::user()?->can('hr_view_sensitive_employee_data') ?? false)
+                                                                    ->disabled(fn (?Employee $record): bool => $record !== null),
                                                                 TextInput::make('private_email')
                                                                     ->label(__('employees::filament/resources/employee.form.tabs.private-information.fields.private-email'))
                                                                     ->suffixAction(
@@ -620,13 +678,21 @@ class EmployeeResource extends Resource
                                                             ->preload()
                                                             ->required(fn (Get $get) => Country::find($get('country_id'))?->state_required),
                                                         TextInput::make('identification_id')
-                                                            ->label(__('employees::filament/resources/employee.form.tabs.private-information.fields.identification-id')),
+                                                            ->label(__('employees::filament/resources/employee.form.tabs.private-information.fields.identification-id'))
+                                                            ->visible(fn (): bool => Auth::user()?->can('hr_view_sensitive_employee_data') ?? false)
+                                                            ->disabled(fn (?Employee $record): bool => $record !== null),
                                                         TextInput::make('ssnid')
-                                                            ->label(__('employees::filament/resources/employee.form.tabs.private-information.fields.ssnid')),
+                                                            ->label(__('employees::filament/resources/employee.form.tabs.private-information.fields.ssnid'))
+                                                            ->visible(fn (): bool => Auth::user()?->can('hr_view_sensitive_employee_data') ?? false)
+                                                            ->disabled(fn (?Employee $record): bool => $record !== null),
                                                         TextInput::make('sinid')
-                                                            ->label(__('employees::filament/resources/employee.form.tabs.private-information.fields.sinid')),
+                                                            ->label(__('employees::filament/resources/employee.form.tabs.private-information.fields.sinid'))
+                                                            ->visible(fn (): bool => Auth::user()?->can('hr_view_sensitive_employee_data') ?? false)
+                                                            ->disabled(fn (?Employee $record): bool => $record !== null),
                                                         TextInput::make('passport_id')
-                                                            ->label(__('employees::filament/resources/employee.form.tabs.private-information.fields.passport-id')),
+                                                            ->label(__('employees::filament/resources/employee.form.tabs.private-information.fields.passport-id'))
+                                                            ->visible(fn (): bool => Auth::user()?->can('hr_view_sensitive_employee_data') ?? false)
+                                                            ->disabled(fn (?Employee $record): bool => $record !== null),
                                                         Select::make('gender')
                                                             ->label(__('employees::filament/resources/employee.form.tabs.private-information.fields.gender'))
                                                             ->searchable()
@@ -1286,6 +1352,34 @@ class EmployeeResource extends Resource
             ->persistSortInSession()
             ->recordActions([
                 ActivityTableAction::make(),
+                Action::make('request_sensitive_change')
+                    ->label('Request sensitive change')
+                    ->icon('heroicon-o-shield-check')
+                    ->visible(fn (): bool => Auth::user()?->can('hr_manage_sensitive_employee_data') ?? false)
+                    ->fillForm(fn (Employee $record): array => [
+                        'identification_id'  => $record->identification_id,
+                        'passport_id'        => $record->passport_id,
+                        'ssnid'              => $record->ssnid,
+                        'sinid'              => $record->sinid,
+                        'bank_account_id'    => $record->bank_account_id,
+                        'salary_grade'       => $record->salary_grade,
+                        'base_salary'        => $record->base_salary,
+                        'salary_currency_id' => $record->salary_currency_id,
+                    ])
+                    ->schema([
+                        TextInput::make('identification_id')->label('CNIC / identification'),
+                        TextInput::make('passport_id')->label('Passport'),
+                        TextInput::make('ssnid')->label('SSN'),
+                        TextInput::make('sinid')->label('SIN'),
+                        Select::make('bank_account_id')->relationship('bankAccount', 'account_number')->searchable()->preload(),
+                        TextInput::make('salary_grade'),
+                        TextInput::make('base_salary')->numeric()->minValue(0),
+                        Select::make('salary_currency_id')->relationship('salaryCurrency', 'name')->searchable()->preload(),
+                    ])
+                    ->action(function (Employee $record, array $data): void {
+                        app(EmployeeSensitiveChangeService::class)->submit($record, Auth::user(), $data);
+                        Notification::make()->success()->title('Sensitive change submitted for approval')->send();
+                    }),
                 ViewAction::make()
                     ->outlined(),
                 EditAction::make()
@@ -1347,6 +1441,19 @@ class EmployeeResource extends Resource
                 ]),
             ])
             ->modifyQueryUsing(fn (Builder $query) => $query->with(['categories']));
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        $user = Auth::user();
+        $companyId = (int) $user?->default_company_id;
+        if (! $user || $companyId <= 0) {
+            return parent::getEloquentQuery()->whereRaw('1 = 0');
+        }
+
+        return parent::getEloquentQuery()
+            ->where('company_id', $companyId)
+            ->whereIn('id', app(HrHierarchyService::class)->visibleEmployeeIds($user, $companyId));
     }
 
     public static function infolist(Schema $schema): Schema

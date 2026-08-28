@@ -10,7 +10,9 @@ use Filament\Schemas\Components\Group;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Webkul\TimeOff\Enums\State;
 use Webkul\TimeOff\Filament\Clusters\Management\Resources\TimeOffResource;
 use Webkul\TimeOff\Filament\Clusters\MyTime;
@@ -51,6 +53,13 @@ class MyTimeOffResource extends Resource
     public static function table(Table $table): Table
     {
         return $table = TimeOffResource::table($table);
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+            ->where('company_id', Auth::user()?->default_company_id)
+            ->whereHas('employee', fn (Builder $query): Builder => $query->where('user_id', Auth::id()));
     }
 
     public static function getPages(): array

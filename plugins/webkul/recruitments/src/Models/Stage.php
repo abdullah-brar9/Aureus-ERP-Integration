@@ -10,6 +10,7 @@ use Spatie\EloquentSortable\Sortable;
 use Spatie\EloquentSortable\SortableTrait;
 use Webkul\Employee\Models\EmployeeJobPosition;
 use Webkul\Security\Models\User;
+use Webkul\Support\Models\Company;
 
 class Stage extends Model implements Sortable
 {
@@ -22,7 +23,9 @@ class Stage extends Model implements Sortable
         'sort',
         'is_default',
         'creator_id',
+        'company_id',
         'name',
+        'pipeline_code',
         'legend_blocked',
         'legend_done',
         'legend_normal',
@@ -45,6 +48,11 @@ class Stage extends Model implements Sortable
     public function creator(): BelongsTo
     {
         return $this->belongsTo(User::class, 'creator_id');
+    }
+
+    public function company(): BelongsTo
+    {
+        return $this->belongsTo(Company::class);
     }
 
     public function jobs()

@@ -1,142 +1,128 @@
-FROM ubuntu:24.04
-
-ARG APP_REF=master
-ARG PHP_VERSION=8.4
+ARG PHP_VERSION=8.3
 ARG NODE_VERSION=22
-ARG REPO_URL=https://github.com/aureuserp/aureuserp.git
 
-ARG ADMIN_NAME=Administrator
-ARG ADMIN_EMAIL=admin@example.com
-ARG ADMIN_PASSWORD=password
+FROM node:${NODE_VERSION}-bookworm-slim AS frontend
 
-ENV DEBIAN_FRONTEND=noninteractive
-ENV TZ=UTC
+WORKDIR /build
 
-RUN apt-get update && apt-get install -y \
-        apt-transport-https \
+COPY package.json package-lock.json ./
+RUN npm ci --no-audit --no-fund
+
+COPY . .
+RUN npm run build
+
+FROM php:${PHP_VERSION}-fpm-bookworm AS app
+
+ENV APP_ENV=production \
+    COMPOSER_ALLOW_SUPERUSER=1
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
         ca-certificates \
         curl \
         git \
-        gnupg \
-        software-properties-common \
-        unzip \
-    && add-apt-repository ppa:ondrej/php -y \
-    && apt-get update && apt-get install -y \
-        imagemagick \
+        gosu \
+        libcurl4-openssl-dev \
+        libcurl4 \
+        libfcgi-bin \
+        libfreetype6-dev \
+        libfreetype6 \
+        libgmp-dev \
+        libgmp10 \
+        libicu-dev \
+        libicu72 \
+        libjpeg62-turbo-dev \
+        libjpeg62-turbo \
         libmagickwand-dev \
-        mysql-server \
-        nginx \
-        supervisor \
-    && rm -rf /var/lib/apt/lists/*
-
-RUN apt-get update && apt-get install -y \
-        php${PHP_VERSION}-bcmath \
-        php${PHP_VERSION}-cli \
-        php${PHP_VERSION}-curl \
-        php${PHP_VERSION}-dev \
-        php${PHP_VERSION}-exif \
-        php${PHP_VERSION}-fpm \
-        php${PHP_VERSION}-gd \
-        php${PHP_VERSION}-gmp \
-        php${PHP_VERSION}-intl \
-        php${PHP_VERSION}-mbstring \
-        php${PHP_VERSION}-mysql \
-        php${PHP_VERSION}-soap \
-        php${PHP_VERSION}-xml \
-        php${PHP_VERSION}-zip \
-        php-pear \
-    && rm -rf /var/lib/apt/lists/*
-
-RUN pecl channel-update pecl.php.net \
-    && mkdir -p /tmp/imagick-build && cd /tmp/imagick-build \
-    && pecl download imagick \
-    && tar xzf imagick-*.tgz \
-    && cd imagick-*/ \
-    && phpize${PHP_VERSION} \
-    && ./configure --with-php-config=/usr/bin/php-config${PHP_VERSION} \
-    && make -j"$(nproc)" \
-    && make install \
-    && echo "extension=imagick.so" > /etc/php/${PHP_VERSION}/mods-available/imagick.ini \
-    && phpenmod -v ${PHP_VERSION} imagick \
-    && rm -rf /tmp/imagick-build
-
-RUN curl -fsSL https://deb.nodesource.com/setup_${NODE_VERSION}.x | bash - \
-    && apt-get install -y nodejs \
-    && rm -rf /var/lib/apt/lists/*
-
-RUN apt-get purge -y php${PHP_VERSION}-dev php-pear \
-    && apt-get autoremove -y \
-    && rm -rf /var/lib/apt/lists/*
+        libmagickwand-6.q16-6 \
+        libonig-dev \
+        libonig5 \
+        libpng-dev \
+        libpng16-16 \
+        libxml2-dev \
+        libxml2 \
+        libzip-dev \
+        libzip4 \
+        unzip \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install -j"$(nproc)" \
+        bcmath \
+        curl \
+        dom \
+        exif \
+        gd \
+        gmp \
+        intl \
+        mbstring \
+        pcntl \
+        pdo_mysql \
+        simplexml \
+        soap \
+        xml \
+        xmlreader \
+        xmlwriter \
+        zip \
+    && pecl install imagick-3.8.1 \
+    && docker-php-ext-enable imagick \
+    && apt-get purge -y --auto-remove \
+        libcurl4-openssl-dev \
+        libfreetype6-dev \
+        libgmp-dev \
+        libicu-dev \
+        libjpeg62-turbo-dev \
+        libmagickwand-dev \
+        libonig-dev \
+        libpng-dev \
+        libxml2-dev \
+        libzip-dev \
+    && rm -rf /var/lib/apt/lists/* /tmp/pear
 
 COPY --from=composer:2 /usr/bin/composer /usr/local/bin/composer
 
-WORKDIR /var/www/aureuserp
+WORKDIR /var/www/html
 
-RUN git clone --depth 1 --branch ${APP_REF} ${REPO_URL} . \
-    && composer install \
-        --no-dev \
-        --no-interaction \
-        --prefer-dist \
-        --optimize-autoloader \
-        --no-scripts \
-    && rm -rf .git /root/.composer/cache
+COPY . .
+COPY --from=frontend /build/public/build ./public/build
 
-RUN cp .env.example .env \
-    && sed -i 's/^APP_DEBUG=.*/APP_DEBUG=false/' .env \
-    && sed -i 's/^DB_CONNECTION=.*/DB_CONNECTION=mysql/' .env \
-    && sed -i 's/^CACHE_STORE=.*/CACHE_STORE=file/' .env \
-    && sed -i 's/^# *DB_HOST=.*/DB_HOST=127.0.0.1/' .env \
-    && sed -i 's/^# *DB_PORT=.*/DB_PORT=3306/' .env \
-    && sed -i 's/^# *DB_DATABASE=.*/DB_DATABASE=aureus/' .env \
-    && sed -i 's/^# *DB_USERNAME=.*/DB_USERNAME=aureus/' .env \
-    && sed -i 's/^# *DB_PASSWORD=.*/DB_PASSWORD=aureus/' .env \
-    && sed -i 's|^APP_URL=.*|APP_URL=http://localhost|' .env
-
-RUN npm ci --no-audit --no-fund \
-    && npm run build \
-    && rm -rf node_modules /root/.npm \
+RUN composer install \
+    --no-dev \
+    --no-interaction \
+    --no-progress \
+    --no-scripts \
+    --prefer-dist \
+    --optimize-autoloader \
     && php artisan package:discover --ansi \
-    && php artisan filament:assets \
-    && php artisan vendor:publish --tag=laravel-assets --force --ansi
+    && composer clear-cache
 
-COPY mysql-init.sql /docker-entrypoint-initdb.d/init.sql
-COPY build-install.sh /tmp/build-install.sh
-RUN chmod +x /tmp/build-install.sh \
-    && ADMIN_NAME="${ADMIN_NAME}" \
-       ADMIN_EMAIL="${ADMIN_EMAIL}" \
-       ADMIN_PASSWORD="${ADMIN_PASSWORD}" \
-       bash /tmp/build-install.sh \
-    && rm /tmp/build-install.sh
+COPY docker/production/php.ini /usr/local/etc/php/conf.d/99-aureuserp.ini
+COPY docker/production/php-fpm.conf /usr/local/etc/php-fpm.d/zz-aureuserp.conf
+COPY docker/production/entrypoint.sh /usr/local/bin/aureuserp-entrypoint
 
-RUN sed -i 's/^APP_ENV=.*/APP_ENV=production/' .env
+RUN chmod +x /usr/local/bin/aureuserp-entrypoint \
+    && mkdir -p \
+        bootstrap/cache \
+        storage/app/private \
+        storage/app/public \
+        storage/framework/cache/data \
+        storage/framework/sessions \
+        storage/framework/testing \
+        storage/framework/views \
+        storage/logs \
+    && rm -rf public/storage \
+    && ln -s ../storage/app/public public/storage \
+    && chown -R www-data:www-data storage bootstrap/cache \
+    && chmod -R ug+rwX storage bootstrap/cache
 
-COPY php.ini /etc/php/${PHP_VERSION}/fpm/conf.d/99-aureus.ini
-COPY php.ini /etc/php/${PHP_VERSION}/cli/conf.d/99-aureus.ini
-COPY php-fpm.conf /etc/php/${PHP_VERSION}/fpm/pool.d/www.conf
+EXPOSE 9000
 
-RUN rm -f /etc/nginx/sites-enabled/default /etc/nginx/conf.d/default.conf
-COPY nginx.conf /etc/nginx/conf.d/aureus.conf
+ENTRYPOINT ["aureuserp-entrypoint"]
+CMD ["php-fpm", "-F"]
 
-COPY supervisord.conf /etc/supervisor/conf.d/aureus.conf
+FROM nginx:1.28-alpine AS web
 
-RUN mkdir -p /run/php /var/log/supervisor /var/log/aureus
+WORKDIR /var/www/html
 
-RUN chown -R www-data:www-data /var/www/aureuserp /var/log/aureus \
-    && chmod -R 775 storage bootstrap/cache \
-    && find storage bootstrap/cache -type d -exec chmod g+s {} +
-
-COPY entrypoint.sh /usr/local/bin/entrypoint.sh
-RUN chmod +x /usr/local/bin/entrypoint.sh
-
-RUN apt-get purge -y git nodejs \
-    && apt-get autoremove -y \
-    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-
+COPY --from=app /var/www/html/public ./public
+COPY docker/production/nginx.conf /etc/nginx/conf.d/default.conf
 
 EXPOSE 80
-
-HEALTHCHECK --interval=30s --timeout=5s --start-period=60s --retries=3 \
-    CMD curl -fsS http://127.0.0.1/health || exit 1
-
-ENTRYPOINT ["bash", "/usr/local/bin/entrypoint.sh"]
-CMD ["/usr/bin/supervisord", "-n", "-c", "/etc/supervisor/supervisord.conf"]

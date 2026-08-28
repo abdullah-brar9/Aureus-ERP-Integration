@@ -34,10 +34,15 @@ class EmployeeJobPosition extends Model implements Sortable
         'description',
         'requirements',
         'is_active',
+        'posting_status',
+        'published_at',
+        'posting_channels',
     ];
 
     protected $casts = [
-        'is_active' => 'boolean',
+        'is_active'        => 'boolean',
+        'published_at'     => 'datetime',
+        'posting_channels' => 'array',
     ];
 
     public $sortable = [

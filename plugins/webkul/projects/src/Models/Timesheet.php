@@ -4,9 +4,18 @@ namespace Webkul\Project\Models;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Webkul\Analytic\Models\Record;
+use Webkul\Support\Models\ApprovalRequest;
+use Webkul\Timesheet\Services\TimesheetWorkflowService;
 
 class Timesheet extends Record
 {
+    public function synchronizeApprovalState(ApprovalRequest $request): void
+    {
+        if ((int) $this->approval_request_id === (int) $request->id) {
+            app(TimesheetWorkflowService::class)->synchronize($this);
+        }
+    }
+
     protected static function boot()
     {
         parent::boot();

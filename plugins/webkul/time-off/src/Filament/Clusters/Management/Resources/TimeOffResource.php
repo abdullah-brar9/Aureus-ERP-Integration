@@ -10,6 +10,7 @@ use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
+use Filament\Forms\Components\Textarea;
 use Filament\Infolists\Components\ImageEntry;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Notifications\Notification;
@@ -20,9 +21,12 @@ use Filament\Schemas\Schema;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Webkul\Chatter\Filament\Actions\ActivityTableAction;
+use Webkul\Support\Services\ApprovalEngine;
 use Webkul\TimeOff\Enums\State;
 use Webkul\TimeOff\Filament\Clusters\Management;
 use Webkul\TimeOff\Filament\Clusters\Management\Resources\TimeOffResource\Pages\CreateTimeOff;
@@ -30,6 +34,7 @@ use Webkul\TimeOff\Filament\Clusters\Management\Resources\TimeOffResource\Pages\
 use Webkul\TimeOff\Filament\Clusters\Management\Resources\TimeOffResource\Pages\ListTimeOff;
 use Webkul\TimeOff\Filament\Clusters\Management\Resources\TimeOffResource\Pages\ViewTimeOff;
 use Webkul\TimeOff\Models\Leave;
+use Webkul\TimeOff\Services\LeaveApprovalService;
 use Webkul\TimeOff\Traits\TimeOffHelper;
 
 class TimeOffResource extends Resource
@@ -130,16 +135,34 @@ class TimeOffResource extends Resource
             ->recordActions([
                 ActivityTableAction::make(),
                 ActionGroup::make([
+                    Action::make('submit_for_approval')
+                        ->label('Submit for approval')
+                        ->icon('heroicon-o-paper-airplane')
+                        ->color('primary')
+                        ->visible(function (Leave $record): bool {
+                            $canSubmit = (int) $record->employee?->user_id === (int) Auth::id()
+                                || (bool) Auth::user()?->can('hr_approve_leave');
+                            $approvalStatus = $record->approvalRequest?->status;
+
+                            return $canSubmit
+                                && in_array($record->state, [State::CONFIRM, State::REFUSE], true)
+                                && $approvalStatus !== 'pending';
+                        })
+                        ->action(function (Leave $record): void {
+                            app(LeaveApprovalService::class)->submit($record, Auth::user());
+
+                            Notification::make()
+                                ->success()
+                                ->title('Leave submitted for approval')
+                                ->send();
+                        }),
                     Action::make('approve')
                         ->icon('heroicon-o-check-circle')
                         ->color('success')
-                        ->hidden(fn ($record) => $record->state === State::VALIDATE_TWO->value)
-                        ->action(function ($record) {
-                            if ($record->state === State::VALIDATE_ONE->value) {
-                                $record->update(['state' => State::VALIDATE_TWO->value]);
-                            } else {
-                                $record->update(['state' => State::VALIDATE_TWO->value]);
-                            }
+                        ->visible(fn (Leave $record): bool => $record->approvalRequest?->status === 'pending'
+                            && app(ApprovalEngine::class)->canAct($record->approvalRequest, Auth::user()))
+                        ->action(function (Leave $record): void {
+                            app(LeaveApprovalService::class)->approve($record, Auth::user());
 
                             Notification::make()
                                 ->success()
@@ -147,19 +170,26 @@ class TimeOffResource extends Resource
                                 ->body(__('time-off::filament/clusters/management/resources/time-off.table.actions.approve.notification.body'))
                                 ->send();
                         })
-                        ->label(function ($record) {
-                            if ($record->state === State::VALIDATE_ONE->value) {
+                        ->label(function (Leave $record): string {
+                            if ($record->state === State::VALIDATE_ONE) {
                                 return __('time-off::filament/clusters/management/resources/time-off.table.actions.approve.title.validate');
-                            } else {
-                                return __('time-off::filament/clusters/management/resources/time-off.table.actions.approve.title.approve');
                             }
+
+                            return __('time-off::filament/clusters/management/resources/time-off.table.actions.approve.title.approve');
                         }),
                     Action::make('refuse')
                         ->icon('heroicon-o-x-circle')
-                        ->hidden(fn ($record) => $record->state === State::REFUSE->value)
+                        ->visible(fn (Leave $record): bool => $record->approvalRequest?->status === 'pending'
+                            && app(ApprovalEngine::class)->canAct($record->approvalRequest, Auth::user()))
                         ->color('danger')
-                        ->action(function ($record) {
-                            $record->update(['state' => State::REFUSE->value]);
+                        ->schema([
+                            Textarea::make('reason')
+                                ->label('Rejection reason')
+                                ->required()
+                                ->maxLength(2000),
+                        ])
+                        ->action(function (Leave $record, array $data): void {
+                            app(LeaveApprovalService::class)->reject($record, Auth::user(), $data['reason']);
 
                             Notification::make()
                                 ->success()
@@ -169,8 +199,12 @@ class TimeOffResource extends Resource
                         })
                         ->label(__('time-off::filament/clusters/management/resources/time-off.table.actions.refused.title')),
                     ViewAction::make(),
-                    EditAction::make(),
+                    EditAction::make()
+                        ->visible(fn (Leave $record): bool => $record->approvalRequest?->status !== 'pending'
+                            && $record->state !== State::VALIDATE_TWO),
                     DeleteAction::make()
+                        ->visible(fn (Leave $record): bool => $record->approvalRequest?->status !== 'pending'
+                            && $record->state !== State::VALIDATE_TWO)
                         ->successNotification(
                             Notification::make()
                                 ->success()
@@ -260,5 +294,11 @@ class TimeOffResource extends Resource
             'edit'   => EditTimeOff::route('/{record}/edit'),
             'view'   => ViewTimeOff::route('/{record}'),
         ];
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+            ->where('company_id', Auth::user()?->default_company_id);
     }
 }

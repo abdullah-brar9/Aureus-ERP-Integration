@@ -2,6 +2,7 @@
 
 namespace Webkul\Timesheet\Filament\Resources;
 
+use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
@@ -9,7 +10,9 @@ use Filament\Actions\EditAction;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Schemas\Components\Utilities\Get;
@@ -25,9 +28,12 @@ use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
+use Webkul\Support\Enums\NavigationGroup;
+use Webkul\Support\Services\ApprovalEngine;
 use Webkul\Timesheet\Filament\Resources\TimesheetResource\Pages\ManageTimesheets;
 use Webkul\Timesheet\Models\Timesheet;
-use Webkul\Support\Enums\NavigationGroup;
+use Webkul\Timesheet\Services\TimesheetWorkflowService;
 
 class TimesheetResource extends Resource
 {
@@ -38,7 +44,7 @@ class TimesheetResource extends Resource
         return __('timesheets::filament/resources/timesheet.navigation.title');
     }
 
-    public static function getNavigationGroup(): string | \UnitEnum
+    public static function getNavigationGroup(): string|\UnitEnum
     {
         return NavigationGroup::Project;
     }
@@ -68,6 +74,10 @@ class TimesheetResource extends Resource
             ->components([
                 Hidden::make('type')
                     ->default('projects'),
+                Hidden::make('company_id')
+                    ->default(fn (): ?int => Auth::user()?->default_company_id),
+                Hidden::make('workflow_status')
+                    ->default('draft'),
                 DatePicker::make('date')
                     ->label(__('timesheets::filament/resources/timesheet.form.date'))
                     ->required()
@@ -75,13 +85,13 @@ class TimesheetResource extends Resource
                 Select::make('user_id')
                     ->label(__('timesheets::filament/resources/timesheet.form.employee'))
                     ->required()
-                    ->relationship('user', 'name')
+                    ->relationship('user', 'name', modifyQueryUsing: fn (Builder $query): Builder => $query->where('default_company_id', Auth::user()?->default_company_id))
                     ->searchable()
                     ->preload(),
                 Select::make('project_id')
                     ->label(__('timesheets::filament/resources/timesheet.form.project'))
                     ->required()
-                    ->relationship('project', 'name')
+                    ->relationship('project', 'name', modifyQueryUsing: fn (Builder $query): Builder => $query->where('company_id', Auth::user()?->default_company_id))
                     ->searchable()
                     ->preload()
                     ->live()
@@ -94,7 +104,9 @@ class TimesheetResource extends Resource
                     ->relationship(
                         name: 'task',
                         titleAttribute: 'title',
-                        modifyQueryUsing: fn (Get $get, Builder $query) => $query->where('project_id', $get('project_id')),
+                        modifyQueryUsing: fn (Get $get, Builder $query) => $query
+                            ->where('company_id', Auth::user()?->default_company_id)
+                            ->where('project_id', $get('project_id')),
                     )
                     ->searchable()
                     ->preload(),
@@ -107,6 +119,8 @@ class TimesheetResource extends Resource
                     ->minValue(0)
                     ->maxValue(99999999999)
                     ->helperText(__('timesheets::filament/resources/timesheet.form.time-spent-helper-text')),
+                Toggle::make('is_billable')->label('Billable'),
+                TextInput::make('overtime_hours')->numeric()->minValue(0)->default(0),
             ])
             ->columns(1);
     }
@@ -155,6 +169,11 @@ class TimesheetResource extends Resource
                                 return $hours.':'.$minutes;
                             }),
                     ]),
+                TextColumn::make('is_billable')->label('Billing')->formatStateUsing(fn (bool $state): string => $state ? 'Billable' : 'Non-billable')->badge(),
+                TextColumn::make('overtime_hours')->numeric(decimalPlaces: 2),
+                TextColumn::make('workflow_status')->label('Approval status')->badge()->color(fn (string $state): string => match ($state) {
+                    'approved' => 'success', 'rejected' => 'danger', 'submitted' => 'warning', default => 'gray',
+                }),
                 TextColumn::make('created_at')
                     ->label(__('timesheets::filament/resources/timesheet.table.columns.created-at'))
                     ->dateTime()
@@ -235,7 +254,36 @@ class TimesheetResource extends Resource
                     ->preload(),
             ])
             ->recordActions([
+                Action::make('submit')
+                    ->icon('heroicon-o-paper-airplane')
+                    ->visible(fn (Timesheet $record): bool => in_array($record->workflow_status, ['draft', 'rejected'], true)
+                        && ((int) $record->user_id === (int) Auth::id() || (Auth::user()?->can('hr_approve_timesheets') ?? false)))
+                    ->action(function (Timesheet $record): void {
+                        app(TimesheetWorkflowService::class)->submit($record, Auth::user());
+                        Notification::make()->success()->title('Timesheet submitted for approval')->send();
+                    }),
+                Action::make('approve')
+                    ->icon('heroicon-o-check')->color('success')
+                    ->schema([Textarea::make('reason')->label('Approval note')])
+                    ->visible(fn (Timesheet $record): bool => $record->approvalRequest !== null
+                        && Auth::user() !== null
+                        && app(ApprovalEngine::class)->canAct($record->approvalRequest, Auth::user()))
+                    ->action(function (Timesheet $record, array $data): void {
+                        app(TimesheetWorkflowService::class)->approve($record, Auth::user(), $data['reason'] ?? null);
+                        Notification::make()->success()->title('Timesheet approved')->send();
+                    }),
+                Action::make('reject')
+                    ->icon('heroicon-o-x-mark')->color('danger')
+                    ->schema([Textarea::make('reason')->required()])
+                    ->visible(fn (Timesheet $record): bool => $record->approvalRequest !== null
+                        && Auth::user() !== null
+                        && app(ApprovalEngine::class)->canAct($record->approvalRequest, Auth::user()))
+                    ->action(function (Timesheet $record, array $data): void {
+                        app(TimesheetWorkflowService::class)->reject($record, Auth::user(), (string) $data['reason']);
+                        Notification::make()->success()->title('Timesheet returned for rework')->send();
+                    }),
                 EditAction::make()
+                    ->visible(fn (Timesheet $record): bool => in_array($record->workflow_status, ['draft', 'rejected'], true))
                     ->successNotification(
                         Notification::make()
                             ->success()
@@ -243,6 +291,7 @@ class TimesheetResource extends Resource
                             ->body(__('timesheets::filament/resources/timesheet.table.actions.edit.notification.body')),
                     ),
                 DeleteAction::make()
+                    ->visible(fn (Timesheet $record): bool => in_array($record->workflow_status, ['draft', 'rejected'], true))
                     ->successNotification(
                         Notification::make()
                             ->success()
@@ -268,5 +317,10 @@ class TimesheetResource extends Resource
         return [
             'index' => ManageTimesheets::route('/'),
         ];
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()->where('company_id', Auth::user()?->default_company_id);
     }
 }

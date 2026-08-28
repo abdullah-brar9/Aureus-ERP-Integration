@@ -38,6 +38,8 @@ opencode.json
 /test-results
 /nativephp
 /hi.txt
+/graphify-out/
+/*.sql
 .DS_Store
 Thumbs.db
 *.log

@@ -43,9 +43,11 @@ use Filament\Tables\Table;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\HtmlString;
 use Webkul\Chatter\Filament\Actions\ActivityTableAction;
+use Webkul\Employee\Support\HrPermissions;
 use Webkul\Field\Filament\Forms\Components\ProgressStepper as FormProgressStepper;
 use Webkul\Field\Filament\Infolists\Components\ProgressStepper as InfolistProgressStepper;
 use Webkul\Recruitment\Enums\ApplicationStatus;
@@ -60,6 +62,7 @@ use Webkul\Recruitment\Models\Applicant;
 use Webkul\Recruitment\Models\Candidate;
 use Webkul\Recruitment\Models\JobPosition;
 use Webkul\Recruitment\Models\Stage as RecruitmentStage;
+use Webkul\Recruitment\Services\CandidateConversionService;
 use Webkul\Security\Filament\Resources\UserResource;
 
 class ApplicantResource extends Resource
@@ -103,7 +106,13 @@ class ApplicantResource extends Resource
                         FormProgressStepper::make('stage_id')
                             ->hiddenLabel()
                             ->inline()
-                            ->options(fn () => RecruitmentStage::orderBy('sort')->get()->mapWithKeys(fn ($stage) => [$stage->id => $stage->name]))
+                            ->options(fn () => RecruitmentStage::query()
+                                ->where(fn (Builder $query): Builder => $query
+                                    ->whereNull('company_id')
+                                    ->orWhere('company_id', Auth::user()?->default_company_id))
+                                ->orderBy('sort')
+                                ->get()
+                                ->mapWithKeys(fn ($stage) => [$stage->id => $stage->name]))
                             ->columnSpan('full')
                             ->live()
                             ->reactive()
@@ -397,6 +406,20 @@ class ApplicantResource extends Resource
                                 Select::make('medium_id')
                                     ->relationship('medium', 'name')
                                     ->label(__('recruitments::filament/clusters/applications/resources/applicant.form.sections.source-and-medium.fields.medium')),
+                                TextInput::make('external_application_id')
+                                    ->label('External application ID')
+                                    ->maxLength(255),
+                                TextInput::make('source_details')
+                                    ->label('Source / channel details')
+                                    ->maxLength(255),
+                                TextInput::make('screening_score')->numeric()->minValue(0)->maxValue(100),
+                                TextInput::make('interview_score')->numeric()->minValue(0)->maxValue(100),
+                                TextInput::make('assessment_score')->numeric()->minValue(0)->maxValue(100),
+                                Select::make('offer_status')->options([
+                                    'draft'    => 'Draft', 'sent' => 'Sent', 'accepted' => 'Accepted',
+                                    'declined' => 'Declined', 'withdrawn' => 'Withdrawn',
+                                ]),
+                                DatePicker::make('offer_date')->native(false),
                             ])->columnSpanFull(),
                     ])
                     ->columnSpan(['lg' => 1]),
@@ -664,6 +687,20 @@ class ApplicantResource extends Resource
             ->recordActions([
                 ActivityTableAction::make(),
                 ActionGroup::make([
+                    Action::make('convert_to_employee')
+                        ->label('Convert to employee')
+                        ->icon('heroicon-o-user-plus')
+                        ->color('success')
+                        ->requiresConfirmation()
+                        ->visible(fn (Applicant $record): bool => $record->candidate?->employee_id === null
+                            && (Auth::user()?->can(HrPermissions::ConvertCandidates) ?? false))
+                        ->action(function (Applicant $record): void {
+                            $employee = app(CandidateConversionService::class)->convert($record);
+                            Notification::make()
+                                ->success()
+                                ->title($employee ? 'Candidate converted to employee' : 'Candidate requires a linked contact before conversion')
+                                ->send();
+                        }),
                     ViewAction::make(),
                     EditAction::make(),
                     RestoreAction::make()
@@ -708,6 +745,11 @@ class ApplicantResource extends Resource
                         ->orWhereNull('state');
                 });
             });
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()->where('company_id', Auth::user()?->default_company_id);
     }
 
     public static function infolist(Schema $schema): Schema

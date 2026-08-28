@@ -12,6 +12,7 @@ use Webkul\Chatter\Traits\HasLogActivity;
 use Webkul\Employee\Models\Department;
 use Webkul\Employee\Models\Employee;
 use Webkul\Recruitment\Enums\ApplicationStatus;
+use Webkul\Recruitment\Services\CandidateConversionService;
 use Webkul\Recruitment\Traits\HasApplicationStatus;
 use Webkul\Security\Models\User;
 use Webkul\Support\Models\Company;
@@ -29,6 +30,8 @@ class Applicant extends Model
     protected $fillable = [
         'source_id',
         'medium_id',
+        'external_application_id',
+        'source_details',
         'candidate_id',
         'stage_id',
         'last_stage_id',
@@ -52,6 +55,11 @@ class Applicant extends Model
         'date_last_stage_updated',
         'refuse_date',
         'probability',
+        'screening_score',
+        'interview_score',
+        'assessment_score',
+        'offer_status',
+        'offer_date',
         'salary_proposed',
         'salary_expected',
         'delay_close',
@@ -66,6 +74,10 @@ class Applicant extends Model
         'refuse_date'             => 'date',
         'applicant_properties'    => 'json',
         'probability'             => 'double',
+        'screening_score'         => 'double',
+        'interview_score'         => 'double',
+        'assessment_score'        => 'double',
+        'offer_date'              => 'date',
         'salary_proposed'         => 'double',
         'salary_expected'         => 'double',
         'delay_close'             => 'double',
@@ -204,32 +216,7 @@ class Applicant extends Model
 
     public function createEmployee(): ?Employee
     {
-        if (! $this->candidate?->partner_id) {
-            return null;
-        }
-
-        if ($this->candidate->employee_id) {
-            return $this->candidate->employee;
-        }
-
-        $employee = Employee::create([
-            'name'          => $this->candidate->name,
-            'user_id'       => $this->candidate->user_id,
-            'job_id'        => $this->job_id,
-            'department_id' => $this->department_id,
-            'company_id'    => $this->company_id,
-            'partner_id'    => $this->candidate->partner_id,
-            'company_id'    => $this->candidate->company_id,
-            'work_email'    => $this->candidate->email_from,
-            'mobile_phone'  => $this->candidate->phone,
-            'is_active'     => true,
-        ]);
-
-        $this->candidate()->update([
-            'employee_id' => $employee->id,
-        ]);
-
-        return $employee;
+        return app(CandidateConversionService::class)->convert($this);
     }
 
     public function handleApplicationCreation(): void

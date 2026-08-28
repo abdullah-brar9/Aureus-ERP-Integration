@@ -151,6 +151,7 @@ class OverviewCalendarWidget extends FullCalendarWidget
         $user = Auth::user();
 
         return Leave::query()
+            ->where('company_id', $user?->default_company_id)
             ->where('request_date_from', '>=', $fetchInfo['start'])
             ->where('request_date_to', '<=', $fetchInfo['end'])
             ->with('holidayStatus')

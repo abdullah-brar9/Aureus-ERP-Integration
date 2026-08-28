@@ -32,7 +32,13 @@ class MyTimeOffWidget extends BaseWidget
         $employeeId = Auth::user()?->employee?->id;
         $endOfYear = Carbon::now()->endOfYear();
 
-        $leaveTypes = LeaveType::where('show_on_dashboard', '!=', 0)->get();
+        $leaveTypes = LeaveType::query()
+            ->where('show_on_dashboard', '!=', 0)
+            ->where(function ($query): void {
+                $query->whereNull('company_id')
+                    ->orWhere('company_id', Auth::user()?->default_company_id);
+            })
+            ->get();
 
         $stats = [];
 
@@ -65,6 +71,7 @@ class MyTimeOffWidget extends BaseWidget
             ->sum('number_of_days');
 
         $totalTaken = Leave::where('employee_id', $employeeId)
+            ->where('company_id', Auth::user()?->default_company_id)
             ->where('holiday_status_id', $leaveTypeId)
             ->where(function ($query) use ($endDate) {
                 $query->where('request_date_to', '<=', $endDate)
@@ -83,6 +90,7 @@ class MyTimeOffWidget extends BaseWidget
     protected function calculatePendingRequests($employeeId)
     {
         return Leave::where('employee_id', $employeeId)
+            ->where('company_id', Auth::user()?->default_company_id)
             ->where('state', 'confirm')
             ->count();
     }
